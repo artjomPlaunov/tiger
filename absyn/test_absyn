@@ -1,0 +1,12 @@
+#!/bin/bash
+i=1
+fname="test$i.tig"
+
+while [ -f ../test_files/"$fname" ] 
+do 
+        
+        ./exe ../test_files/"$fname"
+        ((i++))
+        fname="test$i.tig"
+done 
+

@@ -1,0 +1,6 @@
+let 
+    type i = int
+    var i : i := 5
+in 
+    5 + i
+end
