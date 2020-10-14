@@ -101,6 +101,9 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
             }
         }
         
+        case A_recordExp: {
+              
+        }
 
         case A_seqExp: {
             // Default return if the seqExp is empty 
@@ -155,7 +158,7 @@ void transDec(S_table venv, S_table tenv, A_dec d) {
                         EM_error(d->pos, "incompatible type constraint");
                     }
                 }
-            }
+            } 
             S_enter(venv, d->u.var.var, E_VarEntry(e.ty));
             break;
         }
@@ -192,6 +195,13 @@ Ty_ty transTy(S_table tenv, A_ty a) {
                     Ty_field new_hd = Ty_Field(hd->head->name, fieldType);
                     res = Ty_FieldList(new_hd, res);
                 }
+            }
+            /* Reverse field list */
+            Ty_fieldList aux = Ty_FieldList(NULL, NULL);
+            Ty_fieldList cur = res;
+            while cur {
+                Ty_fieldList tmp = cur->tail;
+                
             }
             return Ty_Record(res);
         }
