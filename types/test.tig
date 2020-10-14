@@ -1,6 +1,8 @@
 let 
     type i = int
     var i : i := 5
+    type j = {field:int}
+    var s : j := nil
 in 
     5 + i
 end

@@ -71,14 +71,36 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
                 ||  oper==A_minusOp 
                 ||  oper==A_timesOp 
                 ||  oper==A_divideOp
+                ||  oper==A_ltOp
+                ||  oper==A_gtOp
+                ||  oper==A_geOp
             ) {
+                INTVAR:
                 if (left.ty->kind != Ty_int)
                     EM_error(a->u.op.left->pos, "integer required");
                 if (right.ty->kind != Ty_int) 
                     EM_error(a->u.op.left->pos, "integer required");
                 return expTy(NULL, Ty_Int());
+            } else if (oper==A_eqOp || oper==A_neqOp) {
+                if (    left.ty->kind != Ty_record 
+                    ||  left.ty->kind != Ty_array) {
+                    goto INTVAR;
+                } else {
+                    /* TO-DO - CONDITIONAL STATEMENT CHECK FOR EQUALITY 
+                        BETWEEN RECORD/ARRAY TYPES - TYPE CHECKER. */
+                    if (typeMatch(left.ty, right.ty)) {
+                        if (left.ty->kind == Ty_record) {
+                            
+                        } else {
+                        }
+                    } else {
+                        EM_error(a->u.op.left->pos, 
+                            "Incompatible types for eq/neq comparison");
+                    }
+                }
             }
         }
+        
 
         case A_seqExp: {
             // Default return if the seqExp is empty 
@@ -115,8 +137,18 @@ void transDec(S_table venv, S_table tenv, A_dec d) {
             // If constraint type is present
             if (d->u.var.typ != NULL) {
                 // Check if constraint is defined
-                if (S_look(tenv, d->u.var.typ) == NULL) {
+                Ty_ty constraint = S_look(tenv, d->u.var.typ);
+                if (constraint == NULL) {
                     EM_error(d->pos, "undefined constraint type");
+                // Check if constraint is record type in case of NIL init.
+                } else if (typeMatch(e.ty, Ty_Nil())) {
+                    // FIX THIS CONDIITON CHECK ONCE RECORD TYDECS ARE DEFINED
+        
+                    if (actual_ty(constraint)->kind != Ty_record) {
+                        EM_error(d->pos, "non-record constraint type for NIL");
+                    } else {
+                        S_enter(venv, d->u.var.var, constraint);
+                    }
                 // Check if constraint matches expression type
                 } else {
                     if (!typeMatch(e.ty, (Ty_ty)S_look(tenv, d->u.var.typ))) {
@@ -150,7 +182,18 @@ Ty_ty transTy(S_table tenv, A_ty a) {
             }
         }
         case A_recordTy: {
-             
+            Ty_fieldList res = NULL;  
+            for (A_fieldList hd = a->u.record; hd != NULL; hd = hd->tail) {
+                Ty_ty fieldType = S_look(tenv, hd->head->typ);
+                if (fieldType == NULL) {
+                    EM_error(a->pos, "undefined field type: %s",
+                                        S_name(hd->head->typ));
+                } else {
+                    Ty_field new_hd = Ty_Field(hd->head->name, fieldType);
+                    res = Ty_FieldList(new_hd, res);
+                }
+            }
+            return Ty_Record(res);
         }
     }
 }
