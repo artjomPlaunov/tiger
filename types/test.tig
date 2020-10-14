@@ -1,8 +1,10 @@
 let 
     type i = int
     var i : i := 5
-    type j = {field:int}
-    var s : i := nil
+    type rec = {f1:string}
+    type j = {f1:rec}
+    var x : j := nil
+    var y : rec := nil
 in 
-    5 + i
+   rec{f1:"str"} 
 end

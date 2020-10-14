@@ -171,7 +171,7 @@ ty:
                 $$ = A_RecordTy(EM_tokPos, NULL);
         }
 |       LBRACE field_lst RBRACE {
-                $$ = A_RecordTy(EM_tokPos, NULL);
+                $$ = A_RecordTy(EM_tokPos, $2);
         }
 |       ARRAY OF ID {
                 $$ = A_ArrayTy(EM_tokPos, S_Symbol($3));

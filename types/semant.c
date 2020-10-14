@@ -47,7 +47,7 @@ struct  expty   transVar(S_table venv,  S_table tenv,   A_var v) {
                             S_name(v->u.simple));
             }
             /* Dummy return to allow the type checker to continue. */
-            return expTy(NULL, Ty_Int());
+            return expTy(NULL, NULL);
         }
     }
 }
@@ -67,6 +67,8 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
             A_oper oper = a->u.op.oper;
             struct expty left = transExp(venv, tenv, a->u.op.left);
             struct expty right = transExp(venv, tenv, a->u.op.right);
+            
+            /*
             if (    oper==A_plusOp 
                 ||  oper==A_minusOp 
                 ||  oper==A_timesOp 
@@ -83,14 +85,12 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
                 return expTy(NULL, Ty_Int());
             } else if (oper==A_eqOp || oper==A_neqOp) {
                 if (    left.ty->kind != Ty_record 
-                    ||  left.ty->kind != Ty_array) {
+                    &&  left.ty->kind != Ty_array) {
                     goto INTVAR;
                 } else {
-                    /* TO-DO - CONDITIONAL STATEMENT CHECK FOR EQUALITY 
-                        BETWEEN RECORD/ARRAY TYPES - TYPE CHECKER. */
                     if (typeMatch(left.ty, right.ty)) {
                         if (left.ty->kind == Ty_record) {
-                            
+                                                 
                         } else {
                         }
                     } else {
@@ -98,11 +98,10 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
                             "Incompatible types for eq/neq comparison");
                     }
                 }
-            }
+            }*/
         }
         
         case A_recordExp: {
-              
         }
 
         case A_seqExp: {
@@ -114,6 +113,10 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
                 hd = hd->tail;
             }
             return e;
+        }
+
+        case A_assignExp: {
+            
         }
 
         case A_letExp: {
@@ -185,7 +188,9 @@ Ty_ty transTy(S_table tenv, A_ty a) {
             }
         }
         case A_recordTy: {
-            Ty_fieldList res = NULL;  
+            Ty_fieldList res = Ty_FieldList(NULL,NULL);
+            Ty_fieldList cur = res;
+            
             for (A_fieldList hd = a->u.record; hd != NULL; hd = hd->tail) {
                 Ty_ty fieldType = S_look(tenv, hd->head->typ);
                 if (fieldType == NULL) {
@@ -193,17 +198,11 @@ Ty_ty transTy(S_table tenv, A_ty a) {
                                         S_name(hd->head->typ));
                 } else {
                     Ty_field new_hd = Ty_Field(hd->head->name, fieldType);
-                    res = Ty_FieldList(new_hd, res);
+                    cur->tail = Ty_FieldList(new_hd, NULL);
+                    cur = cur->tail;
                 }
             }
-            /* Reverse field list */
-            Ty_fieldList aux = Ty_FieldList(NULL, NULL);
-            Ty_fieldList cur = res;
-            while cur {
-                Ty_fieldList tmp = cur->tail;
-                
-            }
-            return Ty_Record(res);
+            return Ty_Record(res->tail);
         }
     }
 }
