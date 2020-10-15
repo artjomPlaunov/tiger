@@ -1,10 +1,12 @@
 let 
     type i = int
-    var i : i := 5
-    type rec = {f1:string}
-    type j = {f1:rec}
-    var x : j := nil
-    var y : rec := nil
+    var j : i := 5
 in 
-   rec{f1:"str"} 
+    (let type i = string
+    var newScopeVar : newScopeType := 6
+    in 
+        newScopeVar + 5
+    end;
+    newScopeVar+5)
+    
 end

@@ -47,7 +47,7 @@ struct  expty   transVar(S_table venv,  S_table tenv,   A_var v) {
                             S_name(v->u.simple));
             }
             /* Dummy return to allow the type checker to continue. */
-            return expTy(NULL, NULL);
+            return expTy(NULL, Ty_Error());
         }
     }
 }
@@ -67,46 +67,13 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
             A_oper oper = a->u.op.oper;
             struct expty left = transExp(venv, tenv, a->u.op.left);
             struct expty right = transExp(venv, tenv, a->u.op.right);
-            
-            /*
-            if (    oper==A_plusOp 
-                ||  oper==A_minusOp 
-                ||  oper==A_timesOp 
-                ||  oper==A_divideOp
-                ||  oper==A_ltOp
-                ||  oper==A_gtOp
-                ||  oper==A_geOp
-            ) {
-                INTVAR:
-                if (left.ty->kind != Ty_int)
-                    EM_error(a->u.op.left->pos, "integer required");
-                if (right.ty->kind != Ty_int) 
-                    EM_error(a->u.op.left->pos, "integer required");
-                return expTy(NULL, Ty_Int());
-            } else if (oper==A_eqOp || oper==A_neqOp) {
-                if (    left.ty->kind != Ty_record 
-                    &&  left.ty->kind != Ty_array) {
-                    goto INTVAR;
-                } else {
-                    if (typeMatch(left.ty, right.ty)) {
-                        if (left.ty->kind == Ty_record) {
-                                                 
-                        } else {
-                        }
-                    } else {
-                        EM_error(a->u.op.left->pos, 
-                            "Incompatible types for eq/neq comparison");
-                    }
-                }
-            }*/
         }
         
         case A_recordExp: {
         }
 
         case A_seqExp: {
-            // Default return if the seqExp is empty 
-            struct expty e = expTy(NULL, NULL);
+            struct expty e = expTy(NULL, Ty_Void());
             A_expList hd = a->u.seq;
             while (hd != NULL) {
                 e = transExp(venv, tenv, hd->head);
@@ -116,7 +83,21 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
         }
 
         case A_assignExp: {
-            
+            struct expty e1 = transVar(venv, tenv, a->u.assign.var);
+            struct expty e2 = transExp(venv, tenv, a->u.assign.exp);
+            if (e1.ty->kind == Ty_error || e2.ty->kind == Ty_error) {
+                return expTy(NULL, Ty_Void());
+            }
+            if (e1.ty->kind != e2.ty->kind) {
+                EM_error(a->pos, "Incompatible types for assignment");
+            }
+            return expTy(NULL, Ty_Void());
+        }
+
+        case A_ifExp: {
+            if (a->u.if_.else_) {
+                
+            }
         }
 
         case A_letExp: {
