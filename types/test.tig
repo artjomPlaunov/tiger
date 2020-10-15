@@ -2,11 +2,5 @@ let
     type i = int
     var j : i := 5
 in 
-    (let type i = string
-    var newScopeVar : newScopeType := 6
-    in 
-        newScopeVar + 5
-    end;
-    newScopeVar+5)
-    
+    if 5 then ()
 end

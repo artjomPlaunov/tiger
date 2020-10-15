@@ -46,8 +46,11 @@ struct  expty   transVar(S_table venv,  S_table tenv,   A_var v) {
                 EM_error(v->pos, "undefined variable %s",
                             S_name(v->u.simple));
             }
-            /* Dummy return to allow the type checker to continue. */
-            return expTy(NULL, Ty_Error());
+            /*  Dummy return to allow the type checker to continue. 
+                Set variable to be type VOID; not sure if this is the best
+                solution? Need to think this through and see how it 
+                interacts with other components of the type checker. */
+            return expTy(NULL, Ty_Void());
         }
     }
 }
@@ -85,9 +88,6 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
         case A_assignExp: {
             struct expty e1 = transVar(venv, tenv, a->u.assign.var);
             struct expty e2 = transExp(venv, tenv, a->u.assign.exp);
-            if (e1.ty->kind == Ty_error || e2.ty->kind == Ty_error) {
-                return expTy(NULL, Ty_Void());
-            }
             if (e1.ty->kind != e2.ty->kind) {
                 EM_error(a->pos, "Incompatible types for assignment");
             }
@@ -96,7 +96,28 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
 
         case A_ifExp: {
             if (a->u.if_.else_) {
-                
+                struct expty test = transExp(venv, tenv, a->u.if_.test);
+                if (test.ty->kind != Ty_int) {
+                    EM_error(a->pos, "test clause in if expr must be ty INT");
+                }
+                struct expty then = transExp(venv, tenv, a->u.if_.then);
+                struct expty else_ = transExp(venv, tenv, a->u.if_.else_);
+                if (then.ty->kind != else_.ty->kind) {
+                    EM_error(a->pos,
+                    "incompatible types in then and else clauses");
+                }
+                return expTy(NULL, then.ty);
+            } else {
+                struct expty test = transExp(venv, tenv, a->u.if_.test);
+                if (test.ty->kind != Ty_int) {
+                    EM_error(a->pos, "test clause in if expr must be ty INT");
+                }
+                struct expty then = transExp(venv, tenv, a->u.if_.then);
+                if (then.ty->kind != Ty_void) {
+                    EM_error(a->pos, 
+                    "then type in if-then must produce no value");
+                }
+                return expTy(NULL, Ty_Void());
             }
         }
 
