@@ -67,12 +67,14 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
         case A_stringExp:
             return expTy(NULL, Ty_String());
 
+        /* TO-DO: op expressions */
         case A_opExp: {
             A_oper oper = a->u.op.oper;
             struct expty left = transExp(venv, tenv, a->u.op.left);
             struct expty right = transExp(venv, tenv, a->u.op.right);
         }
-        
+       
+        /* TO-DO: record expressions */
         case A_recordExp: {
         }
 
@@ -159,6 +161,12 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
             // End scope for loop iterator.
             S_endScope(venv);
         }
+   
+        /* TO-DO: check that break expressions are within for or while 
+            loops. */
+        case A_breakExp: {
+            return expTy(NULL, Ty_Void());
+        }
 
         case A_letExp: {
             struct expty exp;
@@ -171,6 +179,11 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
             S_endScope(tenv);
             S_endScope(venv);
             return exp;
+        }
+
+        /* TO-DO - array expressions */
+        case A_arrayExp: {
+
         }
     }
     assert(0);
@@ -224,6 +237,7 @@ Ty_ty transTy(S_table tenv, A_ty a) {
             if (S_look(tenv, a->u.name) == NULL) {
                 EM_error(a->pos, "undefined type name: %s",
                             S_name(a->u.name));
+                return Ty_Void();
             } else {
                 return actual_ty(S_look(tenv, a->u.name));
             }
