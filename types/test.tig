@@ -1,8 +1,9 @@
 let 
-    type rec = {field1:string}
-    var i:int := 5
-    type arrType = array of string
-    var j := arrType[0] of "string"
-in 
-    i := 5
+    type intArr = array of int
+    var x := intArr[5] of 0
+
+    type twoDArr = array of intArr
+    var xy := twoDArr[5] of x
+in
+    ()
 end

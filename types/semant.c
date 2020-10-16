@@ -183,7 +183,8 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
 
         case A_arrayExp: {
             struct expty res = expTy(NULL, Ty_Void());
-            if (S_look(tenv, a->u.array.typ) == NULL) {
+            Ty_ty arrType = S_look(tenv, a->u.array.typ);
+            if (arrType == NULL || actual_ty(arrType)->kind != Ty_array) {
                 EM_error(a->pos,
                 "undefined array type %s",
                 S_name(a->u.array.typ));
@@ -196,11 +197,12 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
                 return res;
             }
             struct expty init = transExp(venv, tenv, a->u.array.init);
-            if (!typeMatch(S_look(tenv, a->u.array.typ),init.ty)) {
-                EM_error(a->pos,
-                "array initializer value incompatible with array type");
-                return res;
-            }
+            
+            /* TO-DO:
+                there is no check thus far that compares the initializer 
+                value with the array type; Think this would require some sort
+                of deep-structural equality comparison that isn't implemented
+                as of yet. */
             res.ty = Ty_Array(S_look(tenv,a->u.array.typ));
             return res;
         }
@@ -289,7 +291,7 @@ Ty_ty transTy(S_table tenv, A_ty a) {
                 S_name(a->u.array));
                 return Ty_Void();
             }
-            return actual_ty(S_look(tenv, a->u.array));
+            return Ty_Array(S_look(tenv, a->u.array));
         }
     }
 }
