@@ -1,7 +1,8 @@
 let 
-    type i = int
-    var j : i := 5
+    type rec = {field1:string}
+    var i:int := 5
+    type arrType = array of string
+    var j := arrType[0] of "string"
 in 
-    for id := 1 to 5 do
-        j := id 
+    i := 5
 end

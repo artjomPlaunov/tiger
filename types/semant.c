@@ -181,9 +181,28 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
             return exp;
         }
 
-        /* TO-DO - array expressions */
         case A_arrayExp: {
-
+            struct expty res = expTy(NULL, Ty_Void());
+            if (S_look(tenv, a->u.array.typ) == NULL) {
+                EM_error(a->pos,
+                "undefined array type %s",
+                S_name(a->u.array.typ));
+                return res;
+            }
+            struct expty size = transExp(venv, tenv, a->u.array.size);
+            if (size.ty->kind != Ty_int) {
+                EM_error(a->pos,
+                "array size expression must be type INT");
+                return res;
+            }
+            struct expty init = transExp(venv, tenv, a->u.array.init);
+            if (!typeMatch(S_look(tenv, a->u.array.typ),init.ty)) {
+                EM_error(a->pos,
+                "array initializer value incompatible with array type");
+                return res;
+            }
+            res.ty = Ty_Array(S_look(tenv,a->u.array.typ));
+            return res;
         }
     }
     assert(0);
@@ -193,26 +212,27 @@ void transDec(S_table venv, S_table tenv, A_dec d) {
     switch (d->kind) {
         case A_varDec: {
             struct expty e = transExp(venv, tenv, d->u.var.init);
-            
             // If constraint type is present
             if (d->u.var.typ != NULL) {
                 // Check if constraint is defined
                 Ty_ty constraint = S_look(tenv, d->u.var.typ);
                 if (constraint == NULL) {
                     EM_error(d->pos, "undefined constraint type");
+                    return;
                 // Check if constraint is record type in case of NIL init.
                 } else if (typeMatch(e.ty, Ty_Nil())) {
-                    // FIX THIS CONDIITON CHECK ONCE RECORD TYDECS ARE DEFINED
-        
                     if (actual_ty(constraint)->kind != Ty_record) {
                         EM_error(d->pos, "non-record constraint type for NIL");
+                        return; 
                     } else {
                         S_enter(venv, d->u.var.var, constraint);
+                        return;
                     }
                 // Check if constraint matches expression type
                 } else {
                     if (!typeMatch(e.ty, (Ty_ty)S_look(tenv, d->u.var.typ))) {
                         EM_error(d->pos, "incompatible type constraint");
+                        return; 
                     }
                 }
             } 
@@ -222,8 +242,11 @@ void transDec(S_table venv, S_table tenv, A_dec d) {
         case A_typeDec: {
             A_nametyList hd = d->u.type;
             while (hd != NULL) {
-                S_enter(tenv, hd->head->name, 
-                        transTy(tenv, hd->head->ty));
+                Ty_ty res = transTy(tenv, hd->head->ty);
+                if (res->kind != Ty_void) {
+                    S_enter(tenv, hd->head->name, 
+                            transTy(tenv, hd->head->ty));
+                }
                 hd = hd->tail;
             }
             break;
@@ -259,5 +282,17 @@ Ty_ty transTy(S_table tenv, A_ty a) {
             }
             return Ty_Record(res->tail);
         }
+        case A_arrayTy: {
+            if (S_look(tenv, a->u.array) == NULL) {
+                EM_error(a->pos,
+                "undefined array type name %s",
+                S_name(a->u.array));
+                return Ty_Void();
+            }
+            return actual_ty(S_look(tenv, a->u.array));
+        }
     }
 }
+
+
+
