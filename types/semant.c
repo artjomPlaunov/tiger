@@ -1,4 +1,5 @@
 #include <stddef.h>
+#include <stdio.h>
 #include "semant.h"
 #include "env.h"
 #include "errormsg.h"
@@ -119,6 +120,44 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
                 }
                 return expTy(NULL, Ty_Void());
             }
+        }
+
+        case A_whileExp: {
+            struct expty test = transExp(venv, tenv, a->u.while_.test);
+                if (test.ty->kind != Ty_int) {
+                    EM_error(a->pos, 
+                    "test clause in while expr must be ty INT");
+                }
+                struct expty body = transExp(venv, tenv, a->u.while_.body);
+                if (body.ty->kind != Ty_void) {
+                    EM_error(a->pos, 
+                    "type of body in while expr must produce no value");
+                }
+                return expTy(NULL, Ty_Void());
+        }
+
+        /*  TO-DO: 
+         *      Tiger specs state that the variable initialized as the 
+         *      iterator in the for loop may not be assigned to; 
+         *      As of yet this is not enforced. */
+        case A_forExp: {
+            struct expty lo = transExp(venv, tenv, a->u.for_.lo);
+            struct expty hi = transExp(venv, tenv, a->u.for_.hi);
+            if (hi.ty->kind != Ty_int || lo.ty->kind != Ty_int) {
+                EM_error(a->pos,
+                "initializer and limit expressions must be type INT in for");
+                return expTy(NULL, Ty_Void());
+            }
+            // Begin new scope for for loop iterator. 
+            S_beginScope(venv);
+            S_enter(venv, a->u.for_.var, E_VarEntry(Ty_Int()));
+            struct expty body = transExp(venv, tenv, a->u.for_.body);
+            if (body.ty->kind != Ty_void) {
+                EM_error(a->u.for_.body->pos,
+                "for loop body must not produce a value");
+            }
+            // End scope for loop iterator.
+            S_endScope(venv);
         }
 
         case A_letExp: {

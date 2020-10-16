@@ -22,9 +22,6 @@ Ty_ty Ty_String(void) {return &tystring;}
 static struct Ty_ty_ tyvoid = {Ty_void};
 Ty_ty Ty_Void(void) {return &tyvoid;}
 
-static struct Ty_ty_ tyerror = {Ty_error};
-Ty_ty Ty_Error(void) {return &tyerror;}
-
 Ty_ty Ty_Record(Ty_fieldList fields)
 {Ty_ty p = checked_malloc(sizeof(*p));
  p->kind=Ty_record;
