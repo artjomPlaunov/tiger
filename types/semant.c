@@ -67,6 +67,8 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
         case A_stringExp:
             return expTy(NULL, Ty_String());
 
+        /* TO-DO call expressions */
+
         /* TO-DO: op expressions */
         case A_opExp: {
             A_oper oper = a->u.op.oper;
@@ -76,6 +78,35 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
        
         /* TO-DO: record expressions */
         case A_recordExp: {
+            Ty_ty recType = S_look(tenv, a->u.record.typ);
+            if (recType == NULL) {
+                EM_error(a->pos,
+                "undefined record type %s",
+                S_name(a->u.record.typ));
+                return expTy(NULL, Ty_Void());
+            }
+            Ty_fieldList TyFields = recType->u.record;
+            A_efieldList AbsynFields = a->u.record.fields;
+
+            while (TyFields && AbsynFields) {
+                if (AbsynFields->head->name != TyFields->head->name) {
+                    EM_error(a->pos,
+                    "Discrepancy between record field expression and typedef");
+                    return expTy(NULL, Ty_Void());
+                }
+                
+                TyFields = TyFields->tail;
+                AbsynFields = AbsynFields->tail;
+            }
+            /*  If one is NULL and the other isn't, then the length of 
+             *  the lists is different. */
+            if ((long)TyFields ^ (long)AbsynFields) {
+                EM_error(a->pos,
+                "Discrepancy between record field expression and typedef");
+                return expTy(NULL, Ty_Void());
+            
+             }
+            return expTy(NULL, S_look(tenv, a->u.record.typ));
         }
 
         case A_seqExp: {
@@ -109,7 +140,7 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
                     EM_error(a->pos,
                     "incompatible types in then and else clauses");
                 }
-                return expTy(NULL, then.ty);
+                return expTy(NULL, actual_ty(then.ty));
             } else {
                 struct expty test = transExp(venv, tenv, a->u.if_.test);
                 if (test.ty->kind != Ty_int) {
@@ -160,6 +191,7 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
             }
             // End scope for loop iterator.
             S_endScope(venv);
+            return expTy(NULL, Ty_Void());
         }
    
         /* TO-DO: check that break expressions are within for or while 
@@ -184,7 +216,7 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
         case A_arrayExp: {
             struct expty res = expTy(NULL, Ty_Void());
             Ty_ty arrType = S_look(tenv, a->u.array.typ);
-            if (arrType == NULL || actual_ty(arrType)->kind != Ty_array) {
+            if (arrType == NULL || arrType->kind != Ty_array) {
                 EM_error(a->pos,
                 "undefined array type %s",
                 S_name(a->u.array.typ));
@@ -197,13 +229,13 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
                 return res;
             }
             struct expty init = transExp(venv, tenv, a->u.array.init);
-            
-            /* TO-DO:
-                there is no check thus far that compares the initializer 
-                value with the array type; Think this would require some sort
-                of deep-structural equality comparison that isn't implemented
-                as of yet. */
-            res.ty = Ty_Array(S_look(tenv,a->u.array.typ));
+            if (init.ty != arrType->u.array) {
+                EM_error(a->pos,
+                "init expression incompatible with array type");
+                return res;
+            }
+
+            res.ty = S_look(tenv,a->u.array.typ);
             return res;
         }
     }
@@ -239,7 +271,7 @@ void transDec(S_table venv, S_table tenv, A_dec d) {
                 }
             } 
             S_enter(venv, d->u.var.var, E_VarEntry(e.ty));
-            break;
+            return;
         }
         case A_typeDec: {
             A_nametyList hd = d->u.type;

@@ -1,9 +1,8 @@
 let 
-    type intArr = array of int
-    var x := intArr[5] of 0
-
-    type twoDArr = array of intArr
-    var xy := twoDArr[5] of x
+    type arrType = array of int
+    type twoDimensional = array of arrType
+    var x := arrType[5] of 0
+    var xy := arrType[5] of x
 in
-    ()
+    ()  
 end
