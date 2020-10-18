@@ -1,8 +1,8 @@
 let 
-    type arrType = array of int
-    type twoDimensional = array of arrType
-    var x := arrType[5] of 0
-    var xy := arrType[5] of x
+    type one = {field1:int}
+    type two = {field1:int, field2:one}
+    var recVar := two{field1=5, field2=one{field1=123}}
+
 in
-    ()  
+    recVar.field3
 end

@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <stdio.h>
+#include <string.h>
 #include "semant.h"
 #include "env.h"
 #include "errormsg.h"
@@ -47,10 +48,30 @@ struct  expty   transVar(S_table venv,  S_table tenv,   A_var v) {
                 EM_error(v->pos, "undefined variable %s",
                             S_name(v->u.simple));
             }
-            /*  Dummy return to allow the type checker to continue. 
-                Set variable to be type VOID; not sure if this is the best
-                solution? Need to think this through and see how it 
-                interacts with other components of the type checker. */
+            return expTy(NULL, Ty_Void());
+        }
+
+        /* TO-DO: implement functionality for recursive record field selections
+            i.e. something like : "recVariable.field1.field2", where field1
+            is itself a record type being selected. */
+        case A_fieldVar: {
+            // Extract field list from variable translation. 
+            struct expty e = transVar(venv, tenv, v->u.field.var);
+            Ty_fieldList fl = e.ty->u.record;
+
+            while (fl) { 
+                if (strcmp(S_name(fl->head->name),S_name(v->u.field.sym))==0) {
+                    return expTy(NULL, fl->head->ty);
+                } else {
+                    fl = fl->tail;
+                }
+            }
+
+            EM_error(v->pos,
+            "field identifier %s does not match any fields in defined record\
+type",
+            S_name(v->u.field.sym));
+
             return expTy(NULL, Ty_Void());
         }
     }
@@ -89,9 +110,20 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
             A_efieldList AbsynFields = a->u.record.fields;
 
             while (TyFields && AbsynFields) {
+                // Check for equal field names.
                 if (AbsynFields->head->name != TyFields->head->name) {
                     EM_error(a->pos,
-                    "Discrepancy between record field expression and typedef");
+                    "field name in record expression does not match \
+                    field name in record type definition");
+                    return expTy(NULL, Ty_Void());
+                }
+                // Check for equivalent field types.
+                struct expty e = transExp(venv, tenv, AbsynFields->head->exp);
+                if (!typeMatch(e.ty, TyFields->head->ty)) {
+                    EM_error(a->pos,
+                    "field initializer in record expression does not match \
+                    corresponding type for field %s",
+                    S_name(TyFields->head->name));
                     return expTy(NULL, Ty_Void());
                 }
                 
@@ -102,7 +134,8 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
              *  the lists is different. */
             if ((long)TyFields ^ (long)AbsynFields) {
                 EM_error(a->pos,
-                "Discrepancy between record field expression and typedef");
+                "Number of fields in record expression does not match \
+                number in record type definition");
                 return expTy(NULL, Ty_Void());
             
              }
@@ -229,7 +262,7 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
                 return res;
             }
             struct expty init = transExp(venv, tenv, a->u.array.init);
-            if (init.ty != arrType->u.array) {
+            if (!typeMatch(init.ty,arrType->u.array)) {
                 EM_error(a->pos,
                 "init expression incompatible with array type");
                 return res;
