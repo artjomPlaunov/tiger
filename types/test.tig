@@ -1,8 +1,11 @@
 let 
-    type one = {field1:int}
-    type two = {field1:int, field2:one}
-    var recVar := two{field1=5, field2=one{field1=123}}
-
+    type point = {x:int, y:int}
+    type rectangle = {a:point, b:point, c:point, d:point}
+    type rectangularPrism = {side1:rectangle, side2:rectangle}
+    var p := point{x=1,y=5}
+    var r1 := rectangle{a=p,b=p,c=p,d=p}
+    var r2 := r1 
+    var solid := rectangularPrism{side1=r1, side2=r2}
 in
-    recVar.field3
+    solid.side1.a := point{x=5,y="str"}
 end

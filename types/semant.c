@@ -51,11 +51,7 @@ struct  expty   transVar(S_table venv,  S_table tenv,   A_var v) {
             return expTy(NULL, Ty_Void());
         }
 
-        /* TO-DO: implement functionality for recursive record field selections
-            i.e. something like : "recVariable.field1.field2", where field1
-            is itself a record type being selected. */
         case A_fieldVar: {
-            // Extract field list from variable translation. 
             struct expty e = transVar(venv, tenv, v->u.field.var);
             Ty_fieldList fl = e.ty->u.record;
 
