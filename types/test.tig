@@ -1,11 +1,6 @@
 let 
-    type point = {x:int, y:int}
-    type rectangle = {a:point, b:point, c:point, d:point}
-    type rectangularPrism = {side1:rectangle, side2:rectangle}
-    var p := point{x=1,y=5}
-    var r1 := rectangle{a=p,b=p,c=p,d=p}
-    var r2 := r1 
-    var solid := rectangularPrism{side1=r1, side2=r2}
+    type intArray = array of int
+    var row := intArray [10] of 0
 in
-    solid.side1.a := point{x=5,y="str"}
+    row["str"]
 end

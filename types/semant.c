@@ -70,6 +70,19 @@ type",
 
             return expTy(NULL, Ty_Void());
         }
+
+        case A_subscriptVar: {
+            struct expty var = transVar(venv, tenv, v->u.subscript.var);
+            Ty_ty arrType = var.ty->u.array;
+            
+            struct expty e = transExp(venv, tenv, v->u.subscript.exp);
+            if (e.ty->kind != Ty_int) {
+                EM_error(v->pos,
+                "subscript expression in array must be of type INT");
+                return expTy(NULL, Ty_Void());
+            }
+            return expTy(NULL, arrType);
+        }
     }
 }
 
@@ -273,6 +286,12 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
 
 void transDec(S_table venv, S_table tenv, A_dec d) {
     switch (d->kind) {
+
+        case A_functionDec: {
+            
+        
+        }
+
         case A_varDec: {
             struct expty e = transExp(venv, tenv, d->u.var.init);
             // If constraint type is present
