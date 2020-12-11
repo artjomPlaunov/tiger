@@ -288,8 +288,14 @@ void transDec(S_table venv, S_table tenv, A_dec d) {
     switch (d->kind) {
 
         case A_functionDec: {
-            
-        
+            A_fundecList lst = d->u.function;            
+            while lst {
+                A_fundec head = lst.head;
+                
+
+
+                lst = lst.tail;
+            }
         }
 
         case A_varDec: {

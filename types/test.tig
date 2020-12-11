@@ -2,5 +2,5 @@ let
     type intArray = array of int
     var row := intArray [10] of 0
 in
-    row["str"]
+    row[1]
 end
