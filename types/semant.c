@@ -98,6 +98,47 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
             return expTy(NULL, Ty_String());
 
         /* TO-DO call expressions */
+        case A_callExp: {
+            E_enventry e = S_look(venv, a->u.call.func);
+            if (e == NULL ) {
+                EM_error(a->pos,
+                "call to undeclared function");
+                return expTy(NULL, NULL);
+            }
+            A_expList args = a->u.call.args;
+            Ty_tyList formals = e->u.fun.formals;
+            Ty_ty result_type = e->u.fun.result;
+
+            while (args && formals) {
+                
+                A_exp arg = args->head;
+                Ty_ty formal = formals->head;
+
+                struct expty e = transExp(venv, tenv, arg);
+                if (!typeMatch(e.ty, formal)) {
+                    EM_error(a->pos,
+                    "function argument type mismatch to signature");
+                    return expTy(NULL, result_type);
+                }
+
+                args = args->tail;
+                formals = formals->tail;
+            }
+            if (args || formals) {
+                if (args) {
+                    EM_error(a->pos,
+                    "too many arguments passed to function call");
+                } else {
+                    EM_error(a->pos,
+                    "too few arguments passed to function call");
+                }
+                return expTy(NULL, result_type);
+            }
+
+            
+
+            return expTy(NULL, result_type);
+        }
 
         /* TO-DO: op expressions */
         case A_opExp: {
@@ -286,7 +327,6 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
 
 void transDec(S_table venv, S_table tenv, A_dec d) {
     switch (d->kind) {
-
         case A_functionDec: {
             A_fundecList lst = d->u.function;            
          
@@ -316,7 +356,7 @@ void transDec(S_table venv, S_table tenv, A_dec d) {
                         cur = cur->tail;
                         // Part of the param 'hack': variables get entered 
                         // into variable scope here.
-                        S_enter(venv, field->name, param);
+                        S_enter(venv, field->name, E_VarEntry(param));
                     }
                     params = params->tail; 
                 }
@@ -344,10 +384,10 @@ void transDec(S_table venv, S_table tenv, A_dec d) {
                 S_endScope(venv);
     
                 // Finally add the function to the type scope. 
-                S_enter(tenv, head->name, E_FunEntry(res->tail, constraint));
-
+                S_enter(venv, head->name, E_FunEntry(res->tail, constraint));
                 lst = lst->tail;
             }
+            return;
         }
 
         case A_varDec: {

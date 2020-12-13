@@ -1,6 +1,9 @@
 let 
     type intArray = array of int
-    var row := intArray [10] of 0
-in
-    ()
-end
+    function f(a:int, b:int) : int = (a)
+    function g(a:string) = 
+        ("str";a;5)
+in (    
+    g("str");
+    f(1,5)
+) end

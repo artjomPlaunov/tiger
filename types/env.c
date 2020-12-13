@@ -9,7 +9,13 @@ E_enventry E_VarEntry(Ty_ty ty) {
     return e;
 }
 
-E_enventry E_FunEntry(Ty_tyList formals, Ty_ty result) {return 0;}
+E_enventry E_FunEntry(Ty_tyList formals, Ty_ty result) {
+    E_enventry e = checked_malloc(sizeof(*e));
+    e->kind = E_funEntry;
+    e->u.fun.formals = formals;
+    e->u.fun.result = result;
+    return e;    
+}
 
 S_table E_base_tenv(void) {
     S_table s = S_empty();
