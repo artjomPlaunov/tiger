@@ -251,11 +251,11 @@ exp:
                 $$ = A_OpExp($3, A_leOp, $1, $4);
         }
 |       exp AND pos exp {
-                $$ = A_IfExp( $3, $1, $4, A_IntExp($3,0));
+                $$ = A_OpExp($3, A_andOp, $1, $4);
                         
         }
 |       exp OR pos exp {
-                $$ = A_IfExp($3, $1, A_IntExp($3,1), $4); 
+                $$ = A_OpExp($3, A_orOp, $1, $4);
         }
 |       ID LBRACE pos RBRACE {
                 $$ = A_RecordExp( $3, S_Symbol($1), NULL);

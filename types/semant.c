@@ -53,6 +53,13 @@ struct  expty   transVar(S_table venv,  S_table tenv,   A_var v) {
 
         case A_fieldVar: {
             struct expty e = transVar(venv, tenv, v->u.field.var);
+
+            if (e.ty->kind != Ty_record) {
+                EM_error(v->pos,
+                "non-record variable type in field expression");
+                return expTy(NULL, Ty_Void());
+            }
+
             Ty_fieldList fl = e.ty->u.record;
 
             while (fl) { 
@@ -73,6 +80,12 @@ type",
 
         case A_subscriptVar: {
             struct expty var = transVar(venv, tenv, v->u.subscript.var);
+            if (var.ty->kind != Ty_array) {
+                EM_error(v->pos,
+                "subscript variable not array type");
+                return expTy(NULL, Ty_Void());
+            }
+
             Ty_ty arrType = var.ty->u.array;
             
             struct expty e = transExp(venv, tenv, v->u.subscript.exp);
@@ -145,7 +158,57 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
             A_oper oper = a->u.op.oper;
             struct expty left = transExp(venv, tenv, a->u.op.left);
             struct expty right = transExp(venv, tenv, a->u.op.right);
-        }
+            
+            if (    oper == A_plusOp 
+                ||  oper == A_minusOp 
+                ||  oper == A_timesOp
+                ||  oper == A_divideOp 
+                ||  oper == A_andOp
+                ||  oper == A_orOp) {
+            
+                if (left.ty->kind != Ty_int) {
+                    EM_error(a->pos,
+                    "left operand supposed to be of type int");
+                } else if (right.ty->kind != Ty_int) {
+                    EM_error(a->pos,
+                    "right operand supposed to be of type int");
+                }
+            } else if (oper == A_eqOp || oper == A_neqOp) {
+                if (    left.ty->kind == Ty_record  ||
+                        right.ty->kind == Ty_record ||
+                        left.ty->kind == Ty_array   ||
+                        right.ty->kind == Ty_array ) {
+                    
+                    if (!typeMatch(left.ty, right.ty)) {
+                        EM_error(a->pos,
+                        "record or array comparison type mismatch");    
+                    }
+                } else if ( left.ty->kind == Ty_int     ||
+                            right.ty->kind == Ty_int    ||
+                            left.ty->kind == Ty_string  ||
+                            right.ty->kind == Ty_string ) {
+                    if (!typeMatch(left.ty, right.ty)) {
+                        EM_error(a->pos,
+                        "comparison type mismatch");
+                    }
+                } else {
+                    EM_error(a->pos,
+                    "invalid comparison type");
+                }
+            } else if ( left.ty->kind == Ty_int     ||
+                        right.ty->kind == Ty_int    ||
+                        left.ty->kind == Ty_string  ||
+                        right.ty->kind == Ty_string) {
+                if (!typeMatch(left.ty, right.ty)) {
+                    EM_error(a->pos,
+                    "operator type mismatch");
+                }
+            } else {
+                EM_error(a->pos,
+                "invalid operator type");
+            }
+            return expTy(NULL, Ty_Int());
+        } 
        
         /* TO-DO: record expressions */
         case A_recordExp: {
@@ -297,6 +360,7 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
         }
 
         case A_arrayExp: {
+            printf("we made it here\n");
             struct expty res = expTy(NULL, Ty_Void());
             Ty_ty arrType = S_look(tenv, a->u.array.typ);
             if (arrType == NULL || arrType->kind != Ty_array) {
@@ -377,6 +441,11 @@ void transDec(S_table venv, S_table tenv, A_dec d) {
                     if (!typeMatch(constraint, e.ty)) {
                         EM_error(d->pos, 
                         "function return type and expression body mismatch");
+                    }
+                } else {
+                    if (e.ty != Ty_Void()) {
+                        EM_error(d->pos,
+                        "procedure returning value");
                     }
                 }
                 

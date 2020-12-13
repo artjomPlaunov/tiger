@@ -1,9 +1,10 @@
 let 
     type intArray = array of int
-    function f(a:int, b:int) : int = (a)
+    function f(a:int, b:int) : int = (1 & 0)
     function g(a:string) = 
         ("str";a;5)
 in (    
     g("str");
-    f(1,5)
+    f(1,5);
+    1 | 0
 ) end
