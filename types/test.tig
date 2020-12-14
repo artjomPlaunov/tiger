@@ -1,7 +1,7 @@
 let 
     type intArray = array of int
     function f(a:int, b:int) : int = (1 & 0)
-    function g(a:string) = 
+    function g(a:string) :int = 
         ("str";a;5)
 in (    
     g("str");

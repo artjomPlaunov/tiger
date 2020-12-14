@@ -1,3 +1,0 @@
-let type id = array of int
-in f()
-end

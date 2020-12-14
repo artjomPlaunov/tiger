@@ -43,7 +43,7 @@ struct  expty   transVar(S_table venv,  S_table tenv,   A_var v) {
         case A_simpleVar: {
             E_enventry x = S_look(venv, v->u.simple);
             if (x && x->kind==E_varEntry) {
-                return expTy(NULL, actual_ty(x->u.var.ty));
+                return expTy(NULL, (x->u.var.ty));
             } else {
                 EM_error(v->pos, "undefined variable %s",
                             S_name(v->u.simple));
@@ -155,10 +155,20 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
 
         /* TO-DO: op expressions */
         case A_opExp: {
+            
+            // This code is an utter mess. 
+            // Refactor redundant logic. 
             A_oper oper = a->u.op.oper;
             struct expty left = transExp(venv, tenv, a->u.op.left);
             struct expty right = transExp(venv, tenv, a->u.op.right);
-            
+           
+            // Handle nil assignment to record types.
+            if (oper == A_eqOp || oper == A_neqOp) {
+                if (left.ty->kind == Ty_record && right.ty->kind == Ty_nil) {
+                    return expTy(NULL, Ty_Int());
+                }
+            }
+
             if (    oper == A_plusOp 
                 ||  oper == A_minusOp 
                 ||  oper == A_timesOp
@@ -268,7 +278,11 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
         case A_assignExp: {
             struct expty e1 = transVar(venv, tenv, a->u.assign.var);
             struct expty e2 = transExp(venv, tenv, a->u.assign.exp);
-            if (e1.ty->kind != e2.ty->kind) {
+           
+            if ((actual_ty(e1.ty)->kind == Ty_record) 
+                && e2.ty->kind == Ty_nil) {
+                ; // OK 
+            } else if ( !typeMatch(e1.ty, e2.ty) ) {
                 EM_error(a->pos, "Incompatible types for assignment");
             }
             return expTy(NULL, Ty_Void());
@@ -351,8 +365,9 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
             A_decList d;
             S_beginScope(venv);
             S_beginScope(tenv);
-            for (d = a->u.let.decs; d; d=d->tail)
+            for (d = a->u.let.decs; d; d=d->tail) {
                 transDec(venv, tenv, d->head);
+            }
             exp = transExp(venv, tenv, a->u.let.body);
             S_endScope(tenv);
             S_endScope(venv);
@@ -360,7 +375,6 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
         }
 
         case A_arrayExp: {
-            printf("we made it here\n");
             struct expty res = expTy(NULL, Ty_Void());
             Ty_ty arrType = S_look(tenv, a->u.array.typ);
             if (arrType == NULL || arrType->kind != Ty_array) {
@@ -474,7 +488,7 @@ void transDec(S_table venv, S_table tenv, A_dec d) {
                         EM_error(d->pos, "non-record constraint type for NIL");
                         return; 
                     } else {
-                        S_enter(venv, d->u.var.var, constraint);
+                        S_enter(venv, d->u.var.var, E_VarEntry(constraint));
                         return;
                     }
                 // Check if constraint matches expression type
@@ -484,17 +498,35 @@ void transDec(S_table venv, S_table tenv, A_dec d) {
                         return; 
                     }
                 }
-            } 
+            } else {
+                // If constraint type is not present and initializer is of 
+                // type NIL, throw an error.
+                if (e.ty->kind == Ty_nil) {
+                    EM_error(d->pos,
+                    "no constraint type for nil initializer");
+                    return;
+                }
+            }
             S_enter(venv, d->u.var.var, E_VarEntry(e.ty));
             return;
         }
         case A_typeDec: {
+            // First pass: create header environment ' e '.
             A_nametyList hd = d->u.type;
+
             while (hd != NULL) {
-                Ty_ty res = transTy(tenv, hd->head->ty);
+                S_symbol header = hd->head->name;
+                S_enter(tenv, header, Ty_Name(header,NULL));
+                hd = hd->tail;
+            }
+
+            // Second pass: Process bodies in environment ' e '.
+            hd = d->u.type;
+            while (hd != NULL) {
+                Ty_ty res = transTy(tenv, hd->head->ty, 0);
                 if (res->kind != Ty_void) {
                     S_enter(tenv, hd->head->name, 
-                            transTy(tenv, hd->head->ty));
+                            transTy(tenv, hd->head->ty,1));
                 }
                 hd = hd->tail;
             }
@@ -503,7 +535,7 @@ void transDec(S_table venv, S_table tenv, A_dec d) {
     }
 }
 
-Ty_ty transTy(S_table tenv, A_ty a) {
+Ty_ty transTy(S_table tenv, A_ty a, int final_pass) {
     switch (a->kind) {    
         case A_nameTy: {
             if (S_look(tenv, a->u.name) == NULL) {
@@ -511,7 +543,11 @@ Ty_ty transTy(S_table tenv, A_ty a) {
                             S_name(a->u.name));
                 return Ty_Void();
             } else {
-                return actual_ty(S_look(tenv, a->u.name));
+                if (final_pass) {
+                    return actual_ty(S_look(tenv, a->u.name));
+                } else {
+                    return (S_look(tenv, a->u.name));
+                }
             }
         }
         case A_recordTy: {

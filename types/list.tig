@@ -1,0 +1,6 @@
+let
+    type list = {first: int, rest: list}
+    type new = {first:list, second:new}
+in 
+    ()
+end
