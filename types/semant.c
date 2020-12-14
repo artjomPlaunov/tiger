@@ -523,19 +523,24 @@ void transDec(S_table venv, S_table tenv, A_dec d) {
             // Second pass: Process bodies in environment ' e '.
             hd = d->u.type;
             while (hd != NULL) {
-                Ty_ty res = transTy(tenv, hd->head->ty, 0);
+                Ty_ty res = transTy(tenv, hd->head->ty);
                 if (res->kind != Ty_void) {
-                    S_enter(tenv, hd->head->name, 
-                            transTy(tenv, hd->head->ty,1));
+                    // Patch over NULL Ty_Name's.
+                    Ty_ty patch = S_look(tenv, hd->head->name);
+                    if (patch->kind == Ty_name) {
+                        patch->u.name.ty = res;
+                    } else {
+                        S_enter(tenv, hd->head->name, res);
+                    }
                 }
                 hd = hd->tail;
             }
-            break;
+        
         }    
     }
 }
 
-Ty_ty transTy(S_table tenv, A_ty a, int final_pass) {
+Ty_ty transTy(S_table tenv, A_ty a) {
     switch (a->kind) {    
         case A_nameTy: {
             if (S_look(tenv, a->u.name) == NULL) {
@@ -543,11 +548,7 @@ Ty_ty transTy(S_table tenv, A_ty a, int final_pass) {
                             S_name(a->u.name));
                 return Ty_Void();
             } else {
-                if (final_pass) {
-                    return actual_ty(S_look(tenv, a->u.name));
-                } else {
-                    return (S_look(tenv, a->u.name));
-                }
+                return (S_look(tenv, a->u.name));
             }
         }
         case A_recordTy: {
