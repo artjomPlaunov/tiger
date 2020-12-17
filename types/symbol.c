@@ -68,6 +68,10 @@ void S_endScope(S_table t)
   while (s != &marksym);
 }
 
+void S_move(S_table dst, S_table src) {
+    TAB_move(dst,src);
+}
+
 void S_dump(S_table t, void (*show)(S_symbol sym, void *binding)) {
   TAB_dump(t, (void (*)(void *, void *)) show);
 }

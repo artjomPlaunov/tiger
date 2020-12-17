@@ -91,3 +91,17 @@ void TAB_dump(TAB_table t, void (*show)(void *key, void *value))
         t->top=k;
         t->table[index]=b;
 }
+
+void TAB_move(TAB_table dst, TAB_table t) {
+    void *k = t->top;
+    int index = ((unsigned)k) % TABSIZE;
+    binder b = t->table[index];
+    if (b==NULL) return;
+    t->table[index]=b->next;
+    t->top=b->prevtop;
+    TAB_enter(dst, b->key,b->value);
+    TAB_move(dst, t);
+    assert(t->top == b->prevtop && t->table[index]==b->next);
+    t->top=k;
+    t->table[index]=b;
+}

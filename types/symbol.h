@@ -36,6 +36,8 @@ void *S_look(S_table t, S_symbol sym);
 /* Start a new "scope" in "t".  Scopes are nested. */
 void S_beginScope(S_table t);
 
+void S_move(S_table dst, S_table src);
+
 /* Remove any bindings entered since the current scope began,
    and end the current scope. */
 void S_endScope(S_table t);

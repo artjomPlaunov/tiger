@@ -25,6 +25,7 @@ void TAB_enter(TAB_table t, void *key, void *value);
 /* Look up the most recent binding for "key" in table "t" */
 void *TAB_look(TAB_table t, void *key);
 
+
 /* Pop the most recent binding and return its key.
  * This may expose another binding for the same key, if there was one. */
 void *TAB_pop(TAB_table t);

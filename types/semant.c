@@ -121,6 +121,9 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
             A_expList args = a->u.call.args;
             Ty_tyList formals = e->u.fun.formals;
             Ty_ty result_type = e->u.fun.result;
+            if (result_type == NULL) {
+                result_type = Ty_Void();
+            }
 
             while (args && formals) {
                 
@@ -242,7 +245,10 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
                 }
                 // Check for equivalent field types.
                 struct expty e = transExp(venv, tenv, AbsynFields->head->exp);
-                if (!typeMatch(e.ty, TyFields->head->ty)) {
+                if (actual_ty(TyFields->head->ty)->kind == Ty_record &&
+                    e.ty->kind == Ty_nil ) {
+                    ; // OK nil assignment to record type.
+                } else if (!typeMatch(e.ty, TyFields->head->ty)) {
                     EM_error(a->pos,
                     "field initializer in record expression does not match \
                     corresponding type for field %s",
@@ -406,46 +412,74 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
 void transDec(S_table venv, S_table tenv, A_dec d) {
     switch (d->kind) {
         case A_functionDec: {
+           
+            S_table functionDecs = S_empty();
+
+            // First Pass: gather function headers.
             A_fundecList lst = d->u.function;            
-         
-            while (lst) {
+            while (lst) { 
                 A_fundec head = lst->head;
-                
-                // Process function parameter list.
-                A_fieldList params = head->params;   
-                Ty_tyList res = Ty_TyList(NULL,NULL);
-                Ty_tyList cur = res;                                
-                
-                // TO-DO
-                // Beginscope is a temporary hack to get the variables 
-                // being processed in the parameter list available in the 
-                // variable scope during processing of the function body.
-                //
-                // Fix this when adding support for recursive functions. 
-                S_beginScope(venv);
+                if (S_look(functionDecs, head->name)) {
+                    EM_error(d->pos,
+                    "mutually recursive function redeclaration");
+                    lst = lst->tail;
+                    continue;
+                }
+                A_fieldList params = head->params;
+                Ty_tyList res = Ty_TyList(NULL,NULL); 
+                Ty_tyList cur = res;
 
                 while (params) {
+                    // Just collect the type on first pass, do not enter 
+                    // variable into environment. 
                     A_field field = params->head;
                     Ty_ty param = S_look(tenv, field->typ);
                     if (!param) {
                         EM_error(d->pos, "undefined parameter type");
+                        return;
                     } else {
                         cur->tail = Ty_TyList(param, NULL);
                         cur = cur->tail;
-                        // Part of the param 'hack': variables get entered 
-                        // into variable scope here.
-                        S_enter(venv, field->name, E_VarEntry(param));
                     }
-                    params = params->tail; 
+                    params = params->tail;
                 }
-                
                 // Process function result type.
                 Ty_ty constraint = NULL;
                 if (head->result) {
                     constraint = S_look(tenv, head->result);
                     if (!constraint) {
                         EM_error(d->pos, "undefined function result type");
+                        return;
                     }
+                }
+                // Add function to variable scope.
+                S_enter(functionDecs, head->name, 
+                        E_FunEntry(res->tail, constraint));
+                lst = lst->tail;
+            }
+            S_move(venv, functionDecs);
+
+
+            // Second pass: process function bodies, patch parameters.
+            lst = d->u.function;
+            escape: while (lst) {
+                A_fundec head = lst->head;
+                
+                // Process function parameter list.
+                A_fieldList params = head->params;   
+                
+                S_beginScope(venv);
+
+                while (params) {
+                    A_field field = params->head;
+                    Ty_ty param = S_look(tenv, field->typ);
+                    S_enter(venv, field->name, E_VarEntry(param));
+                    params = params->tail; 
+                }
+                
+                Ty_ty constraint = NULL;
+                if (head->result) {
+                    constraint = S_look(tenv, head->result);
                 }
                
                 // Process function expression.
@@ -455,19 +489,20 @@ void transDec(S_table venv, S_table tenv, A_dec d) {
                     if (!typeMatch(constraint, e.ty)) {
                         EM_error(d->pos, 
                         "function return type and expression body mismatch");
+                        S_endScope(venv);
+                        lst = lst->tail;
+                        goto escape;
                     }
                 } else {
                     if (e.ty != Ty_Void()) {
                         EM_error(d->pos,
                         "procedure returning value");
+                        S_endScope(venv);
+                        lst = lst->tail;
+                        goto escape;
                     }
                 }
-                
-                // End of param 'hack'; variables get popped here. 
                 S_endScope(venv);
-    
-                // Finally add the function to the type scope. 
-                S_enter(venv, head->name, E_FunEntry(res->tail, constraint));
                 lst = lst->tail;
             }
             return;
@@ -510,15 +545,25 @@ void transDec(S_table venv, S_table tenv, A_dec d) {
             S_enter(venv, d->u.var.var, E_VarEntry(e.ty));
             return;
         }
+        // TO-DO: Check for illegal cycles in type declarations.
         case A_typeDec: {
             // First pass: create header environment ' e '.
             A_nametyList hd = d->u.type;
 
+            S_table typeDecs = S_empty();
+
             while (hd != NULL) {
                 S_symbol header = hd->head->name;
-                S_enter(tenv, header, Ty_Name(header,NULL));
+                if (S_look(typeDecs, header)) {
+                    EM_error(d->pos,
+                    "mutually recursive type re-declaration");
+                    hd = hd->tail;
+                    continue;
+                }
+                S_enter(typeDecs, header, Ty_Name(header,NULL));
                 hd = hd->tail;
             }
+            S_move(tenv, typeDecs);
 
             // Second pass: Process bodies in environment ' e '.
             hd = d->u.type;
@@ -529,6 +574,7 @@ void transDec(S_table venv, S_table tenv, A_dec d) {
                     Ty_ty patch = S_look(tenv, hd->head->name);
                     if (patch->kind == Ty_name) {
                         patch->u.name.ty = res;
+                        S_enter(tenv, hd->head->name, res);
                     } else {
                         S_enter(tenv, hd->head->name, res);
                     }
