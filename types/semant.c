@@ -15,6 +15,8 @@ void SEM_transProg(A_exp exp) {
     struct expty expty = transExp(venv, tenv, exp);
 }
 
+static int loopCount = 0;
+
 static int typeMatch(Ty_ty t1, Ty_ty t2) {
     if (t1->kind == t2->kind) {
         // If record or array type, check for pointer equality. 
@@ -327,8 +329,12 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
                     EM_error(a->pos, 
                     "test clause in while expr must be ty INT");
                 }
-                struct expty body = transExp(venv, tenv, a->u.while_.body);
-                if (body.ty->kind != Ty_void) {
+                
+				loopCount++;
+				struct expty body = transExp(venv, tenv, a->u.while_.body);
+                loopCount--;
+				
+				if (body.ty->kind != Ty_void) {
                     EM_error(a->pos, 
                     "type of body in while expr must produce no value");
                 }
@@ -350,8 +356,10 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
             // Begin new scope for for loop iterator. 
             S_beginScope(venv);
             S_enter(venv, a->u.for_.var, E_VarEntry(Ty_Int()));
-            struct expty body = transExp(venv, tenv, a->u.for_.body);
-            if (body.ty->kind != Ty_void) {
+            loopCount++;
+			struct expty body = transExp(venv, tenv, a->u.for_.body);
+            loopCount--;
+			if (body.ty->kind != Ty_void) {
                 EM_error(a->u.for_.body->pos,
                 "for loop body must not produce a value");
             }
@@ -360,10 +368,12 @@ struct expty transExp(S_table venv, S_table tenv, A_exp a) {
             return expTy(NULL, Ty_Void());
         }
    
-        /* TO-DO: check that break expressions are within for or while 
-            loops. */
         case A_breakExp: {
-            return expTy(NULL, Ty_Void());
+            if (loopCount == 0) {
+				EM_error(a->pos,
+				"break statement found outside of loop");
+			}
+			return expTy(NULL, Ty_Void());
         }
 
         case A_letExp: {
