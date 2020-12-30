@@ -1,3 +1,3 @@
 run 'make'
 
-execute: ./exe <file>
+execute: ./exe test_file.tig
