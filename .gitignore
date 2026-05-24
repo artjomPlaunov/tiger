@@ -1,0 +1,6 @@
+/_build/
+/.coverage
+*.install
+.DS_Store
+tiger/
+AGENTS.md
