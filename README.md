@@ -9,10 +9,10 @@ dune runtest
 Run a specific Cram test with:
 
 ```sh
-dune runtest test/chap2/lexer.t
-dune runtest test/chap2/lexer-errors.t
-dune runtest test/chap2/programs-lexer.t
-dune runtest test/chap3/parser.t
+dune runtest test/lexer/lexer.t
+dune runtest test/lexer/lexer-errors.t
+dune runtest test/lexer/testcases-lexer.t
+dune runtest test/parser/parser.t
 ```
 
 If a Cram test fails and the diff is correct, promote the corrected output:
@@ -21,15 +21,18 @@ If a Cram test fails and the diff is correct, promote the corrected output:
 dune promote
 ```
 
-Then it will save that output and future runs will diff against it.
+Then rerun the same Cram test to confirm it passes.
 
-Each Cram test runs an executable for that compiler component, i.e. lexer tests:
+For manual inspection, run the component executable directly. This does not
+create promotable Cram output.
+
+Lexer example:
 
 ```sh
 dune exec tiger-lex -- programs/lexer/scaffold.tig
 ```
 
-parser tests:
+Parser example:
 
 ```sh
 dune exec tiger-parse -- programs/parser/empty.tig

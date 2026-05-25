@@ -20,5 +20,7 @@ program:
   exp EOF { () }
 
 exp:
-  /* Parser skeleton placeholder. */
-  { () }
+  NIL { () }
+| INT { () }
+| STRING { () }
+| LPAREN RPAREN { () }
