@@ -2,25 +2,7 @@
 
 `test/<chapter>/`.
 
-Uses dune cram tests:
-
-```sh
-dune runtest test/chap2/lexer.t
-dune runtest test/chap2/lexer-errors.t
-dune runtest test/chap2/programs-lexer.t
-```
-
-To inspect the lexer output directly:
-
-```sh
-dune exec tiger -- programs/lexer/scaffold.tig
-```
-
-To update the expected Cram output after inspecting a cram diff:
-
-```sh
-dune promote
-```
+## Tests
 
 Run all tests with:
 
@@ -28,10 +10,33 @@ Run all tests with:
 dune runtest
 ```
 
-`test/chap2/lexer.t` contains focused valid lexer cases.
-`test/chap2/lexer-errors.t` contains lexer diagnostic cases.
-`test/chap2/programs-lexer.t` contains snapshots for the root-level Tiger
-programs.
+Run a specific Cram test with:
 
-To add a new focused lexer case, add a command to `test/chap2/lexer.t`, run the
-Cram test, inspect Dune's diff, and promote it if the output is correct.
+```sh
+dune runtest test/chap2/lexer.t
+dune runtest test/chap2/lexer-errors.t
+dune runtest test/chap2/programs-lexer.t
+dune runtest test/chap3/parser.t
+```
+
+If a Cram test fails and the diff is correct, promote the corrected output:
+
+```sh
+dune promote
+```
+
+Then it will save that output and future runs will diff against it.
+
+## Direct Inspection
+
+Each Cram test runs an executable for that compiler component, i.e. lexer tests:
+
+```sh
+dune exec tiger-lex -- programs/lexer/scaffold.tig
+```
+
+parser tests:
+
+```sh
+dune exec tiger-parse -- programs/parser/empty.tig
+```

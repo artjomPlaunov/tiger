@@ -1,6 +1,6 @@
 Chapter 2 lexer scaffold.
 
-  $ ../../bin/main.exe ../../programs/lexer/scaffold.tig
+  $ ../../bin/tiger_lex.exe ../../programs/lexer/scaffold.tig
   VAR   0
   COMMA   3
   INT(123)   4
@@ -8,14 +8,14 @@ Chapter 2 lexer scaffold.
 
 Comments are skipped like whitespace and can be nested.
 
-  $ ../../bin/main.exe ../../programs/lexer/comments.tig
+  $ ../../bin/tiger_lex.exe ../../programs/lexer/comments.tig
   VAR   0
   VAR   28
   EOF   32
 
 All fixed tokens, keywords, identifiers, and integers.
 
-  $ ../../bin/main.exe ../../programs/lexer/tokens.tig
+  $ ../../bin/tiger_lex.exe ../../programs/lexer/tokens.tig
   TYPE   0
   VAR   5
   FUNCTION   9
@@ -65,7 +65,7 @@ All fixed tokens, keywords, identifiers, and integers.
 
 Strings support Tiger escapes.
 
-  $ ../../bin/main.exe ../../programs/lexer/strings.tig
+  $ ../../bin/tiger_lex.exe ../../programs/lexer/strings.tig
   STRING(hello)     0
   STRING(")     8
   STRING(\)     13

@@ -1,4 +1,17 @@
 (executable
  (public_name tiger)
  (name main)
+ (modules main)
+ (libraries tiger))
+
+(executable
+ (public_name tiger-lex)
+ (name tiger_lex)
+ (modules tiger_lex)
+ (libraries tiger))
+
+(executable
+ (public_name tiger-parse)
+ (name tiger_parse)
+ (modules tiger_parse)
  (libraries tiger))

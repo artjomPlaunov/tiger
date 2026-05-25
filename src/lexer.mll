@@ -1,72 +1,66 @@
 {
-let span lexbuf =
-  Token.
-    {
-      start_pos = Lexing.lexeme_start lexbuf;
-      end_pos = Lexing.lexeme_end lexbuf;
-    }
+let last_token_start = ref 0
 
-let make_token lexbuf kind = Token.{ kind; span = span lexbuf }
+let token_start () = !last_token_start
+
+let make_token lexbuf token =
+  last_token_start := Lexing.lexeme_start lexbuf;
+  token
 
 let keyword_or_id lexbuf =
-  let kind =
+  let token =
     match Lexing.lexeme lexbuf with
-    | "type" -> Token.TYPE
-    | "var" -> Token.VAR
-    | "function" -> Token.FUNCTION
-    | "break" -> Token.BREAK
-    | "of" -> Token.OF
-    | "end" -> Token.END
-    | "in" -> Token.IN
-    | "nil" -> Token.NIL
-    | "let" -> Token.LET
-    | "do" -> Token.DO
-    | "to" -> Token.TO
-    | "for" -> Token.FOR
-    | "while" -> Token.WHILE
-    | "else" -> Token.ELSE
-    | "then" -> Token.THEN
-    | "if" -> Token.IF
-    | "array" -> Token.ARRAY
-    | name -> Token.ID name
+    | "type" -> Parser.TYPE
+    | "var" -> Parser.VAR
+    | "function" -> Parser.FUNCTION
+    | "break" -> Parser.BREAK
+    | "of" -> Parser.OF
+    | "end" -> Parser.END
+    | "in" -> Parser.IN
+    | "nil" -> Parser.NIL
+    | "let" -> Parser.LET
+    | "do" -> Parser.DO
+    | "to" -> Parser.TO
+    | "for" -> Parser.FOR
+    | "while" -> Parser.WHILE
+    | "else" -> Parser.ELSE
+    | "then" -> Parser.THEN
+    | "if" -> Parser.IF
+    | "array" -> Parser.ARRAY
+    | name -> Parser.ID name
   in
-  make_token lexbuf kind
+  make_token lexbuf token
 
 let int_token lexbuf =
-  let span = span lexbuf in
+  let start_pos = Lexing.lexeme_start lexbuf in
+  last_token_start := start_pos;
   let value =
     match int_of_string_opt (Lexing.lexeme lexbuf) with
     | Some value -> value
     | None ->
-        Error_msg.error span.start_pos "integer too large";
+        Error_msg.error start_pos "integer too large";
         1
   in
-  Token.{ kind = INT value; span }
+  Parser.INT value
 
 let string_buffer = Buffer.create 128
 
-let string_token start_pos lexbuf =
-  Token.
-    {
-      kind = STRING (Buffer.contents string_buffer);
-      span = { start_pos; end_pos = Lexing.lexeme_end lexbuf };
-    }
+let string_token start_pos =
+  last_token_start := start_pos;
+  Parser.STRING (Buffer.contents string_buffer)
 
-let unterminated_string_token start_pos lexbuf =
+let unterminated_string_token start_pos =
+  last_token_start := start_pos;
   Error_msg.error start_pos "unclosed string";
-  Token.
-    {
-      kind = STRING (Buffer.contents string_buffer);
-      span = { start_pos; end_pos = Lexing.lexeme_start lexbuf };
-    }
+  Parser.STRING (Buffer.contents string_buffer)
 
 let newline lexbuf =
   incr Error_msg.line_num;
   Error_msg.line_pos := Lexing.lexeme_end lexbuf :: !(Error_msg.line_pos)
 
 let eof_token lexbuf =
-  let pos = Lexing.lexeme_start lexbuf in
-  Token.{ kind = EOF; span = { start_pos = pos; end_pos = pos } }
+  last_token_start := Lexing.lexeme_start lexbuf;
+  Parser.EOF
 
 let add_decimal_escape lexbuf =
   let start_pos = Lexing.lexeme_start lexbuf in
@@ -95,29 +89,29 @@ rule token = parse
     }
   | newline { newline lexbuf; token lexbuf }
   | whitespace+ { token lexbuf }
-  | ":=" { make_token lexbuf Token.ASSIGN }
-  | "|" { make_token lexbuf Token.OR }
-  | "&" { make_token lexbuf Token.AND }
-  | ">=" { make_token lexbuf Token.GE }
-  | ">" { make_token lexbuf Token.GT }
-  | "<=" { make_token lexbuf Token.LE }
-  | "<" { make_token lexbuf Token.LT }
-  | "<>" { make_token lexbuf Token.NEQ }
-  | "=" { make_token lexbuf Token.EQ }
-  | "/" { make_token lexbuf Token.DIVIDE }
-  | "*" { make_token lexbuf Token.TIMES }
-  | "-" { make_token lexbuf Token.MINUS }
-  | "+" { make_token lexbuf Token.PLUS }
-  | "." { make_token lexbuf Token.DOT }
-  | "}" { make_token lexbuf Token.RBRACE }
-  | "{" { make_token lexbuf Token.LBRACE }
-  | "]" { make_token lexbuf Token.RBRACK }
-  | "[" { make_token lexbuf Token.LBRACK }
-  | ")" { make_token lexbuf Token.RPAREN }
-  | "(" { make_token lexbuf Token.LPAREN }
-  | ";" { make_token lexbuf Token.SEMICOLON }
-  | ":" { make_token lexbuf Token.COLON }
-  | "," { make_token lexbuf Token.COMMA }
+  | ":=" { make_token lexbuf Parser.ASSIGN }
+  | "|" { make_token lexbuf Parser.OR }
+  | "&" { make_token lexbuf Parser.AND }
+  | ">=" { make_token lexbuf Parser.GE }
+  | ">" { make_token lexbuf Parser.GT }
+  | "<=" { make_token lexbuf Parser.LE }
+  | "<" { make_token lexbuf Parser.LT }
+  | "<>" { make_token lexbuf Parser.NEQ }
+  | "=" { make_token lexbuf Parser.EQ }
+  | "/" { make_token lexbuf Parser.DIVIDE }
+  | "*" { make_token lexbuf Parser.TIMES }
+  | "-" { make_token lexbuf Parser.MINUS }
+  | "+" { make_token lexbuf Parser.PLUS }
+  | "." { make_token lexbuf Parser.DOT }
+  | "}" { make_token lexbuf Parser.RBRACE }
+  | "{" { make_token lexbuf Parser.LBRACE }
+  | "]" { make_token lexbuf Parser.RBRACK }
+  | "[" { make_token lexbuf Parser.LBRACK }
+  | ")" { make_token lexbuf Parser.RPAREN }
+  | "(" { make_token lexbuf Parser.LPAREN }
+  | ";" { make_token lexbuf Parser.SEMICOLON }
+  | ":" { make_token lexbuf Parser.COLON }
+  | "," { make_token lexbuf Parser.COMMA }
   | digit+ { int_token lexbuf }
   | id { keyword_or_id lexbuf }
   | '"' {
@@ -147,10 +141,10 @@ and comment depth = parse
     }
 
 and string start_pos = parse
-  | '"' { string_token start_pos lexbuf }
+  | '"' { string_token start_pos }
   | '\\' { string_escape start_pos lexbuf }
   | newline {
-      let token = unterminated_string_token start_pos lexbuf in
+      let token = unterminated_string_token start_pos in
       newline lexbuf;
       token
     }
@@ -158,7 +152,7 @@ and string start_pos = parse
       Buffer.add_string string_buffer (Lexing.lexeme lexbuf);
       string start_pos lexbuf
     }
-  | eof { unterminated_string_token start_pos lexbuf }
+  | eof { unterminated_string_token start_pos }
 
 and string_escape start_pos = parse
   | 'n' { Buffer.add_char string_buffer '\n'; string start_pos lexbuf }
@@ -169,7 +163,7 @@ and string_escape start_pos = parse
   | digit digit digit { add_decimal_escape lexbuf; string start_pos lexbuf }
   | whitespace+ { string_gap start_pos lexbuf }
   | newline { newline lexbuf; string_gap start_pos lexbuf }
-  | eof { unterminated_string_token start_pos lexbuf }
+  | eof { unterminated_string_token start_pos }
   | _ {
       Error_msg.error (Lexing.lexeme_start lexbuf) "illegal string escape";
       string start_pos lexbuf
@@ -179,7 +173,7 @@ and string_gap start_pos = parse
   | whitespace+ { string_gap start_pos lexbuf }
   | newline { newline lexbuf; string_gap start_pos lexbuf }
   | '\\' { string start_pos lexbuf }
-  | eof { unterminated_string_token start_pos lexbuf }
+  | eof { unterminated_string_token start_pos }
   | _ {
       Error_msg.error (Lexing.lexeme_start lexbuf) "illegal string escape";
       string start_pos lexbuf
