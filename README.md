@@ -1,9 +1,5 @@
 ## Tests
 
-`test/<chapter>/`.
-
-## Tests
-
 Run all tests with:
 
 ```sh
@@ -26,8 +22,6 @@ dune promote
 ```
 
 Then it will save that output and future runs will diff against it.
-
-## Direct Inspection
 
 Each Cram test runs an executable for that compiler component, i.e. lexer tests:
 
