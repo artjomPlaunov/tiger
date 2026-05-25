@@ -1,51 +1,64 @@
 {
-let span lexbuf = Lexing.lexeme_start lexbuf, Lexing.lexeme_end lexbuf
+let span lexbuf =
+  Token.
+    {
+      start_pos = Lexing.lexeme_start lexbuf;
+      end_pos = Lexing.lexeme_end lexbuf;
+    }
 
-let simple lexbuf make =
-  let start_pos, end_pos = span lexbuf in
-  make start_pos end_pos
+let make_token lexbuf kind = Token.{ kind; span = span lexbuf }
 
 let keyword_or_id lexbuf =
-  simple lexbuf (fun start_pos end_pos ->
+  let kind =
     match Lexing.lexeme lexbuf with
-    | "type" -> Token.TYPE (start_pos, end_pos)
-    | "var" -> Token.VAR (start_pos, end_pos)
-    | "function" -> Token.FUNCTION (start_pos, end_pos)
-    | "break" -> Token.BREAK (start_pos, end_pos)
-    | "of" -> Token.OF (start_pos, end_pos)
-    | "end" -> Token.END (start_pos, end_pos)
-    | "in" -> Token.IN (start_pos, end_pos)
-    | "nil" -> Token.NIL (start_pos, end_pos)
-    | "let" -> Token.LET (start_pos, end_pos)
-    | "do" -> Token.DO (start_pos, end_pos)
-    | "to" -> Token.TO (start_pos, end_pos)
-    | "for" -> Token.FOR (start_pos, end_pos)
-    | "while" -> Token.WHILE (start_pos, end_pos)
-    | "else" -> Token.ELSE (start_pos, end_pos)
-    | "then" -> Token.THEN (start_pos, end_pos)
-    | "if" -> Token.IF (start_pos, end_pos)
-    | "array" -> Token.ARRAY (start_pos, end_pos)
-    | name -> Token.ID (name, start_pos, end_pos))
+    | "type" -> Token.TYPE
+    | "var" -> Token.VAR
+    | "function" -> Token.FUNCTION
+    | "break" -> Token.BREAK
+    | "of" -> Token.OF
+    | "end" -> Token.END
+    | "in" -> Token.IN
+    | "nil" -> Token.NIL
+    | "let" -> Token.LET
+    | "do" -> Token.DO
+    | "to" -> Token.TO
+    | "for" -> Token.FOR
+    | "while" -> Token.WHILE
+    | "else" -> Token.ELSE
+    | "then" -> Token.THEN
+    | "if" -> Token.IF
+    | "array" -> Token.ARRAY
+    | name -> Token.ID name
+  in
+  make_token lexbuf kind
 
 let int_token lexbuf =
-  let start_pos, end_pos = span lexbuf in
+  let span = span lexbuf in
   let value =
     match int_of_string_opt (Lexing.lexeme lexbuf) with
     | Some value -> value
     | None ->
-        Error_msg.error start_pos "integer too large";
+        Error_msg.error span.start_pos "integer too large";
         1
   in
-  Token.INT (value, start_pos, end_pos)
+  Token.{ kind = INT value; span }
 
 let string_buffer = Buffer.create 128
 
 let string_token start_pos lexbuf =
-  Token.STRING (Buffer.contents string_buffer, start_pos, Lexing.lexeme_end lexbuf)
+  Token.
+    {
+      kind = STRING (Buffer.contents string_buffer);
+      span = { start_pos; end_pos = Lexing.lexeme_end lexbuf };
+    }
 
 let unterminated_string_token start_pos lexbuf =
   Error_msg.error start_pos "unclosed string";
-  Token.STRING (Buffer.contents string_buffer, start_pos, Lexing.lexeme_start lexbuf)
+  Token.
+    {
+      kind = STRING (Buffer.contents string_buffer);
+      span = { start_pos; end_pos = Lexing.lexeme_start lexbuf };
+    }
 
 let newline lexbuf =
   incr Error_msg.line_num;
@@ -53,7 +66,7 @@ let newline lexbuf =
 
 let eof_token lexbuf =
   let pos = Lexing.lexeme_start lexbuf in
-  Token.EOF (pos, pos)
+  Token.{ kind = EOF; span = { start_pos = pos; end_pos = pos } }
 
 let add_decimal_escape lexbuf =
   let start_pos = Lexing.lexeme_start lexbuf in
@@ -82,29 +95,29 @@ rule token = parse
     }
   | newline { newline lexbuf; token lexbuf }
   | whitespace+ { token lexbuf }
-  | ":=" { simple lexbuf (fun start_pos end_pos -> Token.ASSIGN (start_pos, end_pos)) }
-  | "|" { simple lexbuf (fun start_pos end_pos -> Token.OR (start_pos, end_pos)) }
-  | "&" { simple lexbuf (fun start_pos end_pos -> Token.AND (start_pos, end_pos)) }
-  | ">=" { simple lexbuf (fun start_pos end_pos -> Token.GE (start_pos, end_pos)) }
-  | ">" { simple lexbuf (fun start_pos end_pos -> Token.GT (start_pos, end_pos)) }
-  | "<=" { simple lexbuf (fun start_pos end_pos -> Token.LE (start_pos, end_pos)) }
-  | "<" { simple lexbuf (fun start_pos end_pos -> Token.LT (start_pos, end_pos)) }
-  | "<>" { simple lexbuf (fun start_pos end_pos -> Token.NEQ (start_pos, end_pos)) }
-  | "=" { simple lexbuf (fun start_pos end_pos -> Token.EQ (start_pos, end_pos)) }
-  | "/" { simple lexbuf (fun start_pos end_pos -> Token.DIVIDE (start_pos, end_pos)) }
-  | "*" { simple lexbuf (fun start_pos end_pos -> Token.TIMES (start_pos, end_pos)) }
-  | "-" { simple lexbuf (fun start_pos end_pos -> Token.MINUS (start_pos, end_pos)) }
-  | "+" { simple lexbuf (fun start_pos end_pos -> Token.PLUS (start_pos, end_pos)) }
-  | "." { simple lexbuf (fun start_pos end_pos -> Token.DOT (start_pos, end_pos)) }
-  | "}" { simple lexbuf (fun start_pos end_pos -> Token.RBRACE (start_pos, end_pos)) }
-  | "{" { simple lexbuf (fun start_pos end_pos -> Token.LBRACE (start_pos, end_pos)) }
-  | "]" { simple lexbuf (fun start_pos end_pos -> Token.RBRACK (start_pos, end_pos)) }
-  | "[" { simple lexbuf (fun start_pos end_pos -> Token.LBRACK (start_pos, end_pos)) }
-  | ")" { simple lexbuf (fun start_pos end_pos -> Token.RPAREN (start_pos, end_pos)) }
-  | "(" { simple lexbuf (fun start_pos end_pos -> Token.LPAREN (start_pos, end_pos)) }
-  | ";" { simple lexbuf (fun start_pos end_pos -> Token.SEMICOLON (start_pos, end_pos)) }
-  | ":" { simple lexbuf (fun start_pos end_pos -> Token.COLON (start_pos, end_pos)) }
-  | "," { simple lexbuf (fun start_pos end_pos -> Token.COMMA (start_pos, end_pos)) }
+  | ":=" { make_token lexbuf Token.ASSIGN }
+  | "|" { make_token lexbuf Token.OR }
+  | "&" { make_token lexbuf Token.AND }
+  | ">=" { make_token lexbuf Token.GE }
+  | ">" { make_token lexbuf Token.GT }
+  | "<=" { make_token lexbuf Token.LE }
+  | "<" { make_token lexbuf Token.LT }
+  | "<>" { make_token lexbuf Token.NEQ }
+  | "=" { make_token lexbuf Token.EQ }
+  | "/" { make_token lexbuf Token.DIVIDE }
+  | "*" { make_token lexbuf Token.TIMES }
+  | "-" { make_token lexbuf Token.MINUS }
+  | "+" { make_token lexbuf Token.PLUS }
+  | "." { make_token lexbuf Token.DOT }
+  | "}" { make_token lexbuf Token.RBRACE }
+  | "{" { make_token lexbuf Token.LBRACE }
+  | "]" { make_token lexbuf Token.RBRACK }
+  | "[" { make_token lexbuf Token.LBRACK }
+  | ")" { make_token lexbuf Token.RPAREN }
+  | "(" { make_token lexbuf Token.LPAREN }
+  | ";" { make_token lexbuf Token.SEMICOLON }
+  | ":" { make_token lexbuf Token.COLON }
+  | "," { make_token lexbuf Token.COMMA }
   | digit+ { int_token lexbuf }
   | id { keyword_or_id lexbuf }
   | '"' {

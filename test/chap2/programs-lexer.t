@@ -1,8 +1,8 @@
-Course corpus lexer snapshots.
+Root program lexer snapshots.
 
-programs/course/merge.tig.
+programs/merge.tig.
 
-  $ ../../bin/main.exe ../../programs/course/merge.tig
+  $ ../../bin/main.exe ../../programs/merge.tig
   LET   0
   TYPE   9
   ID(any)     14
@@ -416,9 +416,9 @@ programs/course/merge.tig.
   END   1413
   EOF   1420
 
-programs/course/queens.tig.
+programs/queens.tig.
 
-  $ ../../bin/main.exe ../../programs/course/queens.tig
+  $ ../../bin/main.exe ../../programs/queens.tig
   LET   49
   VAR   58
   ID(N)     62
@@ -660,9 +660,9 @@ programs/course/queens.tig.
   END   827
   EOF   833
 
-programs/course/test1.tig.
+programs/test1.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test1.tig
+  $ ../../bin/main.exe ../../programs/test1.tig
   LET   43
   TYPE   49
   ID(arrtype)     55
@@ -686,9 +686,9 @@ programs/course/test1.tig.
   END   130
   EOF   135
 
-programs/course/test10.tig.
+programs/test10.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test10.tig
+  $ ../../bin/main.exe ../../programs/test10.tig
   WHILE   38
   LPAREN   43
   INT(10)   44
@@ -701,9 +701,9 @@ programs/course/test10.tig.
   INT(6)   57
   EOF   60
 
-programs/course/test11.tig.
+programs/test11.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test11.tig
+  $ ../../bin/main.exe ../../programs/test11.tig
   FOR   78
   ID(i)     82
   ASSIGN   83
@@ -718,9 +718,9 @@ programs/course/test11.tig.
   INT(1)   110
   EOF   113
 
-programs/course/test12.tig.
+programs/test12.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test12.tig
+  $ ../../bin/main.exe ../../programs/test12.tig
   LET   27
   VAR   33
   ID(a)     37
@@ -747,17 +747,17 @@ programs/course/test12.tig.
   END   82
   EOF   87
 
-programs/course/test13.tig.
+programs/test13.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test13.tig
+  $ ../../bin/main.exe ../../programs/test13.tig
   INT(3)   49
   GT   51
   STRING(df)     53
   EOF   59
 
-programs/course/test14.tig.
+programs/test14.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test14.tig
+  $ ../../bin/main.exe ../../programs/test14.tig
   LET   40
   TYPE   48
   ID(arrtype)     53
@@ -811,18 +811,18 @@ programs/course/test14.tig.
   END   227
   EOF   232
 
-programs/course/test15.tig.
+programs/test15.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test15.tig
+  $ ../../bin/main.exe ../../programs/test15.tig
   IF   42
   INT(20)   45
   THEN   48
   INT(3)   53
   EOF   56
 
-programs/course/test16.tig.
+programs/test16.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test16.tig
+  $ ../../bin/main.exe ../../programs/test16.tig
   LET   80
   TYPE   88
   ID(a)     93
@@ -845,9 +845,9 @@ programs/course/test16.tig.
   END   139
   EOF   144
 
-programs/course/test17.tig.
+programs/test17.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test17.tig
+  $ ../../bin/main.exe ../../programs/test17.tig
   LET   59
   TYPE   85
   ID(tree)     90
@@ -884,9 +884,9 @@ programs/course/test17.tig.
   END   195
   EOF   200
 
-programs/course/test18.tig.
+programs/test18.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test18.tig
+  $ ../../bin/main.exe ../../programs/test18.tig
   LET   64
   FUNCTION   71
   ID(do_nothing1)     80
@@ -946,9 +946,9 @@ programs/course/test18.tig.
   END   256
   EOF   263
 
-programs/course/test19.tig.
+programs/test19.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test19.tig
+  $ ../../bin/main.exe ../../programs/test19.tig
   LET   90
   FUNCTION   97
   ID(do_nothing1)     106
@@ -1004,9 +1004,9 @@ programs/course/test19.tig.
   END   270
   EOF   277
 
-programs/course/test2.tig.
+programs/test2.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test2.tig
+  $ ../../bin/main.exe ../../programs/test2.tig
   LET   55
   TYPE   61
   ID(myint)     66
@@ -1034,9 +1034,9 @@ programs/course/test2.tig.
   END   165
   EOF   170
 
-programs/course/test20.tig.
+programs/test20.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test20.tig
+  $ ../../bin/main.exe ../../programs/test20.tig
   WHILE   38
   INT(10)   44
   GT   47
@@ -1052,9 +1052,9 @@ programs/course/test20.tig.
   RPAREN   61
   EOF   64
 
-programs/course/test21.tig.
+programs/test21.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test21.tig
+  $ ../../bin/main.exe ../../programs/test21.tig
   LET   72
   FUNCTION   99
   ID(nfactor)     108
@@ -1087,9 +1087,9 @@ programs/course/test21.tig.
   END   198
   EOF   205
 
-programs/course/test22.tig.
+programs/test22.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test22.tig
+  $ ../../bin/main.exe ../../programs/test22.tig
   LET   42
   TYPE   49
   ID(rectype)     54
@@ -1125,9 +1125,9 @@ programs/course/test22.tig.
   END   154
   EOF   159
 
-programs/course/test23.tig.
+programs/test23.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test23.tig
+  $ ../../bin/main.exe ../../programs/test23.tig
   LET   31
   TYPE   38
   ID(rectype)     43
@@ -1169,9 +1169,9 @@ programs/course/test23.tig.
   END   159
   EOF   164
 
-programs/course/test24.tig.
+programs/test24.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test24.tig
+  $ ../../bin/main.exe ../../programs/test24.tig
   LET   34
   VAR   41
   ID(d)     45
@@ -1185,9 +1185,9 @@ programs/course/test24.tig.
   END   62
   EOF   69
 
-programs/course/test25.tig.
+programs/test25.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test25.tig
+  $ ../../bin/main.exe ../../programs/test25.tig
   LET   35
   VAR   42
   ID(d)     46
@@ -1200,17 +1200,17 @@ programs/course/test25.tig.
   END   63
   EOF   70
 
-programs/course/test26.tig.
+programs/test26.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test26.tig
+  $ ../../bin/main.exe ../../programs/test26.tig
   INT(3)   34
   PLUS   36
   STRING(var)     38
   EOF   45
 
-programs/course/test27.tig.
+programs/test27.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test27.tig
+  $ ../../bin/main.exe ../../programs/test27.tig
   LET   27
   VAR   33
   ID(a)     37
@@ -1235,9 +1235,9 @@ programs/course/test27.tig.
   END   85
   EOF   90
 
-programs/course/test28.tig.
+programs/test28.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test28.tig
+  $ ../../bin/main.exe ../../programs/test28.tig
   LET   40
   TYPE   46
   ID(rectype1)     51
@@ -1283,9 +1283,9 @@ programs/course/test28.tig.
   END   193
   EOF   198
 
-programs/course/test29.tig.
+programs/test29.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test29.tig
+  $ ../../bin/main.exe ../../programs/test29.tig
   LET   39
   TYPE   45
   ID(arrtype1)     50
@@ -1315,9 +1315,9 @@ programs/course/test29.tig.
   END   162
   EOF   167
 
-programs/course/test3.tig.
+programs/test3.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test3.tig
+  $ ../../bin/main.exe ../../programs/test3.tig
   LET   43
   TYPE   49
   ID(rectype)     55
@@ -1357,9 +1357,9 @@ programs/course/test3.tig.
   END   183
   EOF   188
 
-programs/course/test30.tig.
+programs/test30.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test30.tig
+  $ ../../bin/main.exe ../../programs/test30.tig
   LET   27
   TYPE   35
   ID(a)     40
@@ -1390,9 +1390,9 @@ programs/course/test30.tig.
   END   118
   EOF   123
 
-programs/course/test31.tig.
+programs/test31.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test31.tig
+  $ ../../bin/main.exe ../../programs/test31.tig
   LET   53
   VAR   60
   ID(a)     64
@@ -1405,9 +1405,9 @@ programs/course/test31.tig.
   END   86
   EOF   91
 
-programs/course/test32.tig.
+programs/test32.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test32.tig
+  $ ../../bin/main.exe ../../programs/test32.tig
   LET   56
   TYPE   62
   ID(arrayty)     67
@@ -1429,9 +1429,9 @@ programs/course/test32.tig.
   END   132
   EOF   137
 
-programs/course/test33.tig.
+programs/test33.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test33.tig
+  $ ../../bin/main.exe ../../programs/test33.tig
   LET   28
   VAR   34
   ID(a)     38
@@ -1444,9 +1444,9 @@ programs/course/test33.tig.
   END   62
   EOF   67
 
-programs/course/test34.tig.
+programs/test34.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test34.tig
+  $ ../../bin/main.exe ../../programs/test34.tig
   LET   56
   FUNCTION   62
   ID(g)     71
@@ -1473,9 +1473,9 @@ programs/course/test34.tig.
   END   123
   EOF   128
 
-programs/course/test35.tig.
+programs/test35.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test35.tig
+  $ ../../bin/main.exe ../../programs/test35.tig
   LET   45
   FUNCTION   51
   ID(g)     60
@@ -1500,9 +1500,9 @@ programs/course/test35.tig.
   END   105
   EOF   110
 
-programs/course/test36.tig.
+programs/test36.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test36.tig
+  $ ../../bin/main.exe ../../programs/test36.tig
   LET   46
   FUNCTION   52
   ID(g)     61
@@ -1531,9 +1531,9 @@ programs/course/test36.tig.
   END   110
   EOF   115
 
-programs/course/test37.tig.
+programs/test37.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test37.tig
+  $ ../../bin/main.exe ../../programs/test37.tig
   LET   141
   VAR   147
   ID(a)     151
@@ -1548,9 +1548,9 @@ programs/course/test37.tig.
   END   182
   EOF   187
 
-programs/course/test38.tig.
+programs/test38.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test38.tig
+  $ ../../bin/main.exe ../../programs/test38.tig
   LET   158
   TYPE   164
   ID(a)     169
@@ -1565,9 +1565,9 @@ programs/course/test38.tig.
   END   204
   EOF   209
 
-programs/course/test39.tig.
+programs/test39.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test39.tig
+  $ ../../bin/main.exe ../../programs/test39.tig
   LET   163
   FUNCTION   169
   ID(g)     178
@@ -1596,9 +1596,9 @@ programs/course/test39.tig.
   END   232
   EOF   237
 
-programs/course/test4.tig.
+programs/test4.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test4.tig
+  $ ../../bin/main.exe ../../programs/test4.tig
   LET   35
   FUNCTION   62
   ID(nfactor)     71
@@ -1633,9 +1633,9 @@ programs/course/test4.tig.
   END   166
   EOF   173
 
-programs/course/test40.tig.
+programs/test40.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test40.tig
+  $ ../../bin/main.exe ../../programs/test40.tig
   LET   39
   FUNCTION   45
   ID(g)     54
@@ -1654,9 +1654,9 @@ programs/course/test40.tig.
   END   80
   EOF   87
 
-programs/course/test41.tig.
+programs/test41.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test41.tig
+  $ ../../bin/main.exe ../../programs/test41.tig
   LET   31
   TYPE   37
   ID(a)     42
@@ -1674,9 +1674,9 @@ programs/course/test41.tig.
   END   96
   EOF   101
 
-programs/course/test42.tig.
+programs/test42.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test42.tig
+  $ ../../bin/main.exe ../../programs/test42.tig
   LET   28
   TYPE   36
   ID(arrtype1)     41
@@ -1879,9 +1879,9 @@ programs/course/test42.tig.
   END   736
   EOF   741
 
-programs/course/test43.tig.
+programs/test43.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test43.tig
+  $ ../../bin/main.exe ../../programs/test43.tig
   LET   68
   VAR   75
   ID(a)     79
@@ -1895,9 +1895,9 @@ programs/course/test43.tig.
   END   100
   EOF   105
 
-programs/course/test44.tig.
+programs/test44.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test44.tig
+  $ ../../bin/main.exe ../../programs/test44.tig
   LET   47
   TYPE   56
   ID(rectype)     61
@@ -1924,9 +1924,9 @@ programs/course/test44.tig.
   END   138
   EOF   143
 
-programs/course/test45.tig.
+programs/test45.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test45.tig
+  $ ../../bin/main.exe ../../programs/test45.tig
   LET   74
   TYPE   81
   ID(rectype)     86
@@ -1949,9 +1949,9 @@ programs/course/test45.tig.
   END   143
   EOF   148
 
-programs/course/test46.tig.
+programs/test46.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test46.tig
+  $ ../../bin/main.exe ../../programs/test46.tig
   LET   29
   TYPE   36
   ID(rectype)     41
@@ -1982,9 +1982,9 @@ programs/course/test46.tig.
   END   123
   EOF   128
 
-programs/course/test47.tig.
+programs/test47.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test47.tig
+  $ ../../bin/main.exe ../../programs/test47.tig
   LET   222
   TYPE   228
   ID(a)     233
@@ -2003,9 +2003,9 @@ programs/course/test47.tig.
   END   281
   EOF   286
 
-programs/course/test48.tig.
+programs/test48.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test48.tig
+  $ ../../bin/main.exe ../../programs/test48.tig
   LET   235
   FUNCTION   241
   ID(g)     250
@@ -2038,9 +2038,9 @@ programs/course/test48.tig.
   END   319
   EOF   324
 
-programs/course/test49.tig.
+programs/test49.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test49.tig
+  $ ../../bin/main.exe ../../programs/test49.tig
   LET   68
   TYPE   75
   ID(rectype)     80
@@ -2064,9 +2064,9 @@ programs/course/test49.tig.
   END   145
   EOF   150
 
-programs/course/test5.tig.
+programs/test5.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test5.tig
+  $ ../../bin/main.exe ../../programs/test5.tig
   LET   36
   TYPE   62
   ID(intlist)     67
@@ -2124,9 +2124,9 @@ programs/course/test5.tig.
   END   271
   EOF   276
 
-programs/course/test6.tig.
+programs/test6.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test6.tig
+  $ ../../bin/main.exe ../../programs/test6.tig
   LET   50
   FUNCTION   57
   ID(do_nothing1)     66
@@ -2170,9 +2170,9 @@ programs/course/test6.tig.
   END   209
   EOF   216
 
-programs/course/test7.tig.
+programs/test7.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test7.tig
+  $ ../../bin/main.exe ../../programs/test7.tig
   LET   49
   FUNCTION   56
   ID(do_nothing1)     65
@@ -2228,9 +2228,9 @@ programs/course/test7.tig.
   END   229
   EOF   236
 
-programs/course/test8.tig.
+programs/test8.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test8.tig
+  $ ../../bin/main.exe ../../programs/test8.tig
   IF   18
   LPAREN   21
   INT(10)   22
@@ -2243,9 +2243,9 @@ programs/course/test8.tig.
   INT(40)   44
   EOF   49
 
-programs/course/test9.tig.
+programs/test9.tig.
 
-  $ ../../bin/main.exe ../../programs/course/test9.tig
+  $ ../../bin/main.exe ../../programs/test9.tig
   IF   45
   LPAREN   48
   INT(5)   49
