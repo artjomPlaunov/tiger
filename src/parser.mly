@@ -10,7 +10,14 @@
 %token BREAK NIL
 %token FUNCTION VAR TYPE
 
-%left AND OR
+%nonassoc DO
+%nonassoc THEN
+%nonassoc ELSE
+%nonassoc OF
+%nonassoc LVALUE
+%right ASSIGN
+%left OR
+%left AND
 %nonassoc EQ NEQ LT LE GT GE
 %left PLUS MINUS
 %left TIMES DIVIDE
@@ -50,13 +57,19 @@ exp:
 | ID LPAREN args RPAREN { () }
 | ID LBRACE RBRACE { () }
 | ID LBRACE record_fields RBRACE { () }
-| lvalue { () }
+| ID LBRACK exp RBRACK OF exp %prec OF { () }
+| lvalue ASSIGN exp { () }
+| lvalue %prec LVALUE { () }
+| IF exp THEN exp %prec THEN { () }
+| IF exp THEN exp ELSE exp { () }
+| WHILE exp DO exp %prec DO { () }
 | LPAREN RPAREN { () }
 | LPAREN exp RPAREN { () }
 | LPAREN exp SEMICOLON seq RPAREN { () }
 
 lvalue:
   ID { () }
+| ID LBRACK exp RBRACK { () }
 | lvalue DOT ID { () }
 | lvalue LBRACK exp RBRACK { () }
 

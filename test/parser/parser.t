@@ -99,6 +99,58 @@
   ../../programs/parser/record-trailing-comma.tig:1.13:syntax error
   [2]
 
+  $ ../../bin/tiger_parse.exe ../../programs/parser/array-create.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/array-create-mixed.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/array-missing-of.tig
+  ../../programs/parser/array-missing-of.tig:1.13:syntax error
+  [2]
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/assign-simple.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/assign-lvalue.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/assign-logical.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/assign-non-lvalue.tig
+  ../../programs/parser/assign-non-lvalue.tig:1.2:syntax error
+  [2]
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/assign-chained.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/if-then.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/if-then-else.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/if-dangling-else.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/if-branch-operators.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/if-missing-then.tig
+  ../../programs/parser/if-missing-then.tig:1.9:syntax error
+  [2]
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/while.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/while-sequence.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/while-missing-do.tig
+  ../../programs/parser/while-missing-do.tig:1.12:syntax error
+  [2]
+
   $ ../../bin/tiger_parse.exe ../../programs/parser/empty.tig
   ../../programs/parser/empty.tig:2.0:syntax error
   [2]
