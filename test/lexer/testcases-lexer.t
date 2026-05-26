@@ -1,7 +1,3 @@
-Imported testcase lexer snapshots.
-
-programs/testcases/merge.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/merge.tig
   LET   0
   TYPE   9
@@ -416,8 +412,6 @@ programs/testcases/merge.tig.
   END   1413
   EOF   1420
 
-programs/testcases/queens.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/queens.tig
   LET   49
   VAR   58
@@ -660,8 +654,6 @@ programs/testcases/queens.tig.
   END   827
   EOF   833
 
-programs/testcases/test1.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test1.tig
   LET   43
   TYPE   49
@@ -686,8 +678,6 @@ programs/testcases/test1.tig.
   END   130
   EOF   135
 
-programs/testcases/test10.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test10.tig
   WHILE   38
   LPAREN   43
@@ -700,8 +690,6 @@ programs/testcases/test10.tig.
   PLUS   56
   INT(6)   57
   EOF   60
-
-programs/testcases/test11.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test11.tig
   FOR   78
@@ -717,8 +705,6 @@ programs/testcases/test11.tig.
   MINUS   108
   INT(1)   110
   EOF   113
-
-programs/testcases/test12.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test12.tig
   LET   27
@@ -747,15 +733,11 @@ programs/testcases/test12.tig.
   END   82
   EOF   87
 
-programs/testcases/test13.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test13.tig
   INT(3)   49
   GT   51
   STRING(df)     53
   EOF   59
-
-programs/testcases/test14.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test14.tig
   LET   40
@@ -811,16 +793,12 @@ programs/testcases/test14.tig.
   END   227
   EOF   232
 
-programs/testcases/test15.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test15.tig
   IF   42
   INT(20)   45
   THEN   48
   INT(3)   53
   EOF   56
-
-programs/testcases/test16.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test16.tig
   LET   80
@@ -844,8 +822,6 @@ programs/testcases/test16.tig.
   STRING()     135
   END   139
   EOF   144
-
-programs/testcases/test17.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test17.tig
   LET   59
@@ -883,8 +859,6 @@ programs/testcases/test17.tig.
   ID(d)     192
   END   195
   EOF   200
-
-programs/testcases/test18.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test18.tig
   LET   64
@@ -946,8 +920,6 @@ programs/testcases/test18.tig.
   END   256
   EOF   263
 
-programs/testcases/test19.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test19.tig
   LET   90
   FUNCTION   97
@@ -1004,8 +976,6 @@ programs/testcases/test19.tig.
   END   270
   EOF   277
 
-programs/testcases/test2.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test2.tig
   LET   55
   TYPE   61
@@ -1034,8 +1004,6 @@ programs/testcases/test2.tig.
   END   165
   EOF   170
 
-programs/testcases/test20.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test20.tig
   WHILE   38
   INT(10)   44
@@ -1051,8 +1019,6 @@ programs/testcases/test20.tig.
   RPAREN   60
   RPAREN   61
   EOF   64
-
-programs/testcases/test21.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test21.tig
   LET   72
@@ -1086,8 +1052,6 @@ programs/testcases/test21.tig.
   RPAREN   195
   END   198
   EOF   205
-
-programs/testcases/test22.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test22.tig
   LET   42
@@ -1124,8 +1088,6 @@ programs/testcases/test22.tig.
   STRING(asd)     147
   END   154
   EOF   159
-
-programs/testcases/test23.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test23.tig
   LET   31
@@ -1169,8 +1131,6 @@ programs/testcases/test23.tig.
   END   159
   EOF   164
 
-programs/testcases/test24.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test24.tig
   LET   34
   VAR   41
@@ -1185,8 +1145,6 @@ programs/testcases/test24.tig.
   END   62
   EOF   69
 
-programs/testcases/test25.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test25.tig
   LET   35
   VAR   42
@@ -1200,15 +1158,11 @@ programs/testcases/test25.tig.
   END   63
   EOF   70
 
-programs/testcases/test26.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test26.tig
   INT(3)   34
   PLUS   36
   STRING(var)     38
   EOF   45
-
-programs/testcases/test27.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test27.tig
   LET   27
@@ -1234,8 +1188,6 @@ programs/testcases/test27.tig.
   RPAREN   82
   END   85
   EOF   90
-
-programs/testcases/test28.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test28.tig
   LET   40
@@ -1283,8 +1235,6 @@ programs/testcases/test28.tig.
   END   193
   EOF   198
 
-programs/testcases/test29.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test29.tig
   LET   39
   TYPE   45
@@ -1314,8 +1264,6 @@ programs/testcases/test29.tig.
   ID(arr1)     156
   END   162
   EOF   167
-
-programs/testcases/test3.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test3.tig
   LET   43
@@ -1357,8 +1305,6 @@ programs/testcases/test3.tig.
   END   183
   EOF   188
 
-programs/testcases/test30.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test30.tig
   LET   27
   TYPE   35
@@ -1390,8 +1336,6 @@ programs/testcases/test30.tig.
   END   118
   EOF   123
 
-programs/testcases/test31.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test31.tig
   LET   53
   VAR   60
@@ -1404,8 +1348,6 @@ programs/testcases/test31.tig.
   ID(a)     83
   END   86
   EOF   91
-
-programs/testcases/test32.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test32.tig
   LET   56
@@ -1429,8 +1371,6 @@ programs/testcases/test32.tig.
   END   132
   EOF   137
 
-programs/testcases/test33.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test33.tig
   LET   28
   VAR   34
@@ -1443,8 +1383,6 @@ programs/testcases/test33.tig.
   INT(0)   59
   END   62
   EOF   67
-
-programs/testcases/test34.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test34.tig
   LET   56
@@ -1473,8 +1411,6 @@ programs/testcases/test34.tig.
   END   123
   EOF   128
 
-programs/testcases/test35.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test35.tig
   LET   45
   FUNCTION   51
@@ -1499,8 +1435,6 @@ programs/testcases/test35.tig.
   RPAREN   102
   END   105
   EOF   110
-
-programs/testcases/test36.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test36.tig
   LET   46
@@ -1531,8 +1465,6 @@ programs/testcases/test36.tig.
   END   110
   EOF   115
 
-programs/testcases/test37.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test37.tig
   LET   141
   VAR   147
@@ -1548,8 +1480,6 @@ programs/testcases/test37.tig.
   END   182
   EOF   187
 
-programs/testcases/test38.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test38.tig
   LET   158
   TYPE   164
@@ -1564,8 +1494,6 @@ programs/testcases/test38.tig.
   INT(0)   201
   END   204
   EOF   209
-
-programs/testcases/test39.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test39.tig
   LET   163
@@ -1595,8 +1523,6 @@ programs/testcases/test39.tig.
   INT(0)   229
   END   232
   EOF   237
-
-programs/testcases/test4.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test4.tig
   LET   35
@@ -1633,8 +1559,6 @@ programs/testcases/test4.tig.
   END   166
   EOF   173
 
-programs/testcases/test40.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test40.tig
   LET   39
   FUNCTION   45
@@ -1654,8 +1578,6 @@ programs/testcases/test40.tig.
   END   80
   EOF   87
 
-programs/testcases/test41.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test41.tig
   LET   31
   TYPE   37
@@ -1673,8 +1595,6 @@ programs/testcases/test41.tig.
   END   91
   END   96
   EOF   101
-
-programs/testcases/test42.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test42.tig
   LET   28
@@ -1879,8 +1799,6 @@ programs/testcases/test42.tig.
   END   736
   EOF   741
 
-programs/testcases/test43.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test43.tig
   LET   68
   VAR   75
@@ -1894,8 +1812,6 @@ programs/testcases/test43.tig.
   INT(3)   97
   END   100
   EOF   105
-
-programs/testcases/test44.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test44.tig
   LET   47
@@ -1924,8 +1840,6 @@ programs/testcases/test44.tig.
   END   138
   EOF   143
 
-programs/testcases/test45.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test45.tig
   LET   74
   TYPE   81
@@ -1948,8 +1862,6 @@ programs/testcases/test45.tig.
   ID(a)     140
   END   143
   EOF   148
-
-programs/testcases/test46.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test46.tig
   LET   29
@@ -1982,8 +1894,6 @@ programs/testcases/test46.tig.
   END   123
   EOF   128
 
-programs/testcases/test47.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test47.tig
   LET   222
   TYPE   228
@@ -2002,8 +1912,6 @@ programs/testcases/test47.tig.
   INT(0)   278
   END   281
   EOF   286
-
-programs/testcases/test48.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test48.tig
   LET   235
@@ -2038,8 +1946,6 @@ programs/testcases/test48.tig.
   END   319
   EOF   324
 
-programs/testcases/test49.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test49.tig
   LET   68
   TYPE   75
@@ -2063,8 +1969,6 @@ programs/testcases/test49.tig.
   ID(a)     142
   END   145
   EOF   150
-
-programs/testcases/test5.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test5.tig
   LET   36
@@ -2124,8 +2028,6 @@ programs/testcases/test5.tig.
   END   271
   EOF   276
 
-programs/testcases/test6.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test6.tig
   LET   50
   FUNCTION   57
@@ -2169,8 +2071,6 @@ programs/testcases/test6.tig.
   RPAREN   206
   END   209
   EOF   216
-
-programs/testcases/test7.tig.
 
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test7.tig
   LET   49
@@ -2228,8 +2128,6 @@ programs/testcases/test7.tig.
   END   229
   EOF   236
 
-programs/testcases/test8.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test8.tig
   IF   18
   LPAREN   21
@@ -2243,8 +2141,6 @@ programs/testcases/test8.tig.
   INT(40)   44
   EOF   49
 
-programs/testcases/test9.tig.
-
   $ ../../bin/tiger_lex.exe ../../programs/testcases/test9.tig
   IF   45
   LPAREN   48
@@ -2257,4 +2153,3 @@ programs/testcases/test9.tig.
   ELSE   62
   STRING( )     68
   EOF   73
-

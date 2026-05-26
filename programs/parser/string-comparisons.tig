@@ -1,0 +1,6 @@
+("alpha" = "beta";
+ "alpha" <> "beta";
+ "beta" > "alpha";
+ "alpha" < "beta";
+ "beta" >= "alpha";
+ "alpha" <= "beta")

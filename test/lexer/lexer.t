@@ -1,19 +1,13 @@
-Chapter 2 lexer scaffold.
-
   $ ../../bin/tiger_lex.exe ../../programs/lexer/scaffold.tig
   VAR   0
   COMMA   3
   INT(123)   4
   EOF   8
 
-Comments are skipped like whitespace and can be nested.
-
   $ ../../bin/tiger_lex.exe ../../programs/lexer/comments.tig
   VAR   0
   VAR   28
   EOF   32
-
-All fixed tokens, keywords, identifiers, and integers.
 
   $ ../../bin/tiger_lex.exe ../../programs/lexer/tokens.tig
   TYPE   0
@@ -62,8 +56,6 @@ All fixed tokens, keywords, identifiers, and integers.
   INT(0)   146
   INT(123)   148
   EOF   152
-
-Strings support Tiger escapes.
 
   $ ../../bin/tiger_lex.exe ../../programs/lexer/strings.tig
   STRING(hello)     0

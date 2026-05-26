@@ -1,0 +1,5 @@
+person {
+  name = substring("tiger", 0, 2),
+  older = "tiger" > "cat",
+  next = nil
+}

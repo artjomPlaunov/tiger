@@ -20,6 +20,8 @@
 %type <unit> program
 %type <unit> exp
 %type <unit> lvalue
+%type <unit> args
+%type <unit> record_fields
 %type <unit> seq
 
 %%
@@ -44,6 +46,10 @@ exp:
 | exp GE exp { () }
 | exp AND exp { () }
 | exp OR exp { () }
+| ID LPAREN RPAREN { () }
+| ID LPAREN args RPAREN { () }
+| ID LBRACE RBRACE { () }
+| ID LBRACE record_fields RBRACE { () }
 | lvalue { () }
 | LPAREN RPAREN { () }
 | LPAREN exp RPAREN { () }
@@ -53,6 +59,14 @@ lvalue:
   ID { () }
 | lvalue DOT ID { () }
 | lvalue LBRACK exp RBRACK { () }
+
+args:
+  exp { () }
+| exp COMMA args { () }
+
+record_fields:
+  ID EQ exp { () }
+| ID EQ exp COMMA record_fields { () }
 
 seq:
   exp { () }
