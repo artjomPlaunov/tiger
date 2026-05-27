@@ -13,8 +13,9 @@ let parse lexbuf =
 let parse_channel ?(filename = "") channel =
   Error_msg.reset ~filename ();
   let lexbuf = Lexing.from_channel channel in
-  parse lexbuf;
-  if !(Error_msg.any_errors) then raise Error_msg.Error
+  let ast = parse lexbuf in
+  if !(Error_msg.any_errors) then raise Error_msg.Error;
+  ast
 
 let parse_file filename =
   let channel = open_in filename in
@@ -23,5 +24,5 @@ let parse_file filename =
     (fun () -> parse_channel ~filename channel)
 
 let print_file filename =
-  parse_file filename;
+  ignore (parse_file filename);
   print_endline "parse ok"

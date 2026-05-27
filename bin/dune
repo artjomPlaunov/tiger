@@ -15,3 +15,9 @@
  (name tiger_parse)
  (modules tiger_parse)
  (libraries tiger))
+
+(executable
+ (public_name tiger-ast)
+ (name tiger_ast)
+ (modules tiger_ast)
+ (libraries tiger))

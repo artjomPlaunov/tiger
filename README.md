@@ -1,39 +1,37 @@
-## Tests
-
-Run all tests with:
-
-```sh
-dune runtest
-```
-
-Run a specific Cram test with:
-
-```sh
-dune runtest test/lexer/lexer.t
-dune runtest test/lexer/lexer-errors.t
-dune runtest test/lexer/testcases-lexer.t
-dune runtest test/parser/parser.t
-```
-
-If a Cram test fails and the diff is correct, promote the corrected output:
-
-```sh
-dune promote
-```
-
-Then rerun the same Cram test to confirm it passes.
-
-For manual inspection, run the component executable directly. This does not
-create promotable Cram output.
-
-Lexer example:
-
-```sh
-dune exec tiger-lex -- programs/lexer/scaffold.tig
-```
-
-Parser example:
-
-```sh
-dune exec tiger-parse -- programs/parser/empty.tig
-```
+  /*==========================================================================*\
+  ||  _______ ___ ____ _____ ____                                             ||
+  || |_   _|_ _/ ___| ____|  _ \                                              ||
+  ||   | |  | | |  _|  _| | |_) |                                             ||
+  ||   | |  | | |_| | |___|  _ <                                              ||
+  ||   |_| |___\____|_____|_| \_\                                             ||
+  \*==========================================================================*/
+  
+  ast
+  `==[ LetExp ]
+       |==[ decs ]
+       |    `==[ FunctionDec ]
+       |         `==[ Function nfactor ]
+       |              |==[ params ]
+       |              |    `==[ Field n : int escape=true ]
+       |              |==[ result: int ]
+       |              `==[ body ]
+       |                   `==[ IfExp ]
+       |                        |==[ test ]
+       |                        |    `==[ OpExp EqOp ]
+       |                        |         |==[ VarExp ]
+       |                        |         |    `==[ SimpleVar n ]
+       |                        |         `==[ IntExp 0 ]
+       |                        |==[ then ]
+       |                        |    `==[ IntExp 1 ]
+       |                        `==[ else ]
+       |                             `==[ OpExp TimesOp ]
+       |                                  |==[ VarExp ]
+       |                                  |    `==[ SimpleVar n ]
+       |                                  `==[ CallExp nfactor ]
+       |                                       `==[ OpExp MinusOp ]
+       |                                            |==[ VarExp ]
+       |                                            |    `==[ SimpleVar n ]
+       |                                            `==[ IntExp 1 ]
+       `==[ body ]
+            `==[ CallExp nfactor ]
+                 `==[ IntExp 10 ]
