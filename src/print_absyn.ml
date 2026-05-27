@@ -103,47 +103,18 @@ and ty_tree = function
   | RecordTy fields -> node "RecordTy" (List.map field_tree fields)
   | ArrayTy (name, _) -> leaf ("ArrayTy " ^ symbol name)
 
-let frame_content_width = 72
-
-let fit width text =
-  let length = String.length text in
-  if length <= width then text ^ String.make (width - length) ' '
-  else if width <= 2 then String.sub text 0 width
-  else String.sub text 0 (width - 2) ^ ".."
-
-let frame_line text = "|| " ^ fit frame_content_width text ^ " ||\n"
-
-let frame_rule left right =
-  left ^ String.make (frame_content_width + 2) '=' ^ right ^ "\n"
-
-let render_banner buffer _tree =
-  Buffer.add_string buffer (frame_rule "/*" "*\\");
-  Buffer.add_string buffer (frame_line " _______ ___ ____ _____ ____");
-  Buffer.add_string buffer (frame_line "|_   _|_ _/ ___| ____|  _ \\");
-  Buffer.add_string buffer (frame_line "  | |  | | |  _|  _| | |_) |");
-  Buffer.add_string buffer (frame_line "  | |  | | |_| | |___|  _ <");
-  Buffer.add_string buffer (frame_line "  |_| |___\\____|_____|_| \\_\\");
-  Buffer.add_string buffer (frame_rule "\\*" "*/");
-  Buffer.add_char buffer '\n'
-
 let render_tree tree =
   let buffer = Buffer.create 512 in
-  render_banner buffer tree;
+  Buffer.add_string buffer "╭─ Tiger AST\n";
   let rec print_node prefix is_last is_root (Node (label, children)) =
-    if is_root then (
-      Buffer.add_string buffer "ast";
-      Buffer.add_string buffer "\n";
-      Buffer.add_string buffer "`==[ ";
-      Buffer.add_string buffer label;
-      Buffer.add_string buffer " ]")
+    if is_root then Buffer.add_string buffer "╰─ "
     else (
       Buffer.add_string buffer prefix;
-      Buffer.add_string buffer (if is_last then "`==[ " else "|==[ ");
-      Buffer.add_string buffer label);
-    if not is_root then Buffer.add_string buffer " ]";
+      Buffer.add_string buffer (if is_last then "╰─ " else "├─ "));
+    Buffer.add_string buffer label;
     Buffer.add_char buffer '\n';
     let child_prefix =
-      if is_root then "     " else prefix ^ (if is_last then "     " else "|    ")
+      if is_root then "   " else prefix ^ (if is_last then "   " else "│  ")
     in
     let rec print_children = function
       | [] -> ()
