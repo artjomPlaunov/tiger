@@ -147,8 +147,76 @@
   $ ../../bin/tiger_parse.exe ../../programs/parser/while-sequence.tig
   parse ok
 
+  $ ../../bin/tiger_parse.exe ../../programs/parser/break.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/break-in-loop.tig
+  parse ok
+
   $ ../../bin/tiger_parse.exe ../../programs/parser/while-missing-do.tig
   ../../programs/parser/while-missing-do.tig:1.12:syntax error
+  [2]
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/for.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/for-mixed.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/for-missing-to.tig
+  ../../programs/parser/for-missing-to.tig:1.11:syntax error
+  [2]
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/let-empty.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/let-type-alias.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/let-type-array.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/let-type-record-empty.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/let-type-record-fields.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/let-type-record-mixed.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/let-type-record-trailing-comma.tig
+  ../../programs/parser/let-type-record-trailing-comma.tig:2.22:syntax error
+  [2]
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/let-expseq.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/let-var.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/let-var-typed.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/let-function.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/let-function-result.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/let-decs-mixed.tig
+  parse ok
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/let-var-missing-assign.tig
+  ../../programs/parser/let-var-missing-assign.tig:2.8:syntax error
+  [2]
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/let-function-missing-eq.tig
+  ../../programs/parser/let-function-missing-eq.tig:2.20:syntax error
+  [2]
+
+  $ ../../bin/tiger_parse.exe ../../programs/parser/let-missing-in.tig
+  ../../programs/parser/let-missing-in.tig:3.2:syntax error
   [2]
 
   $ ../../bin/tiger_parse.exe ../../programs/parser/empty.tig
@@ -156,5 +224,4 @@
   [2]
 
   $ ../../bin/tiger_parse.exe ../../programs/testcases/test1.tig
-  ../../programs/testcases/test1.tig:2.0:syntax error
-  [2]
+  parse ok

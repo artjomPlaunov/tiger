@@ -1,0 +1,5 @@
+let
+  type count = int
+in
+  1
+end

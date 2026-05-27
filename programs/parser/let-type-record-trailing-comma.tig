@@ -1,0 +1,4 @@
+let
+  type point = {x:int,}
+in
+end

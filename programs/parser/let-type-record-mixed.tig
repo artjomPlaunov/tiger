@@ -1,0 +1,6 @@
+let
+  type list = {hd:int, tl:list}
+  type lists = array of list
+in
+  nil
+end

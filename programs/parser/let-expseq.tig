@@ -1,0 +1,7 @@
+let
+  type count = int
+in
+  1;
+  (2; 3);
+  count
+end

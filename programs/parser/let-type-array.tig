@@ -1,0 +1,6 @@
+let
+  type count = int
+  type counts = array of count
+in
+  counts[10] of 0
+end

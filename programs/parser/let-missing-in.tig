@@ -1,0 +1,4 @@
+let
+  type count = int
+  1
+end

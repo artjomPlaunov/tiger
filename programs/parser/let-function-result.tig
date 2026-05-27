@@ -1,0 +1,5 @@
+let
+  function join(a:string, b:string):string = a
+in
+  join("a", "b")
+end

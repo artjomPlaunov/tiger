@@ -1,0 +1,6 @@
+let
+  type count = int
+  var x: count := 1
+in
+  x
+end

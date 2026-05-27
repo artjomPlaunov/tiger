@@ -29,7 +29,16 @@
 %type <unit> lvalue
 %type <unit> args
 %type <unit> record_fields
+%type <unit> expseq
 %type <unit> seq
+%type <unit> decs
+%type <unit> dec
+%type <unit> tydec
+%type <unit> vardec
+%type <unit> fundec
+%type <unit> ty
+%type <unit> tyfields
+%type <unit> tyfields_tail
 
 %%
 
@@ -38,6 +47,7 @@ program:
 
 exp:
   NIL { () }
+| BREAK { () }
 | INT { () }
 | STRING { () }
 | MINUS exp %prec UMINUS { () }
@@ -63,9 +73,9 @@ exp:
 | IF exp THEN exp %prec THEN { () }
 | IF exp THEN exp ELSE exp { () }
 | WHILE exp DO exp %prec DO { () }
-| LPAREN RPAREN { () }
-| LPAREN exp RPAREN { () }
-| LPAREN exp SEMICOLON seq RPAREN { () }
+| FOR ID ASSIGN exp TO exp DO exp %prec DO { () }
+| LET decs IN expseq END { () }
+| LPAREN expseq RPAREN { () }
 
 lvalue:
   ID { () }
@@ -81,6 +91,43 @@ record_fields:
   ID EQ exp { () }
 | ID EQ exp COMMA record_fields { () }
 
+expseq:
+  { () }
+| seq { () }
+
 seq:
   exp { () }
 | exp SEMICOLON seq { () }
+
+decs:
+  { () }
+| dec decs { () }
+
+dec:
+  tydec { () }
+| vardec { () }
+| fundec { () }
+
+tydec:
+  TYPE ID EQ ty { () }
+
+vardec:
+  VAR ID ASSIGN exp { () }
+| VAR ID COLON ID ASSIGN exp { () }
+
+fundec:
+  FUNCTION ID LPAREN tyfields RPAREN EQ exp { () }
+| FUNCTION ID LPAREN tyfields RPAREN COLON ID EQ exp { () }
+
+ty:
+  ID { () }
+| LBRACE tyfields RBRACE { () }
+| ARRAY OF ID { () }
+
+tyfields:
+  { () }
+| ID COLON ID tyfields_tail { () }
+
+tyfields_tail:
+  { () }
+| COMMA ID COLON ID tyfields_tail { () }

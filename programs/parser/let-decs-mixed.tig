@@ -1,0 +1,7 @@
+let
+  type count = int
+  var start: count := 0
+  function inc(x: count): count = x + 1
+in
+  inc(start)
+end
