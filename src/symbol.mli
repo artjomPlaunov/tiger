@@ -3,5 +3,8 @@ type t
 val symbol : string -> t
 val name : t -> string
 
-module Table : Map.S with type key = t
+type 'a table
 
+val empty : 'a table
+val enter : 'a table * t * 'a -> 'a table
+val look : 'a table * t -> 'a option
