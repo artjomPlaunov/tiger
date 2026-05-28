@@ -7,7 +7,7 @@ let nextsym = ref 0
 let size_hint = 128
 let hashtable : (string, int) Hashtbl.t = Hashtbl.create size_hint
 
-let symbol name =
+let of_string name =
   match Hashtbl.find_opt hashtable name with
   | Some id -> { name; id }
   | None ->
@@ -16,7 +16,7 @@ let symbol name =
       Hashtbl.add hashtable name id;
       { name; id }
 
-let name symbol = symbol.name
+let to_string symbol = symbol.name
 
 module SymbolTable = Table.IntMapTable (struct
   type nonrec t = t

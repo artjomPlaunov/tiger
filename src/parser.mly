@@ -1,7 +1,7 @@
 %{
 open Absyn
 
-let symbol = Symbol.symbol
+let symbol = Symbol.of_string
 let pos n = Parsing.rhs_start n
 let escape () = ref true
 

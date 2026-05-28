@@ -4,7 +4,6 @@ type tree = Node of string * tree list
 
 let node label children = Node (label, children)
 let leaf label = Node (label, [])
-let symbol = Symbol.name
 
 let oper_name = function
   | PlusOp -> "PlusOp"
@@ -26,18 +25,18 @@ let option_tree label value to_tree =
   | Some value -> named label (to_tree value)
 
 let symbol_pos_tree label value =
-  match value with
-  | None -> leaf (label ^ ": none")
-  | Some (symbol_value, _) -> leaf (label ^ ": " ^ symbol symbol_value)
+	match value with
+	| None -> leaf (label ^ ": none")
+	| Some (symbol_value, _) -> leaf (label ^ ": " ^ Symbol.to_string symbol_value)
 
 let field_tree { name; escape; typ; _ } =
-  leaf
-    (Printf.sprintf "Field %s : %s escape=%b" (symbol name) (symbol typ)
-       !escape)
+	leaf
+	  (Printf.sprintf "Field %s : %s escape=%b" (Symbol.to_string name) (Symbol.to_string typ)
+	     !escape)
 
 let rec var_tree = function
-  | SimpleVar (name, _) -> leaf ("SimpleVar " ^ symbol name)
-  | FieldVar (var, field, _) -> node ("FieldVar " ^ symbol field) [ var_tree var ]
+	| SimpleVar (name, _) -> leaf ("SimpleVar " ^ Symbol.to_string name)
+	| FieldVar (var, field, _) -> node ("FieldVar " ^ Symbol.to_string field) [ var_tree var ]
   | SubscriptVar (var, index, _) ->
       node "SubscriptVar" [ named "var" (var_tree var); named "index" (exp_tree index) ]
 
@@ -46,12 +45,12 @@ and exp_tree = function
   | NilExp -> leaf "NilExp"
   | IntExp value -> leaf ("IntExp " ^ string_of_int value)
   | StringExp (value, _) -> leaf ("StringExp " ^ Printf.sprintf "%S" value)
-  | CallExp { func; args; _ } -> node ("CallExp " ^ symbol func) (List.map exp_tree args)
+	| CallExp { func; args; _ } -> node ("CallExp " ^ Symbol.to_string func) (List.map exp_tree args)
   | OpExp { left; oper; right; _ } ->
       node ("OpExp " ^ oper_name oper) [ exp_tree left; exp_tree right ]
-  | RecordExp { fields; typ; _ } ->
-      let field_tree (name, exp, _) = node ("Field " ^ symbol name) [ exp_tree exp ] in
-      node ("RecordExp " ^ symbol typ) (List.map field_tree fields)
+	| RecordExp { fields; typ; _ } ->
+	    let field_tree (name, exp, _) = node ("Field " ^ Symbol.to_string name) [ exp_tree exp ] in
+	    node ("RecordExp " ^ Symbol.to_string typ) (List.map field_tree fields)
   | SeqExp expressions ->
       node "SeqExp" (List.map (fun (exp, _) -> exp_tree exp) expressions)
   | AssignExp { var; exp; _ } ->
@@ -67,31 +66,31 @@ and exp_tree = function
       node "IfExp" children
   | WhileExp { test; body; _ } ->
       node "WhileExp" [ named "test" (exp_tree test); named "body" (exp_tree body) ]
-  | ForExp { var; escape; lo; hi; body; _ } ->
-      node
-        (Printf.sprintf "ForExp %s escape=%b" (symbol var) !escape)
+	| ForExp { var; escape; lo; hi; body; _ } ->
+	    node
+	      (Printf.sprintf "ForExp %s escape=%b" (Symbol.to_string var) !escape)
         [ named "lo" (exp_tree lo); named "hi" (exp_tree hi); named "body" (exp_tree body) ]
   | BreakExp _ -> leaf "BreakExp"
   | LetExp { decs; body; _ } ->
       node "LetExp" [ node "decs" (List.map dec_tree decs); named "body" (exp_tree body) ]
-  | ArrayExp { typ; size; init; _ } ->
-      node
-        ("ArrayExp " ^ symbol typ)
+	| ArrayExp { typ; size; init; _ } ->
+	    node
+	      ("ArrayExp " ^ Symbol.to_string typ)
         [ named "size" (exp_tree size); named "init" (exp_tree init) ]
 
 and dec_tree = function
   | FunctionDec functions -> node "FunctionDec" (List.map fundec_tree functions)
-  | VarDec { name; escape; typ; init; _ } ->
-      node
-        (Printf.sprintf "VarDec %s escape=%b" (symbol name) !escape)
+	| VarDec { name; escape; typ; init; _ } ->
+	    node
+	      (Printf.sprintf "VarDec %s escape=%b" (Symbol.to_string name) !escape)
         [ symbol_pos_tree "type" typ; named "init" (exp_tree init) ]
   | TypeDec types -> node "TypeDec" (List.map typedec_tree types)
 
-and typedec_tree { name; ty; _ } = node ("Type " ^ symbol name) [ ty_tree ty ]
+and typedec_tree { name; ty; _ } = node ("Type " ^ Symbol.to_string name) [ ty_tree ty ]
 
 and fundec_tree { name; params; result; body; _ } =
-  node
-    ("Function " ^ symbol name)
+	node
+	  ("Function " ^ Symbol.to_string name)
     [
       node "params" (List.map field_tree params);
       symbol_pos_tree "result" result;
@@ -99,9 +98,9 @@ and fundec_tree { name; params; result; body; _ } =
     ]
 
 and ty_tree = function
-  | NameTy (name, _) -> leaf ("NameTy " ^ symbol name)
-  | RecordTy fields -> node "RecordTy" (List.map field_tree fields)
-  | ArrayTy (name, _) -> leaf ("ArrayTy " ^ symbol name)
+	| NameTy (name, _) -> leaf ("NameTy " ^ Symbol.to_string name)
+	| RecordTy fields -> node "RecordTy" (List.map field_tree fields)
+	| ArrayTy (name, _) -> leaf ("ArrayTy " ^ Symbol.to_string name)
 
 let render_tree tree =
   let buffer = Buffer.create 512 in
