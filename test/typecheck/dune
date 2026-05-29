@@ -1,0 +1,4 @@
+(cram
+ (deps
+  ../../bin/tiger_typecheck.exe
+  (source_tree ../../programs)))

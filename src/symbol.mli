@@ -6,5 +6,5 @@ val to_string : t -> string
 type 'a table
 
 val empty : 'a table
-val enter : 'a table * t * 'a -> 'a table
-val look : 'a table * t -> 'a option
+val enter : t -> 'a -> 'a table -> 'a table
+val look : t -> 'a table -> 'a option

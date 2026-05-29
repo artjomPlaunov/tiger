@@ -1,7 +1,9 @@
 type venv = Env.enventry Symbol.table
 type tenv = Types.ty Symbol.table
-type expty
+type expty = { exp : Translate.exp; ty : Types.ty }
 
-val transExp : venv * tenv * Absyn.exp -> expty
+val transProg : Absyn.exp -> unit
 
-(* val transVar : venv * tenv * Absyn.var -> expty *)
+val transExp : venv -> tenv -> Absyn.exp -> expty
+
+(* val transVar : venv -> tenv -> Absyn.var -> expty *)

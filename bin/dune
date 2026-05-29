@@ -21,3 +21,9 @@
  (name tiger_ast)
  (modules tiger_ast)
  (libraries tiger))
+
+(executable
+ (public_name tiger-typecheck)
+ (name tiger_typecheck)
+ (modules tiger_typecheck)
+ (libraries tiger))

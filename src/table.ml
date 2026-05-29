@@ -3,8 +3,8 @@ module type TABLE = sig
   type 'a table
 
   val empty : 'a table
-  val enter : 'a table * key * 'a -> 'a table
-  val look : 'a table * key -> 'a option
+  val enter : key -> 'a -> 'a table -> 'a table
+  val look : key -> 'a table -> 'a option
 end
 
 module IntMapTable (Key : sig
@@ -18,6 +18,6 @@ end) : TABLE with type key = Key.t = struct
   type 'a table = 'a IntMap.t
 
   let empty = IntMap.empty
-  let enter (table, key, value) = IntMap.add (Key.get_int key) value table
-  let look (table, key) = IntMap.find_opt (Key.get_int key) table
+  let enter key value table = IntMap.add (Key.get_int key) value table
+  let look key table = IntMap.find_opt (Key.get_int key) table
 end
