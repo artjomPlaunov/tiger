@@ -4,7 +4,7 @@ let usage () =
 
 let typecheck_file filename =
   let ast = Tiger.Parse.parse_file filename in
-  Tiger.Semant.transProg ast;
+  Tiger.Semant.trans_prog ast;
   if !(Tiger.Error_msg.any_errors) then raise Tiger.Error_msg.Error;
   print_endline "typecheck ok"
 

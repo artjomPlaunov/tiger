@@ -1,7 +1,8 @@
 type access = unit
 type ty = Types.ty
-type enventry = 
-  | VarEntry of { ty: ty }
+
+type enventry =
+  | VarEntry of { ty : ty }
   | FunEntry of { formals : ty list; result : ty }
 
 let base_tenv : ty Symbol.table =
