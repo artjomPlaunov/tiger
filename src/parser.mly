@@ -104,7 +104,7 @@ exp:
 | FOR ID ASSIGN exp TO exp DO exp %prec DO {
     ForExp { var = symbol $2; escape = escape (); lo = $4; hi = $6; body = $8; pos = pos 1 }
   }
-| LET decs IN expseq END { LetExp { decs = $2; body = sequence_exp $4; pos = pos 1 } }
+| LET decs IN expseq END { LetExpr { decs = $2; body = sequence_exp $4; pos = pos 1 } }
 | LPAREN expseq RPAREN { sequence_exp $2 }
 
 lvalue:

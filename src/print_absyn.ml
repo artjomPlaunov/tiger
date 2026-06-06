@@ -71,7 +71,7 @@ and exp_tree = function
 	      (Printf.sprintf "ForExp %s escape=%b" (Symbol.to_string var) !escape)
         [ named "lo" (exp_tree lo); named "hi" (exp_tree hi); named "body" (exp_tree body) ]
   | BreakExp _ -> leaf "BreakExp"
-  | LetExp { decs; body; _ } ->
+  | LetExpr { decs; body; _ } ->
       node "LetExp" [ node "decs" (List.map dec_tree decs); named "body" (exp_tree body) ]
 	| ArrayExp { typ; size; init; _ } ->
 	    node

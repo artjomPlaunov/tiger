@@ -27,7 +27,7 @@ and exp =
       pos : pos;
     }
   | BreakExp of pos
-  | LetExp of { decs : dec list; body : exp; pos : pos }
+  | LetExpr of { decs : dec list; body : exp; pos : pos }
   | ArrayExp of { typ : symbol; size : exp; init : exp; pos : pos }
 
 and dec =
@@ -78,4 +78,3 @@ and typedec = {
   ty : ty;
   pos : pos;
 }
-

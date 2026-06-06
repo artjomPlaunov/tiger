@@ -4,6 +4,16 @@
   $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/int-arithmetic.tig
   typecheck ok
 
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/seq-basic.tig
+  typecheck ok
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/seq-nested.tig
+  typecheck ok
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/seq-arg-error.tig
+  ../../programs/typecheck/seq-arg-error.tig:1.8:integer required
+  [2]
+
   $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/string-plus.tig
   ../../programs/typecheck/string-plus.tig:1.8:integer required
   [2]
