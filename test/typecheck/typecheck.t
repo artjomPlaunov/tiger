@@ -59,3 +59,46 @@
   $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/print-plus.tig
   ../../programs/typecheck/print-plus.tig:1.15:integer required
   [2]
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/let-var-int.tig
+  typecheck ok
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/let-var-typed-int.tig
+  typecheck ok
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/let-var-string-call.tig
+  typecheck ok
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/let-var-declaration-order.tig
+  typecheck ok
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/let-var-shadowing.tig
+  typecheck ok
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/let-var-scope-error.tig
+  ../../programs/typecheck/let-var-scope-error.tig:7.0:undefined variable
+  [2]
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/let-var-body-type-error.tig
+  ../../programs/typecheck/let-var-body-type-error.tig:4.4:integer required
+  [2]
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/let-var-init-uses-previous-error.tig
+  ../../programs/typecheck/let-var-init-uses-previous-error.tig:3.13:integer required
+  [2]
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/let-var-type-mismatch.tig
+  ../../programs/typecheck/let-var-type-mismatch.tig:2.10:init type and declaration type incompatible in variable declaration
+  [2]
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/let-var-unknown-type.tig
+  ../../programs/typecheck/let-var-unknown-type.tig:2.10:type constraint in variable declaration does not exist
+  [2]
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/let-var-nil-unconstrained.tig
+  ../../programs/typecheck/let-var-nil-unconstrained.tig:2.2:Nil initializer in expression must be constrained by record type
+  [2]
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/let-var-nil-int.tig
+  ../../programs/typecheck/let-var-nil-int.tig:2.10:init type and declaration type incompatible in variable declaration
+  [2]

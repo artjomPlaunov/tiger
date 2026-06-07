@@ -1,0 +1,5 @@
+let
+  var x : int := nil
+in
+  x
+end

@@ -1,0 +1,6 @@
+let
+  var x := 1
+  var x := "hello"
+in
+  print(x)
+end

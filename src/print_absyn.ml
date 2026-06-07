@@ -83,7 +83,7 @@ and dec_tree = function
 	| VarDec { name; escape; typ; init; _ } ->
 	    node
 	      (Printf.sprintf "VarDec %s escape=%b" (Symbol.to_string name) !escape)
-        [ symbol_pos_tree "type" typ; named "init" (exp_tree init) ]
+	      [ symbol_pos_tree "type" typ; named "init" (exp_tree init) ]
   | TypeDec types -> node "TypeDec" (List.map typedec_tree types)
 
 and typedec_tree { name; ty; _ } = node ("Type " ^ Symbol.to_string name) [ ty_tree ty ]

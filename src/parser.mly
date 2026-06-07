@@ -141,19 +141,19 @@ dec:
 tydec:
   TYPE ID EQ ty { TypeDec [ { name = symbol $2; ty = $4; pos = pos 1 } ] }
 
-vardec:
-  VAR ID ASSIGN exp {
-    VarDec { name = symbol $2; escape = escape (); typ = None; init = $4; pos = pos 1 }
-  }
-| VAR ID COLON ID ASSIGN exp {
-    VarDec {
-      name = symbol $2;
-      escape = escape ();
-      typ = Some (symbol $4, pos 4);
-      init = $6;
-      pos = pos 1;
-    }
-  }
+	vardec:
+	  VAR ID ASSIGN exp {
+	VarDec { name = symbol $2; escape = escape (); typ = None; init = $4; pos = pos 1 }
+	  }
+	| VAR ID COLON ID ASSIGN exp {
+	    VarDec {
+	      name = symbol $2;
+	      escape = escape ();
+	      typ = Some (symbol $4, pos 4);
+	      init = $6;
+	      pos = pos 1;
+	    }
+	  }
 
 fundec:
   FUNCTION ID LPAREN tyfields RPAREN EQ exp {
@@ -176,14 +176,14 @@ ty:
 | LBRACE tyfields RBRACE { RecordTy $2 }
 | ARRAY OF ID { ArrayTy (symbol $3, pos 3) }
 
-tyfields:
-  { [] }
-| ID COLON ID tyfields_tail {
-    { name = symbol $1; escape = escape (); typ = symbol $3; pos = pos 1 } :: $4
-  }
+	tyfields:
+  	{ [] }
+	| ID COLON ID tyfields_tail {
+	    { name = symbol $1; escape = escape (); typ = symbol $3; pos = pos 1 } :: $4
+	  }
 
-tyfields_tail:
-  { [] }
-| COMMA ID COLON ID tyfields_tail {
-    { name = symbol $2; escape = escape (); typ = symbol $4; pos = pos 2 } :: $5
-  }
+	tyfields_tail:
+  	{ [] }
+	| COMMA ID COLON ID tyfields_tail {
+	    { name = symbol $2; escape = escape (); typ = symbol $4; pos = pos 2 } :: $5
+	  }

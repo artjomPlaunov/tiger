@@ -6,14 +6,14 @@ type expr_ty = { expr : Translate.exp; ty : Types.ty }
 
 let check_int ({ ty; _ } : expr_ty) pos =
   match ty with
-  | Types.Int -> ()
+  | Types.Int | Types.Error -> ()
   | _ -> Error_msg.error pos "integer required"
 
-let trans_expr venv _tenv expr =
+let rec trans_expr venv tenv expr =
   let rec tr_expr expr =
     match expr with
     | VarExp var -> tr_var var
-    | NilExp -> { expr = (); ty = Types.Nil }
+    | NilExp -> {expr=(); ty=Types.Nil}
     | IntExp _ -> { expr = (); ty = Types.Int }
     | StringExp (_, _) -> { expr = (); ty = Types.String }
     | CallExp { func; args; pos } -> tr_call func args pos
@@ -30,10 +30,10 @@ let trans_expr venv _tenv expr =
         | Some (Env.VarEntry { ty }) -> { expr = (); ty = Types.actual ty }
         | Some (Env.FunEntry _) ->
             Error_msg.error pos "function used as variable";
-            { expr = (); ty = Types.Int }
+            { expr = (); ty = Types.Error }
         | None ->
             Error_msg.error pos "undefined variable";
-            { expr = (); ty = Types.Int })
+            { expr = (); ty = Types.Error })
     | _ -> failwith "todo"
 
   (* Function calls. *)
@@ -44,10 +44,10 @@ let trans_expr venv _tenv expr =
         { expr = (); ty = Types.actual result }
     | Some (Env.VarEntry _) ->
         Error_msg.error pos "variable used as function";
-        { expr = (); ty = Types.Int }
+        { expr = (); ty = Types.Error }
     | None ->
         Error_msg.error pos "undefined function";
-        { expr = (); ty = Types.Int }
+        { expr = (); ty = Types.Error }
 
   (* Call arguments. *)
   and check_args pos formals args =
@@ -65,7 +65,7 @@ let trans_expr venv _tenv expr =
 
   and tr_seq_expr exprs = 
     match exprs with 
-    | [] -> { expr = (); ty = Types.Int }
+    | [] -> { expr = (); ty = Types.Unit }
     | [(expr, _)] -> 
         let trans_expr = tr_expr expr in 
         { expr = (); ty = trans_expr.ty }
@@ -87,7 +87,7 @@ let trans_expr venv _tenv expr =
           { expr = (); ty = Types.Int }
         else (
           Error_msg.error pos "same type required";
-          { expr = (); ty = Types.Int })
+          { expr = (); ty = Types.Error })
     | LtOp | LeOp | GtOp | GeOp -> (
         match (Types.actual left_expr_ty.ty, Types.actual right_expr_ty.ty) with
         | Types.Int, Types.Int
@@ -95,16 +95,52 @@ let trans_expr venv _tenv expr =
             { expr = (); ty = Types.Int }
         | _ ->
             Error_msg.error pos "integer or string required";
-            { expr = (); ty = Types.Int })
+            { expr = (); ty = Types.Error })
 
   (* Let Expr *)
-  and tr_let_expr decs body pos = 
-
-    
-    failwith "todo"
+  and tr_let_expr decs body _pos = 
+    let venv', tenv' = trans_decs venv tenv decs
+    in
+    trans_expr venv' tenv' body
   in
   tr_expr expr
 
-let trans_dec venv tenv dec = failwith "todo"
+and trans_dec venv tenv dec = 
+  match dec with 
+  | VarDec {name; typ; init; escape = _; pos} -> (
+      let {expr=_; ty = init_ty} = trans_expr venv tenv init in 
+      let _ =
+        match typ with
+        (* If there is no constraint type, make sure initializer expr is not Nil *)
+        | None -> (
+          match init_ty with 
+          | Types.Nil -> Error_msg.error pos "Nil initializer in expression must be constrained by record type";
+          | _ -> ()
+        ) 
+        (*  Look up declared type to see 
+            1) it exists
+            2) compatible with the type of the init expression *)
+        | Some(name, type_pos) -> (
+            match Symbol.look name tenv with
+            | None ->
+                Error_msg.error type_pos
+                  "type constraint in variable declaration does not exist"
+            | Some dec_ty -> 
+              if Types.compatible dec_ty init_ty then () else 
+              Error_msg.error type_pos "init type and declaration type incompatible in variable declaration" 
+        )
+      in
+      let venv' = Symbol.enter name (Env.VarEntry {ty=init_ty}) venv in 
+      (venv', tenv)
+  )
+  | _ -> (venv, tenv)
+
+and trans_decs venv tenv decs = 
+  match decs with 
+  | [] -> (venv, tenv)
+  | [dec] -> trans_dec venv tenv dec
+  | dec::decs -> 
+      let venv', tenv' = trans_dec venv tenv dec in 
+      trans_decs venv' tenv' decs
 
 let trans_prog expr : unit = ignore (trans_expr Env.base_venv Env.base_tenv expr)

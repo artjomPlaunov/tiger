@@ -1,0 +1,5 @@
+let
+  var x : missing := 1
+in
+  x
+end

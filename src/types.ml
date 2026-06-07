@@ -8,6 +8,7 @@ type ty =
   | Array of ty * unique
   | Name of Symbol.t * ty option ref
   | Unit
+  | Error
 
 let rec actual ty =
   match ty with
@@ -19,6 +20,9 @@ let rec actual ty =
 
 let equal left_ty right_ty =
   match (actual left_ty, actual right_ty) with
+  | Error, _
+  | _, Error ->
+      true
   | Int, Int
   | String, String
   | Unit, Unit
@@ -30,6 +34,9 @@ let equal left_ty right_ty =
 
 let compatible left_ty right_ty =
   match (actual left_ty, actual right_ty) with
+  | Error, _
+  | _, Error ->
+      true
   | Nil, Record _
   | Record _, Nil ->
       true
