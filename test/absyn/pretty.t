@@ -1,56 +1,56 @@
   $ ../../bin/tiger_ast.exe ../../programs/parser/arithmetic.tig
   ╭─ Tiger AST
-  ╰─ OpExp MinusOp
-     ├─ OpExp PlusOp
-     │  ├─ IntExp 1
-     │  ╰─ OpExp TimesOp
-     │     ├─ IntExp 2
-     │     ╰─ IntExp 3
-     ╰─ OpExp DivideOp
-        ├─ IntExp 4
-        ╰─ IntExp 2
+  ╰─ OpExpr MinusOp
+     ├─ OpExpr PlusOp
+     │  ├─ IntExpr 1
+     │  ╰─ OpExpr TimesOp
+     │     ├─ IntExpr 2
+     │     ╰─ IntExpr 3
+     ╰─ OpExpr DivideOp
+        ├─ IntExpr 4
+        ╰─ IntExpr 2
 
   $ ../../bin/tiger_ast.exe ../../programs/parser/assign-lvalue.tig
   ╭─ Tiger AST
-  ╰─ AssignExp
+  ╰─ AssignExpr
      ├─ var
      │  ╰─ FieldVar x
      │     ╰─ SubscriptVar
      │        ├─ var
      │        │  ╰─ SimpleVar rows
      │        ╰─ index
-     │           ╰─ IntExp 0
-     ╰─ exp
-        ╰─ VarExp
+     │           ╰─ IntExpr 0
+     ╰─ expr
+        ╰─ VarExpr
            ╰─ FieldVar y
               ╰─ SimpleVar other
 
   $ ../../bin/tiger_ast.exe ../../programs/parser/for-mixed.tig
   ╭─ Tiger AST
-  ╰─ ForExp i escape=true
+  ╰─ ForExpr i escape=true
      ├─ lo
-     │  ╰─ IntExp 0
+     │  ╰─ IntExpr 0
      ├─ hi
-     │  ╰─ OpExp MinusOp
-     │     ├─ VarExp
+     │  ╰─ OpExpr MinusOp
+     │     ├─ VarExpr
      │     │  ╰─ SimpleVar n
-     │     ╰─ IntExp 1
+     │     ╰─ IntExpr 1
      ╰─ body
-        ╰─ IfExp
+        ╰─ IfExpr
            ├─ test
-           │  ╰─ VarExp
+           │  ╰─ VarExpr
            │     ╰─ SimpleVar ready
            ├─ then
-           │  ╰─ CallExp print
-           │     ╰─ CallExp chr
-           │        ╰─ VarExp
+           │  ╰─ CallExpr print
+           │     ╰─ CallExpr chr
+           │        ╰─ VarExpr
            │           ╰─ SimpleVar i
            ╰─ else
-              ╰─ SeqExp
+              ╰─ SeqExpr
 
   $ ../../bin/tiger_ast.exe ../../programs/parser/let-type-record-fields.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ TypeDec
      │     ╰─ Type point
@@ -58,15 +58,15 @@
      │           ├─ Field x : int escape=true
      │           ╰─ Field y : int escape=true
      ╰─ body
-        ╰─ RecordExp point
+        ╰─ RecordExpr point
            ├─ Field x
-           │  ╰─ IntExp 1
+           │  ╰─ IntExpr 1
            ╰─ Field y
-              ╰─ IntExp 2
+              ╰─ IntExpr 2
 
   $ ../../bin/tiger_ast.exe ../../programs/parser/let-decs-mixed.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ TypeDec
      │  │  ╰─ Type count
@@ -74,20 +74,20 @@
      │  ├─ VarDec start escape=true
      │  │  ├─ type: count
      │  │  ╰─ init
-     │  │     ╰─ IntExp 0
+     │  │     ╰─ IntExpr 0
      │  ╰─ FunctionDec
      │     ╰─ Function inc
      │        ├─ params
      │        │  ╰─ Field x : count escape=true
      │        ├─ result: count
      │        ╰─ body
-     │           ╰─ OpExp PlusOp
-     │              ├─ VarExp
+     │           ╰─ OpExpr PlusOp
+     │              ├─ VarExpr
      │              │  ╰─ SimpleVar x
-     │              ╰─ IntExp 1
+     │              ╰─ IntExpr 1
      ╰─ body
-        ╰─ CallExp inc
-           ╰─ VarExp
+        ╰─ CallExpr inc
+           ╰─ VarExpr
               ╰─ SimpleVar start
 
 Print the imported Tiger testcase corpus as ASTs too. test49.tig is
@@ -95,7 +95,7 @@ syntactically invalid, so it prints the parser error.
 
   $ ../../bin/tiger_ast.exe ../../programs/testcases/merge.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ TypeDec
      │  │  ╰─ Type any
@@ -104,106 +104,106 @@ syntactically invalid, so it prints the parser error.
      │  ├─ VarDec buffer escape=true
      │  │  ├─ type: none
      │  │  ╰─ init
-     │  │     ╰─ CallExp getchar
+     │  │     ╰─ CallExpr getchar
      │  ├─ FunctionDec
      │  │  ╰─ Function readint
      │  │     ├─ params
      │  │     │  ╰─ Field any : any escape=true
      │  │     ├─ result: int
      │  │     ╰─ body
-     │  │        ╰─ LetExp
+     │  │        ╰─ LetExpr
      │  │           ├─ decs
      │  │           │  ├─ VarDec i escape=true
      │  │           │  │  ├─ type: none
      │  │           │  │  ╰─ init
-     │  │           │  │     ╰─ IntExp 0
+     │  │           │  │     ╰─ IntExpr 0
      │  │           │  ╰─ FunctionDec
      │  │           │     ├─ Function isdigit
      │  │           │     │  ├─ params
      │  │           │     │  │  ╰─ Field s : string escape=true
      │  │           │     │  ├─ result: int
      │  │           │     │  ╰─ body
-     │  │           │     │     ╰─ IfExp
+     │  │           │     │     ╰─ IfExpr
      │  │           │     │        ├─ test
-     │  │           │     │        │  ╰─ OpExp GeOp
-     │  │           │     │        │     ├─ CallExp ord
-     │  │           │     │        │     │  ╰─ VarExp
+     │  │           │     │        │  ╰─ OpExpr GeOp
+     │  │           │     │        │     ├─ CallExpr ord
+     │  │           │     │        │     │  ╰─ VarExpr
      │  │           │     │        │     │     ╰─ SimpleVar buffer
-     │  │           │     │        │     ╰─ CallExp ord
-     │  │           │     │        │        ╰─ StringExp "0"
+     │  │           │     │        │     ╰─ CallExpr ord
+     │  │           │     │        │        ╰─ StringExpr "0"
      │  │           │     │        ├─ then
-     │  │           │     │        │  ╰─ OpExp LeOp
-     │  │           │     │        │     ├─ CallExp ord
-     │  │           │     │        │     │  ╰─ VarExp
+     │  │           │     │        │  ╰─ OpExpr LeOp
+     │  │           │     │        │     ├─ CallExpr ord
+     │  │           │     │        │     │  ╰─ VarExpr
      │  │           │     │        │     │     ╰─ SimpleVar buffer
-     │  │           │     │        │     ╰─ CallExp ord
-     │  │           │     │        │        ╰─ StringExp "9"
+     │  │           │     │        │     ╰─ CallExpr ord
+     │  │           │     │        │        ╰─ StringExpr "9"
      │  │           │     │        ╰─ else
-     │  │           │     │           ╰─ IntExp 0
+     │  │           │     │           ╰─ IntExpr 0
      │  │           │     ╰─ Function skipto
      │  │           │        ├─ params
      │  │           │        ├─ result: none
      │  │           │        ╰─ body
-     │  │           │           ╰─ WhileExp
+     │  │           │           ╰─ WhileExpr
      │  │           │              ├─ test
-     │  │           │              │  ╰─ IfExp
+     │  │           │              │  ╰─ IfExpr
      │  │           │              │     ├─ test
-     │  │           │              │     │  ╰─ OpExp EqOp
-     │  │           │              │     │     ├─ VarExp
+     │  │           │              │     │  ╰─ OpExpr EqOp
+     │  │           │              │     │     ├─ VarExpr
      │  │           │              │     │     │  ╰─ SimpleVar buffer
-     │  │           │              │     │     ╰─ StringExp " "
+     │  │           │              │     │     ╰─ StringExpr " "
      │  │           │              │     ├─ then
-     │  │           │              │     │  ╰─ IntExp 1
+     │  │           │              │     │  ╰─ IntExpr 1
      │  │           │              │     ╰─ else
-     │  │           │              │        ╰─ OpExp EqOp
-     │  │           │              │           ├─ VarExp
+     │  │           │              │        ╰─ OpExpr EqOp
+     │  │           │              │           ├─ VarExpr
      │  │           │              │           │  ╰─ SimpleVar buffer
-     │  │           │              │           ╰─ StringExp "\n"
+     │  │           │              │           ╰─ StringExpr "\n"
      │  │           │              ╰─ body
-     │  │           │                 ╰─ AssignExp
+     │  │           │                 ╰─ AssignExpr
      │  │           │                    ├─ var
      │  │           │                    │  ╰─ SimpleVar buffer
-     │  │           │                    ╰─ exp
-     │  │           │                       ╰─ CallExp getchar
+     │  │           │                    ╰─ expr
+     │  │           │                       ╰─ CallExpr getchar
      │  │           ╰─ body
-     │  │              ╰─ SeqExp
-     │  │                 ├─ CallExp skipto
-     │  │                 ├─ AssignExp
+     │  │              ╰─ SeqExpr
+     │  │                 ├─ CallExpr skipto
+     │  │                 ├─ AssignExpr
      │  │                 │  ├─ var
      │  │                 │  │  ╰─ FieldVar any
      │  │                 │  │     ╰─ SimpleVar any
-     │  │                 │  ╰─ exp
-     │  │                 │     ╰─ CallExp isdigit
-     │  │                 │        ╰─ VarExp
+     │  │                 │  ╰─ expr
+     │  │                 │     ╰─ CallExpr isdigit
+     │  │                 │        ╰─ VarExpr
      │  │                 │           ╰─ SimpleVar buffer
-     │  │                 ├─ WhileExp
+     │  │                 ├─ WhileExpr
      │  │                 │  ├─ test
-     │  │                 │  │  ╰─ CallExp isdigit
-     │  │                 │  │     ╰─ VarExp
+     │  │                 │  │  ╰─ CallExpr isdigit
+     │  │                 │  │     ╰─ VarExpr
      │  │                 │  │        ╰─ SimpleVar buffer
      │  │                 │  ╰─ body
-     │  │                 │     ╰─ SeqExp
-     │  │                 │        ├─ AssignExp
+     │  │                 │     ╰─ SeqExpr
+     │  │                 │        ├─ AssignExpr
      │  │                 │        │  ├─ var
      │  │                 │        │  │  ╰─ SimpleVar i
-     │  │                 │        │  ╰─ exp
-     │  │                 │        │     ╰─ OpExp MinusOp
-     │  │                 │        │        ├─ OpExp PlusOp
-     │  │                 │        │        │  ├─ OpExp TimesOp
-     │  │                 │        │        │  │  ├─ VarExp
+     │  │                 │        │  ╰─ expr
+     │  │                 │        │     ╰─ OpExpr MinusOp
+     │  │                 │        │        ├─ OpExpr PlusOp
+     │  │                 │        │        │  ├─ OpExpr TimesOp
+     │  │                 │        │        │  │  ├─ VarExpr
      │  │                 │        │        │  │  │  ╰─ SimpleVar i
-     │  │                 │        │        │  │  ╰─ IntExp 10
-     │  │                 │        │        │  ╰─ CallExp ord
-     │  │                 │        │        │     ╰─ VarExp
+     │  │                 │        │        │  │  ╰─ IntExpr 10
+     │  │                 │        │        │  ╰─ CallExpr ord
+     │  │                 │        │        │     ╰─ VarExpr
      │  │                 │        │        │        ╰─ SimpleVar buffer
-     │  │                 │        │        ╰─ CallExp ord
-     │  │                 │        │           ╰─ StringExp "0"
-     │  │                 │        ╰─ AssignExp
+     │  │                 │        │        ╰─ CallExpr ord
+     │  │                 │        │           ╰─ StringExpr "0"
+     │  │                 │        ╰─ AssignExpr
      │  │                 │           ├─ var
      │  │                 │           │  ╰─ SimpleVar buffer
-     │  │                 │           ╰─ exp
-     │  │                 │              ╰─ CallExp getchar
-     │  │                 ╰─ VarExp
+     │  │                 │           ╰─ expr
+     │  │                 │              ╰─ CallExpr getchar
+     │  │                 ╰─ VarExpr
      │  │                    ╰─ SimpleVar i
      │  ├─ TypeDec
      │  │  ╰─ Type list
@@ -215,94 +215,94 @@ syntactically invalid, so it prints the parser error.
      │  │  │  ├─ params
      │  │  │  ├─ result: list
      │  │  │  ╰─ body
-     │  │  │     ╰─ LetExp
+     │  │  │     ╰─ LetExpr
      │  │  │        ├─ decs
      │  │  │        │  ├─ VarDec any escape=true
      │  │  │        │  │  ├─ type: none
      │  │  │        │  │  ╰─ init
-     │  │  │        │  │     ╰─ RecordExp any
+     │  │  │        │  │     ╰─ RecordExpr any
      │  │  │        │  │        ╰─ Field any
-     │  │  │        │  │           ╰─ IntExp 0
+     │  │  │        │  │           ╰─ IntExpr 0
      │  │  │        │  ╰─ VarDec i escape=true
      │  │  │        │     ├─ type: none
      │  │  │        │     ╰─ init
-     │  │  │        │        ╰─ CallExp readint
-     │  │  │        │           ╰─ VarExp
+     │  │  │        │        ╰─ CallExpr readint
+     │  │  │        │           ╰─ VarExpr
      │  │  │        │              ╰─ SimpleVar any
      │  │  │        ╰─ body
-     │  │  │           ╰─ IfExp
+     │  │  │           ╰─ IfExpr
      │  │  │              ├─ test
-     │  │  │              │  ╰─ VarExp
+     │  │  │              │  ╰─ VarExpr
      │  │  │              │     ╰─ FieldVar any
      │  │  │              │        ╰─ SimpleVar any
      │  │  │              ├─ then
-     │  │  │              │  ╰─ RecordExp list
+     │  │  │              │  ╰─ RecordExpr list
      │  │  │              │     ├─ Field first
-     │  │  │              │     │  ╰─ VarExp
+     │  │  │              │     │  ╰─ VarExpr
      │  │  │              │     │     ╰─ SimpleVar i
      │  │  │              │     ╰─ Field rest
-     │  │  │              │        ╰─ CallExp readlist
+     │  │  │              │        ╰─ CallExpr readlist
      │  │  │              ╰─ else
-     │  │  │                 ╰─ NilExp
+     │  │  │                 ╰─ NilExpr
      │  │  ├─ Function merge
      │  │  │  ├─ params
      │  │  │  │  ├─ Field a : list escape=true
      │  │  │  │  ╰─ Field b : list escape=true
      │  │  │  ├─ result: list
      │  │  │  ╰─ body
-     │  │  │     ╰─ IfExp
+     │  │  │     ╰─ IfExpr
      │  │  │        ├─ test
-     │  │  │        │  ╰─ OpExp EqOp
-     │  │  │        │     ├─ VarExp
+     │  │  │        │  ╰─ OpExpr EqOp
+     │  │  │        │     ├─ VarExpr
      │  │  │        │     │  ╰─ SimpleVar a
-     │  │  │        │     ╰─ NilExp
+     │  │  │        │     ╰─ NilExpr
      │  │  │        ├─ then
-     │  │  │        │  ╰─ VarExp
+     │  │  │        │  ╰─ VarExpr
      │  │  │        │     ╰─ SimpleVar b
      │  │  │        ╰─ else
-     │  │  │           ╰─ IfExp
+     │  │  │           ╰─ IfExpr
      │  │  │              ├─ test
-     │  │  │              │  ╰─ OpExp EqOp
-     │  │  │              │     ├─ VarExp
+     │  │  │              │  ╰─ OpExpr EqOp
+     │  │  │              │     ├─ VarExpr
      │  │  │              │     │  ╰─ SimpleVar b
-     │  │  │              │     ╰─ NilExp
+     │  │  │              │     ╰─ NilExpr
      │  │  │              ├─ then
-     │  │  │              │  ╰─ VarExp
+     │  │  │              │  ╰─ VarExpr
      │  │  │              │     ╰─ SimpleVar a
      │  │  │              ╰─ else
-     │  │  │                 ╰─ IfExp
+     │  │  │                 ╰─ IfExpr
      │  │  │                    ├─ test
-     │  │  │                    │  ╰─ OpExp LtOp
-     │  │  │                    │     ├─ VarExp
+     │  │  │                    │  ╰─ OpExpr LtOp
+     │  │  │                    │     ├─ VarExpr
      │  │  │                    │     │  ╰─ FieldVar first
      │  │  │                    │     │     ╰─ SimpleVar a
-     │  │  │                    │     ╰─ VarExp
+     │  │  │                    │     ╰─ VarExpr
      │  │  │                    │        ╰─ FieldVar first
      │  │  │                    │           ╰─ SimpleVar b
      │  │  │                    ├─ then
-     │  │  │                    │  ╰─ RecordExp list
+     │  │  │                    │  ╰─ RecordExpr list
      │  │  │                    │     ├─ Field first
-     │  │  │                    │     │  ╰─ VarExp
+     │  │  │                    │     │  ╰─ VarExpr
      │  │  │                    │     │     ╰─ FieldVar first
      │  │  │                    │     │        ╰─ SimpleVar a
      │  │  │                    │     ╰─ Field rest
-     │  │  │                    │        ╰─ CallExp merge
-     │  │  │                    │           ├─ VarExp
+     │  │  │                    │        ╰─ CallExpr merge
+     │  │  │                    │           ├─ VarExpr
      │  │  │                    │           │  ╰─ FieldVar rest
      │  │  │                    │           │     ╰─ SimpleVar a
-     │  │  │                    │           ╰─ VarExp
+     │  │  │                    │           ╰─ VarExpr
      │  │  │                    │              ╰─ SimpleVar b
      │  │  │                    ╰─ else
-     │  │  │                       ╰─ RecordExp list
+     │  │  │                       ╰─ RecordExpr list
      │  │  │                          ├─ Field first
-     │  │  │                          │  ╰─ VarExp
+     │  │  │                          │  ╰─ VarExpr
      │  │  │                          │     ╰─ FieldVar first
      │  │  │                          │        ╰─ SimpleVar b
      │  │  │                          ╰─ Field rest
-     │  │  │                             ╰─ CallExp merge
-     │  │  │                                ├─ VarExp
+     │  │  │                             ╰─ CallExpr merge
+     │  │  │                                ├─ VarExpr
      │  │  │                                │  ╰─ SimpleVar a
-     │  │  │                                ╰─ VarExp
+     │  │  │                                ╰─ VarExpr
      │  │  │                                   ╰─ FieldVar rest
      │  │  │                                      ╰─ SimpleVar b
      │  │  ├─ Function printint
@@ -310,7 +310,7 @@ syntactically invalid, so it prints the parser error.
      │  │  │  │  ╰─ Field i : int escape=true
      │  │  │  ├─ result: none
      │  │  │  ╰─ body
-     │  │  │     ╰─ LetExp
+     │  │  │     ╰─ LetExpr
      │  │  │        ├─ decs
      │  │  │        │  ╰─ FunctionDec
      │  │  │        │     ╰─ Function f
@@ -318,386 +318,386 @@ syntactically invalid, so it prints the parser error.
      │  │  │        │        │  ╰─ Field i : int escape=true
      │  │  │        │        ├─ result: none
      │  │  │        │        ╰─ body
-     │  │  │        │           ╰─ IfExp
+     │  │  │        │           ╰─ IfExpr
      │  │  │        │              ├─ test
-     │  │  │        │              │  ╰─ OpExp GtOp
-     │  │  │        │              │     ├─ VarExp
+     │  │  │        │              │  ╰─ OpExpr GtOp
+     │  │  │        │              │     ├─ VarExpr
      │  │  │        │              │     │  ╰─ SimpleVar i
-     │  │  │        │              │     ╰─ IntExp 0
+     │  │  │        │              │     ╰─ IntExpr 0
      │  │  │        │              ├─ then
-     │  │  │        │              │  ╰─ SeqExp
-     │  │  │        │              │     ├─ CallExp f
-     │  │  │        │              │     │  ╰─ OpExp DivideOp
-     │  │  │        │              │     │     ├─ VarExp
+     │  │  │        │              │  ╰─ SeqExpr
+     │  │  │        │              │     ├─ CallExpr f
+     │  │  │        │              │     │  ╰─ OpExpr DivideOp
+     │  │  │        │              │     │     ├─ VarExpr
      │  │  │        │              │     │     │  ╰─ SimpleVar i
-     │  │  │        │              │     │     ╰─ IntExp 10
-     │  │  │        │              │     ╰─ CallExp print
-     │  │  │        │              │        ╰─ CallExp chr
-     │  │  │        │              │           ╰─ OpExp PlusOp
-     │  │  │        │              │              ├─ OpExp MinusOp
-     │  │  │        │              │              │  ├─ VarExp
+     │  │  │        │              │     │     ╰─ IntExpr 10
+     │  │  │        │              │     ╰─ CallExpr print
+     │  │  │        │              │        ╰─ CallExpr chr
+     │  │  │        │              │           ╰─ OpExpr PlusOp
+     │  │  │        │              │              ├─ OpExpr MinusOp
+     │  │  │        │              │              │  ├─ VarExpr
      │  │  │        │              │              │  │  ╰─ SimpleVar i
-     │  │  │        │              │              │  ╰─ OpExp TimesOp
-     │  │  │        │              │              │     ├─ OpExp DivideOp
-     │  │  │        │              │              │     │  ├─ VarExp
+     │  │  │        │              │              │  ╰─ OpExpr TimesOp
+     │  │  │        │              │              │     ├─ OpExpr DivideOp
+     │  │  │        │              │              │     │  ├─ VarExpr
      │  │  │        │              │              │     │  │  ╰─ SimpleVar i
-     │  │  │        │              │              │     │  ╰─ IntExp 10
-     │  │  │        │              │              │     ╰─ IntExp 10
-     │  │  │        │              │              ╰─ CallExp ord
-     │  │  │        │              │                 ╰─ StringExp "0"
+     │  │  │        │              │              │     │  ╰─ IntExpr 10
+     │  │  │        │              │              │     ╰─ IntExpr 10
+     │  │  │        │              │              ╰─ CallExpr ord
+     │  │  │        │              │                 ╰─ StringExpr "0"
      │  │  │        │              ╰─ else: none
      │  │  │        ╰─ body
-     │  │  │           ╰─ IfExp
+     │  │  │           ╰─ IfExpr
      │  │  │              ├─ test
-     │  │  │              │  ╰─ OpExp LtOp
-     │  │  │              │     ├─ VarExp
+     │  │  │              │  ╰─ OpExpr LtOp
+     │  │  │              │     ├─ VarExpr
      │  │  │              │     │  ╰─ SimpleVar i
-     │  │  │              │     ╰─ IntExp 0
+     │  │  │              │     ╰─ IntExpr 0
      │  │  │              ├─ then
-     │  │  │              │  ╰─ SeqExp
-     │  │  │              │     ├─ CallExp print
-     │  │  │              │     │  ╰─ StringExp "-"
-     │  │  │              │     ╰─ CallExp f
-     │  │  │              │        ╰─ OpExp MinusOp
-     │  │  │              │           ├─ IntExp 0
-     │  │  │              │           ╰─ VarExp
+     │  │  │              │  ╰─ SeqExpr
+     │  │  │              │     ├─ CallExpr print
+     │  │  │              │     │  ╰─ StringExpr "-"
+     │  │  │              │     ╰─ CallExpr f
+     │  │  │              │        ╰─ OpExpr MinusOp
+     │  │  │              │           ├─ IntExpr 0
+     │  │  │              │           ╰─ VarExpr
      │  │  │              │              ╰─ SimpleVar i
      │  │  │              ╰─ else
-     │  │  │                 ╰─ IfExp
+     │  │  │                 ╰─ IfExpr
      │  │  │                    ├─ test
-     │  │  │                    │  ╰─ OpExp GtOp
-     │  │  │                    │     ├─ VarExp
+     │  │  │                    │  ╰─ OpExpr GtOp
+     │  │  │                    │     ├─ VarExpr
      │  │  │                    │     │  ╰─ SimpleVar i
-     │  │  │                    │     ╰─ IntExp 0
+     │  │  │                    │     ╰─ IntExpr 0
      │  │  │                    ├─ then
-     │  │  │                    │  ╰─ CallExp f
-     │  │  │                    │     ╰─ VarExp
+     │  │  │                    │  ╰─ CallExpr f
+     │  │  │                    │     ╰─ VarExpr
      │  │  │                    │        ╰─ SimpleVar i
      │  │  │                    ╰─ else
-     │  │  │                       ╰─ CallExp print
-     │  │  │                          ╰─ StringExp "0"
+     │  │  │                       ╰─ CallExpr print
+     │  │  │                          ╰─ StringExpr "0"
      │  │  ╰─ Function printlist
      │  │     ├─ params
      │  │     │  ╰─ Field l : list escape=true
      │  │     ├─ result: none
      │  │     ╰─ body
-     │  │        ╰─ IfExp
+     │  │        ╰─ IfExpr
      │  │           ├─ test
-     │  │           │  ╰─ OpExp EqOp
-     │  │           │     ├─ VarExp
+     │  │           │  ╰─ OpExpr EqOp
+     │  │           │     ├─ VarExpr
      │  │           │     │  ╰─ SimpleVar l
-     │  │           │     ╰─ NilExp
+     │  │           │     ╰─ NilExpr
      │  │           ├─ then
-     │  │           │  ╰─ CallExp print
-     │  │           │     ╰─ StringExp "\n"
+     │  │           │  ╰─ CallExpr print
+     │  │           │     ╰─ StringExpr "\n"
      │  │           ╰─ else
-     │  │              ╰─ SeqExp
-     │  │                 ├─ CallExp printint
-     │  │                 │  ╰─ VarExp
+     │  │              ╰─ SeqExpr
+     │  │                 ├─ CallExpr printint
+     │  │                 │  ╰─ VarExpr
      │  │                 │     ╰─ FieldVar first
      │  │                 │        ╰─ SimpleVar l
-     │  │                 ├─ CallExp print
-     │  │                 │  ╰─ StringExp " "
-     │  │                 ╰─ CallExp printlist
-     │  │                    ╰─ VarExp
+     │  │                 ├─ CallExpr print
+     │  │                 │  ╰─ StringExpr " "
+     │  │                 ╰─ CallExpr printlist
+     │  │                    ╰─ VarExpr
      │  │                       ╰─ FieldVar rest
      │  │                          ╰─ SimpleVar l
      │  ├─ VarDec list1 escape=true
      │  │  ├─ type: none
      │  │  ╰─ init
-     │  │     ╰─ CallExp readlist
+     │  │     ╰─ CallExpr readlist
      │  ╰─ VarDec list2 escape=true
      │     ├─ type: none
      │     ╰─ init
-     │        ╰─ SeqExp
-     │           ├─ AssignExp
+     │        ╰─ SeqExpr
+     │           ├─ AssignExpr
      │           │  ├─ var
      │           │  │  ╰─ SimpleVar buffer
-     │           │  ╰─ exp
-     │           │     ╰─ CallExp getchar
-     │           ╰─ CallExp readlist
+     │           │  ╰─ expr
+     │           │     ╰─ CallExpr getchar
+     │           ╰─ CallExpr readlist
      ╰─ body
-        ╰─ CallExp printlist
-           ╰─ CallExp merge
-              ├─ VarExp
+        ╰─ CallExpr printlist
+           ╰─ CallExpr merge
+              ├─ VarExpr
               │  ╰─ SimpleVar list1
-              ╰─ VarExp
+              ╰─ VarExpr
                  ╰─ SimpleVar list2
   $ ../../bin/tiger_ast.exe ../../programs/testcases/queens.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ VarDec N escape=true
      │  │  ├─ type: none
      │  │  ╰─ init
-     │  │     ╰─ IntExp 8
+     │  │     ╰─ IntExpr 8
      │  ├─ TypeDec
      │  │  ╰─ Type intArray
      │  │     ╰─ ArrayTy int
      │  ├─ VarDec row escape=true
      │  │  ├─ type: none
      │  │  ╰─ init
-     │  │     ╰─ ArrayExp intArray
+     │  │     ╰─ ArrayExpr intArray
      │  │        ├─ size
-     │  │        │  ╰─ VarExp
+     │  │        │  ╰─ VarExpr
      │  │        │     ╰─ SimpleVar N
      │  │        ╰─ init
-     │  │           ╰─ IntExp 0
+     │  │           ╰─ IntExpr 0
      │  ├─ VarDec col escape=true
      │  │  ├─ type: none
      │  │  ╰─ init
-     │  │     ╰─ ArrayExp intArray
+     │  │     ╰─ ArrayExpr intArray
      │  │        ├─ size
-     │  │        │  ╰─ VarExp
+     │  │        │  ╰─ VarExpr
      │  │        │     ╰─ SimpleVar N
      │  │        ╰─ init
-     │  │           ╰─ IntExp 0
+     │  │           ╰─ IntExpr 0
      │  ├─ VarDec diag1 escape=true
      │  │  ├─ type: none
      │  │  ╰─ init
-     │  │     ╰─ ArrayExp intArray
+     │  │     ╰─ ArrayExpr intArray
      │  │        ├─ size
-     │  │        │  ╰─ OpExp MinusOp
-     │  │        │     ├─ OpExp PlusOp
-     │  │        │     │  ├─ VarExp
+     │  │        │  ╰─ OpExpr MinusOp
+     │  │        │     ├─ OpExpr PlusOp
+     │  │        │     │  ├─ VarExpr
      │  │        │     │  │  ╰─ SimpleVar N
-     │  │        │     │  ╰─ VarExp
+     │  │        │     │  ╰─ VarExpr
      │  │        │     │     ╰─ SimpleVar N
-     │  │        │     ╰─ IntExp 1
+     │  │        │     ╰─ IntExpr 1
      │  │        ╰─ init
-     │  │           ╰─ IntExp 0
+     │  │           ╰─ IntExpr 0
      │  ├─ VarDec diag2 escape=true
      │  │  ├─ type: none
      │  │  ╰─ init
-     │  │     ╰─ ArrayExp intArray
+     │  │     ╰─ ArrayExpr intArray
      │  │        ├─ size
-     │  │        │  ╰─ OpExp MinusOp
-     │  │        │     ├─ OpExp PlusOp
-     │  │        │     │  ├─ VarExp
+     │  │        │  ╰─ OpExpr MinusOp
+     │  │        │     ├─ OpExpr PlusOp
+     │  │        │     │  ├─ VarExpr
      │  │        │     │  │  ╰─ SimpleVar N
-     │  │        │     │  ╰─ VarExp
+     │  │        │     │  ╰─ VarExpr
      │  │        │     │     ╰─ SimpleVar N
-     │  │        │     ╰─ IntExp 1
+     │  │        │     ╰─ IntExpr 1
      │  │        ╰─ init
-     │  │           ╰─ IntExp 0
+     │  │           ╰─ IntExpr 0
      │  ╰─ FunctionDec
      │     ├─ Function printboard
      │     │  ├─ params
      │     │  ├─ result: none
      │     │  ╰─ body
-     │     │     ╰─ SeqExp
-     │     │        ├─ ForExp i escape=true
+     │     │     ╰─ SeqExpr
+     │     │        ├─ ForExpr i escape=true
      │     │        │  ├─ lo
-     │     │        │  │  ╰─ IntExp 0
+     │     │        │  │  ╰─ IntExpr 0
      │     │        │  ├─ hi
-     │     │        │  │  ╰─ OpExp MinusOp
-     │     │        │  │     ├─ VarExp
+     │     │        │  │  ╰─ OpExpr MinusOp
+     │     │        │  │     ├─ VarExpr
      │     │        │  │     │  ╰─ SimpleVar N
-     │     │        │  │     ╰─ IntExp 1
+     │     │        │  │     ╰─ IntExpr 1
      │     │        │  ╰─ body
-     │     │        │     ╰─ SeqExp
-     │     │        │        ├─ ForExp j escape=true
+     │     │        │     ╰─ SeqExpr
+     │     │        │        ├─ ForExpr j escape=true
      │     │        │        │  ├─ lo
-     │     │        │        │  │  ╰─ IntExp 0
+     │     │        │        │  │  ╰─ IntExpr 0
      │     │        │        │  ├─ hi
-     │     │        │        │  │  ╰─ OpExp MinusOp
-     │     │        │        │  │     ├─ VarExp
+     │     │        │        │  │  ╰─ OpExpr MinusOp
+     │     │        │        │  │     ├─ VarExpr
      │     │        │        │  │     │  ╰─ SimpleVar N
-     │     │        │        │  │     ╰─ IntExp 1
+     │     │        │        │  │     ╰─ IntExpr 1
      │     │        │        │  ╰─ body
-     │     │        │        │     ╰─ CallExp print
-     │     │        │        │        ╰─ IfExp
+     │     │        │        │     ╰─ CallExpr print
+     │     │        │        │        ╰─ IfExpr
      │     │        │        │           ├─ test
-     │     │        │        │           │  ╰─ OpExp EqOp
-     │     │        │        │           │     ├─ VarExp
+     │     │        │        │           │  ╰─ OpExpr EqOp
+     │     │        │        │           │     ├─ VarExpr
      │     │        │        │           │     │  ╰─ SubscriptVar
      │     │        │        │           │     │     ├─ var
      │     │        │        │           │     │     │  ╰─ SimpleVar col
      │     │        │        │           │     │     ╰─ index
-     │     │        │        │           │     │        ╰─ VarExp
+     │     │        │        │           │     │        ╰─ VarExpr
      │     │        │        │           │     │           ╰─ SimpleVar i
-     │     │        │        │           │     ╰─ VarExp
+     │     │        │        │           │     ╰─ VarExpr
      │     │        │        │           │        ╰─ SimpleVar j
      │     │        │        │           ├─ then
-     │     │        │        │           │  ╰─ StringExp " O"
+     │     │        │        │           │  ╰─ StringExpr " O"
      │     │        │        │           ╰─ else
-     │     │        │        │              ╰─ StringExp " ."
-     │     │        │        ╰─ CallExp print
-     │     │        │           ╰─ StringExp "\n"
-     │     │        ╰─ CallExp print
-     │     │           ╰─ StringExp "\n"
+     │     │        │        │              ╰─ StringExpr " ."
+     │     │        │        ╰─ CallExpr print
+     │     │        │           ╰─ StringExpr "\n"
+     │     │        ╰─ CallExpr print
+     │     │           ╰─ StringExpr "\n"
      │     ╰─ Function try
      │        ├─ params
      │        │  ╰─ Field c : int escape=true
      │        ├─ result: none
      │        ╰─ body
-     │           ╰─ IfExp
+     │           ╰─ IfExpr
      │              ├─ test
-     │              │  ╰─ OpExp EqOp
-     │              │     ├─ VarExp
+     │              │  ╰─ OpExpr EqOp
+     │              │     ├─ VarExpr
      │              │     │  ╰─ SimpleVar c
-     │              │     ╰─ VarExp
+     │              │     ╰─ VarExpr
      │              │        ╰─ SimpleVar N
      │              ├─ then
-     │              │  ╰─ CallExp printboard
+     │              │  ╰─ CallExpr printboard
      │              ╰─ else
-     │                 ╰─ ForExp r escape=true
+     │                 ╰─ ForExpr r escape=true
      │                    ├─ lo
-     │                    │  ╰─ IntExp 0
+     │                    │  ╰─ IntExpr 0
      │                    ├─ hi
-     │                    │  ╰─ OpExp MinusOp
-     │                    │     ├─ VarExp
+     │                    │  ╰─ OpExpr MinusOp
+     │                    │     ├─ VarExpr
      │                    │     │  ╰─ SimpleVar N
-     │                    │     ╰─ IntExp 1
+     │                    │     ╰─ IntExpr 1
      │                    ╰─ body
-     │                       ╰─ IfExp
+     │                       ╰─ IfExpr
      │                          ├─ test
-     │                          │  ╰─ IfExp
+     │                          │  ╰─ IfExpr
      │                          │     ├─ test
-     │                          │     │  ╰─ IfExp
+     │                          │     │  ╰─ IfExpr
      │                          │     │     ├─ test
-     │                          │     │     │  ╰─ OpExp EqOp
-     │                          │     │     │     ├─ VarExp
+     │                          │     │     │  ╰─ OpExpr EqOp
+     │                          │     │     │     ├─ VarExpr
      │                          │     │     │     │  ╰─ SubscriptVar
      │                          │     │     │     │     ├─ var
      │                          │     │     │     │     │  ╰─ SimpleVar row
      │                          │     │     │     │     ╰─ index
-     │                          │     │     │     │        ╰─ VarExp
+     │                          │     │     │     │        ╰─ VarExpr
      │                          │     │     │     │           ╰─ SimpleVar r
-     │                          │     │     │     ╰─ IntExp 0
+     │                          │     │     │     ╰─ IntExpr 0
      │                          │     │     ├─ then
-     │                          │     │     │  ╰─ OpExp EqOp
-     │                          │     │     │     ├─ VarExp
+     │                          │     │     │  ╰─ OpExpr EqOp
+     │                          │     │     │     ├─ VarExpr
      │                          │     │     │     │  ╰─ SubscriptVar
      │                          │     │     │     │     ├─ var
      │                          │     │     │     │     │  ╰─ SimpleVar diag1
      │                          │     │     │     │     ╰─ index
-     │                          │     │     │     │        ╰─ OpExp PlusOp
-     │                          │     │     │     │           ├─ VarExp
+     │                          │     │     │     │        ╰─ OpExpr PlusOp
+     │                          │     │     │     │           ├─ VarExpr
      │                          │     │     │     │           │  ╰─ SimpleVar r
-     │                          │     │     │     │           ╰─ VarExp
+     │                          │     │     │     │           ╰─ VarExpr
      │                          │     │     │     │              ╰─ SimpleVar c
-     │                          │     │     │     ╰─ IntExp 0
+     │                          │     │     │     ╰─ IntExpr 0
      │                          │     │     ╰─ else
-     │                          │     │        ╰─ IntExp 0
+     │                          │     │        ╰─ IntExpr 0
      │                          │     ├─ then
-     │                          │     │  ╰─ OpExp EqOp
-     │                          │     │     ├─ VarExp
+     │                          │     │  ╰─ OpExpr EqOp
+     │                          │     │     ├─ VarExpr
      │                          │     │     │  ╰─ SubscriptVar
      │                          │     │     │     ├─ var
      │                          │     │     │     │  ╰─ SimpleVar diag2
      │                          │     │     │     ╰─ index
-     │                          │     │     │        ╰─ OpExp MinusOp
-     │                          │     │     │           ├─ OpExp PlusOp
-     │                          │     │     │           │  ├─ VarExp
+     │                          │     │     │        ╰─ OpExpr MinusOp
+     │                          │     │     │           ├─ OpExpr PlusOp
+     │                          │     │     │           │  ├─ VarExpr
      │                          │     │     │           │  │  ╰─ SimpleVar r
-     │                          │     │     │           │  ╰─ IntExp 7
-     │                          │     │     │           ╰─ VarExp
+     │                          │     │     │           │  ╰─ IntExpr 7
+     │                          │     │     │           ╰─ VarExpr
      │                          │     │     │              ╰─ SimpleVar c
-     │                          │     │     ╰─ IntExp 0
+     │                          │     │     ╰─ IntExpr 0
      │                          │     ╰─ else
-     │                          │        ╰─ IntExp 0
+     │                          │        ╰─ IntExpr 0
      │                          ├─ then
-     │                          │  ╰─ SeqExp
-     │                          │     ├─ AssignExp
+     │                          │  ╰─ SeqExpr
+     │                          │     ├─ AssignExpr
      │                          │     │  ├─ var
      │                          │     │  │  ╰─ SubscriptVar
      │                          │     │  │     ├─ var
      │                          │     │  │     │  ╰─ SimpleVar row
      │                          │     │  │     ╰─ index
-     │                          │     │  │        ╰─ VarExp
+     │                          │     │  │        ╰─ VarExpr
      │                          │     │  │           ╰─ SimpleVar r
-     │                          │     │  ╰─ exp
-     │                          │     │     ╰─ IntExp 1
-     │                          │     ├─ AssignExp
+     │                          │     │  ╰─ expr
+     │                          │     │     ╰─ IntExpr 1
+     │                          │     ├─ AssignExpr
      │                          │     │  ├─ var
      │                          │     │  │  ╰─ SubscriptVar
      │                          │     │  │     ├─ var
      │                          │     │  │     │  ╰─ SimpleVar diag1
      │                          │     │  │     ╰─ index
-     │                          │     │  │        ╰─ OpExp PlusOp
-     │                          │     │  │           ├─ VarExp
+     │                          │     │  │        ╰─ OpExpr PlusOp
+     │                          │     │  │           ├─ VarExpr
      │                          │     │  │           │  ╰─ SimpleVar r
-     │                          │     │  │           ╰─ VarExp
+     │                          │     │  │           ╰─ VarExpr
      │                          │     │  │              ╰─ SimpleVar c
-     │                          │     │  ╰─ exp
-     │                          │     │     ╰─ IntExp 1
-     │                          │     ├─ AssignExp
+     │                          │     │  ╰─ expr
+     │                          │     │     ╰─ IntExpr 1
+     │                          │     ├─ AssignExpr
      │                          │     │  ├─ var
      │                          │     │  │  ╰─ SubscriptVar
      │                          │     │  │     ├─ var
      │                          │     │  │     │  ╰─ SimpleVar diag2
      │                          │     │  │     ╰─ index
-     │                          │     │  │        ╰─ OpExp MinusOp
-     │                          │     │  │           ├─ OpExp PlusOp
-     │                          │     │  │           │  ├─ VarExp
+     │                          │     │  │        ╰─ OpExpr MinusOp
+     │                          │     │  │           ├─ OpExpr PlusOp
+     │                          │     │  │           │  ├─ VarExpr
      │                          │     │  │           │  │  ╰─ SimpleVar r
-     │                          │     │  │           │  ╰─ IntExp 7
-     │                          │     │  │           ╰─ VarExp
+     │                          │     │  │           │  ╰─ IntExpr 7
+     │                          │     │  │           ╰─ VarExpr
      │                          │     │  │              ╰─ SimpleVar c
-     │                          │     │  ╰─ exp
-     │                          │     │     ╰─ IntExp 1
-     │                          │     ├─ AssignExp
+     │                          │     │  ╰─ expr
+     │                          │     │     ╰─ IntExpr 1
+     │                          │     ├─ AssignExpr
      │                          │     │  ├─ var
      │                          │     │  │  ╰─ SubscriptVar
      │                          │     │  │     ├─ var
      │                          │     │  │     │  ╰─ SimpleVar col
      │                          │     │  │     ╰─ index
-     │                          │     │  │        ╰─ VarExp
+     │                          │     │  │        ╰─ VarExpr
      │                          │     │  │           ╰─ SimpleVar c
-     │                          │     │  ╰─ exp
-     │                          │     │     ╰─ VarExp
+     │                          │     │  ╰─ expr
+     │                          │     │     ╰─ VarExpr
      │                          │     │        ╰─ SimpleVar r
-     │                          │     ├─ CallExp try
-     │                          │     │  ╰─ OpExp PlusOp
-     │                          │     │     ├─ VarExp
+     │                          │     ├─ CallExpr try
+     │                          │     │  ╰─ OpExpr PlusOp
+     │                          │     │     ├─ VarExpr
      │                          │     │     │  ╰─ SimpleVar c
-     │                          │     │     ╰─ IntExp 1
-     │                          │     ├─ AssignExp
+     │                          │     │     ╰─ IntExpr 1
+     │                          │     ├─ AssignExpr
      │                          │     │  ├─ var
      │                          │     │  │  ╰─ SubscriptVar
      │                          │     │  │     ├─ var
      │                          │     │  │     │  ╰─ SimpleVar row
      │                          │     │  │     ╰─ index
-     │                          │     │  │        ╰─ VarExp
+     │                          │     │  │        ╰─ VarExpr
      │                          │     │  │           ╰─ SimpleVar r
-     │                          │     │  ╰─ exp
-     │                          │     │     ╰─ IntExp 0
-     │                          │     ├─ AssignExp
+     │                          │     │  ╰─ expr
+     │                          │     │     ╰─ IntExpr 0
+     │                          │     ├─ AssignExpr
      │                          │     │  ├─ var
      │                          │     │  │  ╰─ SubscriptVar
      │                          │     │  │     ├─ var
      │                          │     │  │     │  ╰─ SimpleVar diag1
      │                          │     │  │     ╰─ index
-     │                          │     │  │        ╰─ OpExp PlusOp
-     │                          │     │  │           ├─ VarExp
+     │                          │     │  │        ╰─ OpExpr PlusOp
+     │                          │     │  │           ├─ VarExpr
      │                          │     │  │           │  ╰─ SimpleVar r
-     │                          │     │  │           ╰─ VarExp
+     │                          │     │  │           ╰─ VarExpr
      │                          │     │  │              ╰─ SimpleVar c
-     │                          │     │  ╰─ exp
-     │                          │     │     ╰─ IntExp 0
-     │                          │     ╰─ AssignExp
+     │                          │     │  ╰─ expr
+     │                          │     │     ╰─ IntExpr 0
+     │                          │     ╰─ AssignExpr
      │                          │        ├─ var
      │                          │        │  ╰─ SubscriptVar
      │                          │        │     ├─ var
      │                          │        │     │  ╰─ SimpleVar diag2
      │                          │        │     ╰─ index
-     │                          │        │        ╰─ OpExp MinusOp
-     │                          │        │           ├─ OpExp PlusOp
-     │                          │        │           │  ├─ VarExp
+     │                          │        │        ╰─ OpExpr MinusOp
+     │                          │        │           ├─ OpExpr PlusOp
+     │                          │        │           │  ├─ VarExpr
      │                          │        │           │  │  ╰─ SimpleVar r
-     │                          │        │           │  ╰─ IntExp 7
-     │                          │        │           ╰─ VarExp
+     │                          │        │           │  ╰─ IntExpr 7
+     │                          │        │           ╰─ VarExpr
      │                          │        │              ╰─ SimpleVar c
-     │                          │        ╰─ exp
-     │                          │           ╰─ IntExp 0
+     │                          │        ╰─ expr
+     │                          │           ╰─ IntExpr 0
      │                          ╰─ else: none
      ╰─ body
-        ╰─ CallExp try
-           ╰─ IntExp 0
+        ╰─ CallExpr try
+           ╰─ IntExpr 0
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test1.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ TypeDec
      │  │  ╰─ Type arrtype
@@ -705,74 +705,74 @@ syntactically invalid, so it prints the parser error.
      │  ╰─ VarDec arr1 escape=true
      │     ├─ type: arrtype
      │     ╰─ init
-     │        ╰─ ArrayExp arrtype
+     │        ╰─ ArrayExpr arrtype
      │           ├─ size
-     │           │  ╰─ IntExp 10
+     │           │  ╰─ IntExpr 10
      │           ╰─ init
-     │              ╰─ IntExp 0
+     │              ╰─ IntExpr 0
      ╰─ body
-        ╰─ VarExp
+        ╰─ VarExpr
            ╰─ SimpleVar arr1
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test10.tig
   ╭─ Tiger AST
-  ╰─ WhileExp
+  ╰─ WhileExpr
      ├─ test
-     │  ╰─ OpExp GtOp
-     │     ├─ IntExp 10
-     │     ╰─ IntExp 5
+     │  ╰─ OpExpr GtOp
+     │     ├─ IntExpr 10
+     │     ╰─ IntExpr 5
      ╰─ body
-        ╰─ OpExp PlusOp
-           ├─ IntExp 5
-           ╰─ IntExp 6
+        ╰─ OpExpr PlusOp
+           ├─ IntExpr 5
+           ╰─ IntExpr 6
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test11.tig
   ╭─ Tiger AST
-  ╰─ ForExp i escape=true
+  ╰─ ForExpr i escape=true
      ├─ lo
-     │  ╰─ IntExp 10
+     │  ╰─ IntExpr 10
      ├─ hi
-     │  ╰─ StringExp " "
+     │  ╰─ StringExpr " "
      ╰─ body
-        ╰─ AssignExp
+        ╰─ AssignExpr
            ├─ var
            │  ╰─ SimpleVar i
-           ╰─ exp
-              ╰─ OpExp MinusOp
-                 ├─ VarExp
+           ╰─ expr
+              ╰─ OpExpr MinusOp
+                 ├─ VarExpr
                  │  ╰─ SimpleVar i
-                 ╰─ IntExp 1
+                 ╰─ IntExpr 1
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test12.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ VarDec a escape=true
      │     ├─ type: none
      │     ╰─ init
-     │        ╰─ IntExp 0
+     │        ╰─ IntExpr 0
      ╰─ body
-        ╰─ ForExp i escape=true
+        ╰─ ForExpr i escape=true
            ├─ lo
-           │  ╰─ IntExp 0
+           │  ╰─ IntExpr 0
            ├─ hi
-           │  ╰─ IntExp 100
+           │  ╰─ IntExpr 100
            ╰─ body
-              ╰─ SeqExp
-                 ├─ AssignExp
+              ╰─ SeqExpr
+                 ├─ AssignExpr
                  │  ├─ var
                  │  │  ╰─ SimpleVar a
-                 │  ╰─ exp
-                 │     ╰─ OpExp PlusOp
-                 │        ├─ VarExp
+                 │  ╰─ expr
+                 │     ╰─ OpExpr PlusOp
+                 │        ├─ VarExpr
                  │        │  ╰─ SimpleVar a
-                 │        ╰─ IntExp 1
-                 ╰─ SeqExp
+                 │        ╰─ IntExpr 1
+                 ╰─ SeqExpr
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test13.tig
   ╭─ Tiger AST
-  ╰─ OpExp GtOp
-     ├─ IntExp 3
-     ╰─ StringExp "df"
+  ╰─ OpExpr GtOp
+     ├─ IntExpr 3
+     ╰─ StringExpr "df"
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test14.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ TypeDec
      │  │  ├─ Type arrtype
@@ -784,42 +784,42 @@ syntactically invalid, so it prints the parser error.
      │  ├─ VarDec rec escape=true
      │  │  ├─ type: none
      │  │  ╰─ init
-     │  │     ╰─ RecordExp rectype
+     │  │     ╰─ RecordExpr rectype
      │  │        ├─ Field name
-     │  │        │  ╰─ StringExp "aname"
+     │  │        │  ╰─ StringExpr "aname"
      │  │        ╰─ Field id
-     │  │           ╰─ IntExp 0
+     │  │           ╰─ IntExpr 0
      │  ╰─ VarDec arr escape=true
      │     ├─ type: none
      │     ╰─ init
-     │        ╰─ ArrayExp arrtype
+     │        ╰─ ArrayExpr arrtype
      │           ├─ size
-     │           │  ╰─ IntExp 3
+     │           │  ╰─ IntExpr 3
      │           ╰─ init
-     │              ╰─ IntExp 0
+     │              ╰─ IntExpr 0
      ╰─ body
-        ╰─ IfExp
+        ╰─ IfExpr
            ├─ test
-           │  ╰─ OpExp NeqOp
-           │     ├─ VarExp
+           │  ╰─ OpExpr NeqOp
+           │     ├─ VarExpr
            │     │  ╰─ SimpleVar rec
-           │     ╰─ VarExp
+           │     ╰─ VarExpr
            │        ╰─ SimpleVar arr
            ├─ then
-           │  ╰─ IntExp 3
+           │  ╰─ IntExpr 3
            ╰─ else
-              ╰─ IntExp 4
+              ╰─ IntExpr 4
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test15.tig
   ╭─ Tiger AST
-  ╰─ IfExp
+  ╰─ IfExpr
      ├─ test
-     │  ╰─ IntExp 20
+     │  ╰─ IntExpr 20
      ├─ then
-     │  ╰─ IntExp 3
+     │  ╰─ IntExpr 3
      ╰─ else: none
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test16.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ TypeDec
      │     ├─ Type a
@@ -831,10 +831,10 @@ syntactically invalid, so it prints the parser error.
      │     ╰─ Type d
      │        ╰─ NameTy a
      ╰─ body
-        ╰─ StringExp ""
+        ╰─ StringExpr ""
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test17.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ TypeDec
      │  │  ╰─ Type tree
@@ -844,18 +844,18 @@ syntactically invalid, so it prints the parser error.
      │  ├─ VarDec d escape=true
      │  │  ├─ type: int
      │  │  ╰─ init
-     │  │     ╰─ IntExp 0
+     │  │     ╰─ IntExpr 0
      │  ╰─ TypeDec
      │     ╰─ Type treelist
      │        ╰─ RecordTy
      │           ├─ Field hd : tree escape=true
      │           ╰─ Field tl : treelist escape=true
      ╰─ body
-        ╰─ VarExp
+        ╰─ VarExpr
            ╰─ SimpleVar d
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test18.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ FunctionDec
      │  │  ╰─ Function do_nothing1
@@ -864,36 +864,36 @@ syntactically invalid, so it prints the parser error.
      │  │     │  ╰─ Field b : string escape=true
      │  │     ├─ result: int
      │  │     ╰─ body
-     │  │        ╰─ SeqExp
-     │  │           ├─ CallExp do_nothing2
-     │  │           │  ╰─ OpExp PlusOp
-     │  │           │     ├─ VarExp
+     │  │        ╰─ SeqExpr
+     │  │           ├─ CallExpr do_nothing2
+     │  │           │  ╰─ OpExpr PlusOp
+     │  │           │     ├─ VarExpr
      │  │           │     │  ╰─ SimpleVar a
-     │  │           │     ╰─ IntExp 1
-     │  │           ╰─ IntExp 0
+     │  │           │     ╰─ IntExpr 1
+     │  │           ╰─ IntExpr 0
      │  ├─ VarDec d escape=true
      │  │  ├─ type: none
      │  │  ╰─ init
-     │  │     ╰─ IntExp 0
+     │  │     ╰─ IntExpr 0
      │  ╰─ FunctionDec
      │     ╰─ Function do_nothing2
      │        ├─ params
      │        │  ╰─ Field d : int escape=true
      │        ├─ result: string
      │        ╰─ body
-     │           ╰─ SeqExp
-     │              ├─ CallExp do_nothing1
-     │              │  ├─ VarExp
+     │           ╰─ SeqExpr
+     │              ├─ CallExpr do_nothing1
+     │              │  ├─ VarExpr
      │              │  │  ╰─ SimpleVar d
-     │              │  ╰─ StringExp "str"
-     │              ╰─ StringExp " "
+     │              │  ╰─ StringExpr "str"
+     │              ╰─ StringExpr " "
      ╰─ body
-        ╰─ CallExp do_nothing1
-           ├─ IntExp 0
-           ╰─ StringExp "str2"
+        ╰─ CallExpr do_nothing1
+           ├─ IntExpr 0
+           ╰─ StringExpr "str2"
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test19.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ FunctionDec
      │     ├─ Function do_nothing1
@@ -902,31 +902,31 @@ syntactically invalid, so it prints the parser error.
      │     │  │  ╰─ Field b : string escape=true
      │     │  ├─ result: int
      │     │  ╰─ body
-     │     │     ╰─ SeqExp
-     │     │        ├─ CallExp do_nothing2
-     │     │        │  ╰─ OpExp PlusOp
-     │     │        │     ├─ VarExp
+     │     │     ╰─ SeqExpr
+     │     │        ├─ CallExpr do_nothing2
+     │     │        │  ╰─ OpExpr PlusOp
+     │     │        │     ├─ VarExpr
      │     │        │     │  ╰─ SimpleVar a
-     │     │        │     ╰─ IntExp 1
-     │     │        ╰─ IntExp 0
+     │     │        │     ╰─ IntExpr 1
+     │     │        ╰─ IntExpr 0
      │     ╰─ Function do_nothing2
      │        ├─ params
      │        │  ╰─ Field d : int escape=true
      │        ├─ result: string
      │        ╰─ body
-     │           ╰─ SeqExp
-     │              ├─ CallExp do_nothing1
-     │              │  ├─ VarExp
+     │           ╰─ SeqExpr
+     │              ├─ CallExpr do_nothing1
+     │              │  ├─ VarExpr
      │              │  │  ╰─ SimpleVar a
-     │              │  ╰─ StringExp "str"
-     │              ╰─ StringExp " "
+     │              │  ╰─ StringExpr "str"
+     │              ╰─ StringExpr " "
      ╰─ body
-        ╰─ CallExp do_nothing1
-           ├─ IntExp 0
-           ╰─ StringExp "str2"
+        ╰─ CallExpr do_nothing1
+           ├─ IntExpr 0
+           ╰─ StringExpr "str2"
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test2.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ TypeDec
      │  │  ├─ Type myint
@@ -936,31 +936,31 @@ syntactically invalid, so it prints the parser error.
      │  ╰─ VarDec arr1 escape=true
      │     ├─ type: arrtype
      │     ╰─ init
-     │        ╰─ ArrayExp arrtype
+     │        ╰─ ArrayExpr arrtype
      │           ├─ size
-     │           │  ╰─ IntExp 10
+     │           │  ╰─ IntExpr 10
      │           ╰─ init
-     │              ╰─ IntExp 0
+     │              ╰─ IntExpr 0
      ╰─ body
-        ╰─ VarExp
+        ╰─ VarExpr
            ╰─ SimpleVar arr1
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test20.tig
   ╭─ Tiger AST
-  ╰─ WhileExp
+  ╰─ WhileExpr
      ├─ test
-     │  ╰─ OpExp GtOp
-     │     ├─ IntExp 10
-     │     ╰─ IntExp 5
+     │  ╰─ OpExpr GtOp
+     │     ├─ IntExpr 10
+     │     ╰─ IntExpr 5
      ╰─ body
-        ╰─ SeqExp
-           ├─ OpExp PlusOp
-           │  ├─ VarExp
+        ╰─ SeqExpr
+           ├─ OpExpr PlusOp
+           │  ├─ VarExpr
            │  │  ╰─ SimpleVar i
-           │  ╰─ IntExp 1
-           ╰─ SeqExp
+           │  ╰─ IntExpr 1
+           ╰─ SeqExpr
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test21.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ FunctionDec
      │     ╰─ Function nfactor
@@ -968,29 +968,29 @@ syntactically invalid, so it prints the parser error.
      │        │  ╰─ Field n : int escape=true
      │        ├─ result: none
      │        ╰─ body
-     │           ╰─ IfExp
+     │           ╰─ IfExpr
      │              ├─ test
-     │              │  ╰─ OpExp EqOp
-     │              │     ├─ VarExp
+     │              │  ╰─ OpExpr EqOp
+     │              │     ├─ VarExpr
      │              │     │  ╰─ SimpleVar n
-     │              │     ╰─ IntExp 0
+     │              │     ╰─ IntExpr 0
      │              ├─ then
-     │              │  ╰─ IntExp 1
+     │              │  ╰─ IntExpr 1
      │              ╰─ else
-     │                 ╰─ OpExp TimesOp
-     │                    ├─ VarExp
+     │                 ╰─ OpExpr TimesOp
+     │                    ├─ VarExpr
      │                    │  ╰─ SimpleVar n
-     │                    ╰─ CallExp nfactor
-     │                       ╰─ OpExp MinusOp
-     │                          ├─ VarExp
+     │                    ╰─ CallExpr nfactor
+     │                       ╰─ OpExpr MinusOp
+     │                          ├─ VarExpr
      │                          │  ╰─ SimpleVar n
-     │                          ╰─ IntExp 1
+     │                          ╰─ IntExpr 1
      ╰─ body
-        ╰─ CallExp nfactor
-           ╰─ IntExp 10
+        ╰─ CallExpr nfactor
+           ╰─ IntExpr 10
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test22.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ TypeDec
      │  │  ╰─ Type rectype
@@ -1000,21 +1000,21 @@ syntactically invalid, so it prints the parser error.
      │  ╰─ VarDec rec1 escape=true
      │     ├─ type: none
      │     ╰─ init
-     │        ╰─ RecordExp rectype
+     │        ╰─ RecordExpr rectype
      │           ├─ Field name
-     │           │  ╰─ StringExp "Name"
+     │           │  ╰─ StringExpr "Name"
      │           ╰─ Field id
-     │              ╰─ IntExp 0
+     │              ╰─ IntExpr 0
      ╰─ body
-        ╰─ AssignExp
+        ╰─ AssignExpr
            ├─ var
            │  ╰─ FieldVar nam
            │     ╰─ SimpleVar rec1
-           ╰─ exp
-              ╰─ StringExp "asd"
+           ╰─ expr
+              ╰─ StringExpr "asd"
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test23.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ TypeDec
      │  │  ╰─ Type rectype
@@ -1024,79 +1024,79 @@ syntactically invalid, so it prints the parser error.
      │  ╰─ VarDec rec1 escape=true
      │     ├─ type: none
      │     ╰─ init
-     │        ╰─ RecordExp rectype
+     │        ╰─ RecordExpr rectype
      │           ├─ Field name
-     │           │  ╰─ StringExp "aname"
+     │           │  ╰─ StringExpr "aname"
      │           ╰─ Field id
-     │              ╰─ IntExp 0
+     │              ╰─ IntExpr 0
      ╰─ body
-        ╰─ SeqExp
-           ├─ AssignExp
+        ╰─ SeqExpr
+           ├─ AssignExpr
            │  ├─ var
            │  │  ╰─ FieldVar name
            │  │     ╰─ SimpleVar rec1
-           │  ╰─ exp
-           │     ╰─ IntExp 3
-           ╰─ AssignExp
+           │  ╰─ expr
+           │     ╰─ IntExpr 3
+           ╰─ AssignExpr
               ├─ var
               │  ╰─ FieldVar id
               │     ╰─ SimpleVar rec1
-              ╰─ exp
-                 ╰─ StringExp ""
+              ╰─ expr
+                 ╰─ StringExpr ""
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test24.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ VarDec d escape=true
      │     ├─ type: none
      │     ╰─ init
-     │        ╰─ IntExp 0
+     │        ╰─ IntExpr 0
      ╰─ body
-        ╰─ VarExp
+        ╰─ VarExpr
            ╰─ SubscriptVar
               ├─ var
               │  ╰─ SimpleVar d
               ╰─ index
-                 ╰─ IntExp 3
+                 ╰─ IntExpr 3
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test25.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ VarDec d escape=true
      │     ├─ type: none
      │     ╰─ init
-     │        ╰─ IntExp 0
+     │        ╰─ IntExpr 0
      ╰─ body
-        ╰─ VarExp
+        ╰─ VarExpr
            ╰─ FieldVar f
               ╰─ SimpleVar d
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test26.tig
   ╭─ Tiger AST
-  ╰─ OpExp PlusOp
-     ├─ IntExp 3
-     ╰─ StringExp "var"
+  ╰─ OpExpr PlusOp
+     ├─ IntExpr 3
+     ╰─ StringExpr "var"
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test27.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ VarDec a escape=true
      │  │  ├─ type: none
      │  │  ╰─ init
-     │  │     ╰─ IntExp 0
+     │  │     ╰─ IntExpr 0
      │  ╰─ FunctionDec
      │     ╰─ Function g
      │        ├─ params
      │        │  ╰─ Field a : int escape=true
      │        ├─ result: int
      │        ╰─ body
-     │           ╰─ VarExp
+     │           ╰─ VarExpr
      │              ╰─ SimpleVar a
      ╰─ body
-        ╰─ CallExp g
-           ╰─ IntExp 2
+        ╰─ CallExpr g
+           ╰─ IntExpr 2
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test28.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ TypeDec
      │  │  ├─ Type rectype1
@@ -1110,17 +1110,17 @@ syntactically invalid, so it prints the parser error.
      │  ╰─ VarDec rec1 escape=true
      │     ├─ type: rectype1
      │     ╰─ init
-     │        ╰─ RecordExp rectype2
+     │        ╰─ RecordExpr rectype2
      │           ├─ Field name
-     │           │  ╰─ StringExp "Name"
+     │           │  ╰─ StringExpr "Name"
      │           ╰─ Field id
-     │              ╰─ IntExp 0
+     │              ╰─ IntExpr 0
      ╰─ body
-        ╰─ VarExp
+        ╰─ VarExpr
            ╰─ SimpleVar rec1
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test29.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ TypeDec
      │  │  ├─ Type arrtype1
@@ -1130,17 +1130,17 @@ syntactically invalid, so it prints the parser error.
      │  ╰─ VarDec arr1 escape=true
      │     ├─ type: arrtype1
      │     ╰─ init
-     │        ╰─ ArrayExp arrtype2
+     │        ╰─ ArrayExpr arrtype2
      │           ├─ size
-     │           │  ╰─ IntExp 10
+     │           │  ╰─ IntExpr 10
      │           ╰─ init
-     │              ╰─ IntExp 0
+     │              ╰─ IntExpr 0
      ╰─ body
-        ╰─ VarExp
+        ╰─ VarExpr
            ╰─ SimpleVar arr1
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test3.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ TypeDec
      │  │  ╰─ Type rectype
@@ -1150,24 +1150,24 @@ syntactically invalid, so it prints the parser error.
      │  ╰─ VarDec rec1 escape=true
      │     ├─ type: rectype
      │     ╰─ init
-     │        ╰─ RecordExp rectype
+     │        ╰─ RecordExpr rectype
      │           ├─ Field name
-     │           │  ╰─ StringExp "Nobody"
+     │           │  ╰─ StringExpr "Nobody"
      │           ╰─ Field age
-     │              ╰─ IntExp 1000
+     │              ╰─ IntExpr 1000
      ╰─ body
-        ╰─ SeqExp
-           ├─ AssignExp
+        ╰─ SeqExpr
+           ├─ AssignExpr
            │  ├─ var
            │  │  ╰─ FieldVar name
            │  │     ╰─ SimpleVar rec1
-           │  ╰─ exp
-           │     ╰─ StringExp "Somebody"
-           ╰─ VarExp
+           │  ╰─ expr
+           │     ╰─ StringExpr "Somebody"
+           ╰─ VarExpr
               ╰─ SimpleVar rec1
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test30.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ TypeDec
      │  │  ├─ Type a
@@ -1177,32 +1177,32 @@ syntactically invalid, so it prints the parser error.
      │  ╰─ VarDec arr1 escape=true
      │     ├─ type: a
      │     ╰─ init
-     │        ╰─ ArrayExp b
+     │        ╰─ ArrayExpr b
      │           ├─ size
-     │           │  ╰─ IntExp 10
+     │           │  ╰─ IntExpr 10
      │           ╰─ init
-     │              ╰─ IntExp 0
+     │              ╰─ IntExpr 0
      ╰─ body
-        ╰─ VarExp
+        ╰─ VarExpr
            ╰─ SubscriptVar
               ├─ var
               │  ╰─ SimpleVar arr1
               ╰─ index
-                 ╰─ IntExp 2
+                 ╰─ IntExpr 2
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test31.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ VarDec a escape=true
      │     ├─ type: int
      │     ╰─ init
-     │        ╰─ StringExp " "
+     │        ╰─ StringExpr " "
      ╰─ body
-        ╰─ VarExp
+        ╰─ VarExpr
            ╰─ SimpleVar a
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test32.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ TypeDec
      │  │  ╰─ Type arrayty
@@ -1210,26 +1210,26 @@ syntactically invalid, so it prints the parser error.
      │  ╰─ VarDec a escape=true
      │     ├─ type: none
      │     ╰─ init
-     │        ╰─ ArrayExp arrayty
+     │        ╰─ ArrayExpr arrayty
      │           ├─ size
-     │           │  ╰─ IntExp 10
+     │           │  ╰─ IntExpr 10
      │           ╰─ init
-     │              ╰─ StringExp " "
+     │              ╰─ StringExpr " "
      ╰─ body
-        ╰─ IntExp 0
+        ╰─ IntExpr 0
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test33.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ VarDec a escape=true
      │     ├─ type: none
      │     ╰─ init
-     │        ╰─ RecordExp rectype
+     │        ╰─ RecordExpr rectype
      ╰─ body
-        ╰─ IntExp 0
+        ╰─ IntExpr 0
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test34.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ FunctionDec
      │     ╰─ Function g
@@ -1238,15 +1238,15 @@ syntactically invalid, so it prints the parser error.
      │        │  ╰─ Field b : string escape=true
      │        ├─ result: int
      │        ╰─ body
-     │           ╰─ VarExp
+     │           ╰─ VarExpr
      │              ╰─ SimpleVar a
      ╰─ body
-        ╰─ CallExp g
-           ├─ StringExp "one"
-           ╰─ StringExp "two"
+        ╰─ CallExpr g
+           ├─ StringExpr "one"
+           ╰─ StringExpr "two"
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test35.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ FunctionDec
      │     ╰─ Function g
@@ -1255,14 +1255,14 @@ syntactically invalid, so it prints the parser error.
      │        │  ╰─ Field b : string escape=true
      │        ├─ result: int
      │        ╰─ body
-     │           ╰─ VarExp
+     │           ╰─ VarExpr
      │              ╰─ SimpleVar a
      ╰─ body
-        ╰─ CallExp g
-           ╰─ StringExp "one"
+        ╰─ CallExpr g
+           ╰─ StringExpr "one"
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test36.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ FunctionDec
      │     ╰─ Function g
@@ -1271,30 +1271,30 @@ syntactically invalid, so it prints the parser error.
      │        │  ╰─ Field b : string escape=true
      │        ├─ result: int
      │        ╰─ body
-     │           ╰─ VarExp
+     │           ╰─ VarExpr
      │              ╰─ SimpleVar a
      ╰─ body
-        ╰─ CallExp g
-           ├─ IntExp 3
-           ├─ StringExp "one"
-           ╰─ IntExp 5
+        ╰─ CallExpr g
+           ├─ IntExpr 3
+           ├─ StringExpr "one"
+           ╰─ IntExpr 5
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test37.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ VarDec a escape=true
      │  │  ├─ type: none
      │  │  ╰─ init
-     │  │     ╰─ IntExp 0
+     │  │     ╰─ IntExpr 0
      │  ╰─ VarDec a escape=true
      │     ├─ type: none
      │     ╰─ init
-     │        ╰─ StringExp " "
+     │        ╰─ StringExpr " "
      ╰─ body
-        ╰─ IntExp 0
+        ╰─ IntExpr 0
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test38.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ TypeDec
      │     ├─ Type a
@@ -1302,10 +1302,10 @@ syntactically invalid, so it prints the parser error.
      │     ╰─ Type a
      │        ╰─ NameTy string
      ╰─ body
-        ╰─ IntExp 0
+        ╰─ IntExpr 0
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test39.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ FunctionDec
      │     ├─ Function g
@@ -1313,20 +1313,20 @@ syntactically invalid, so it prints the parser error.
      │     │  │  ╰─ Field a : int escape=true
      │     │  ├─ result: int
      │     │  ╰─ body
-     │     │     ╰─ VarExp
+     │     │     ╰─ VarExpr
      │     │        ╰─ SimpleVar a
      │     ╰─ Function g
      │        ├─ params
      │        │  ╰─ Field a : int escape=true
      │        ├─ result: int
      │        ╰─ body
-     │           ╰─ VarExp
+     │           ╰─ VarExpr
      │              ╰─ SimpleVar a
      ╰─ body
-        ╰─ IntExp 0
+        ╰─ IntExpr 0
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test4.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ FunctionDec
      │     ╰─ Function nfactor
@@ -1334,29 +1334,29 @@ syntactically invalid, so it prints the parser error.
      │        │  ╰─ Field n : int escape=true
      │        ├─ result: int
      │        ╰─ body
-     │           ╰─ IfExp
+     │           ╰─ IfExpr
      │              ├─ test
-     │              │  ╰─ OpExp EqOp
-     │              │     ├─ VarExp
+     │              │  ╰─ OpExpr EqOp
+     │              │     ├─ VarExpr
      │              │     │  ╰─ SimpleVar n
-     │              │     ╰─ IntExp 0
+     │              │     ╰─ IntExpr 0
      │              ├─ then
-     │              │  ╰─ IntExp 1
+     │              │  ╰─ IntExpr 1
      │              ╰─ else
-     │                 ╰─ OpExp TimesOp
-     │                    ├─ VarExp
+     │                 ╰─ OpExpr TimesOp
+     │                    ├─ VarExpr
      │                    │  ╰─ SimpleVar n
-     │                    ╰─ CallExp nfactor
-     │                       ╰─ OpExp MinusOp
-     │                          ├─ VarExp
+     │                    ╰─ CallExpr nfactor
+     │                       ╰─ OpExpr MinusOp
+     │                          ├─ VarExpr
      │                          │  ╰─ SimpleVar n
-     │                          ╰─ IntExp 1
+     │                          ╰─ IntExpr 1
      ╰─ body
-        ╰─ CallExp nfactor
-           ╰─ IntExp 10
+        ╰─ CallExpr nfactor
+           ╰─ IntExpr 10
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test40.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ FunctionDec
      │     ╰─ Function g
@@ -1364,29 +1364,29 @@ syntactically invalid, so it prints the parser error.
      │        │  ╰─ Field a : int escape=true
      │        ├─ result: none
      │        ╰─ body
-     │           ╰─ VarExp
+     │           ╰─ VarExpr
      │              ╰─ SimpleVar a
      ╰─ body
-        ╰─ CallExp g
-           ╰─ IntExp 2
+        ╰─ CallExpr g
+           ╰─ IntExpr 2
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test41.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ TypeDec
      │     ╰─ Type a
      │        ╰─ NameTy int
      ╰─ body
-        ╰─ LetExp
+        ╰─ LetExpr
            ├─ decs
            │  ╰─ TypeDec
            │     ╰─ Type a
            │        ╰─ NameTy string
            ╰─ body
-              ╰─ IntExp 0
+              ╰─ IntExpr 0
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test42.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ TypeDec
      │  │  ├─ Type arrtype1
@@ -1408,150 +1408,150 @@ syntactically invalid, so it prints the parser error.
      │  ├─ VarDec arr1 escape=true
      │  │  ├─ type: none
      │  │  ╰─ init
-     │  │     ╰─ ArrayExp arrtype1
+     │  │     ╰─ ArrayExpr arrtype1
      │  │        ├─ size
-     │  │        │  ╰─ IntExp 10
+     │  │        │  ╰─ IntExpr 10
      │  │        ╰─ init
-     │  │           ╰─ IntExp 0
+     │  │           ╰─ IntExpr 0
      │  ├─ VarDec arr2 escape=true
      │  │  ├─ type: none
      │  │  ╰─ init
-     │  │     ╰─ ArrayExp arrtype2
+     │  │     ╰─ ArrayExpr arrtype2
      │  │        ├─ size
-     │  │        │  ╰─ IntExp 5
+     │  │        │  ╰─ IntExpr 5
      │  │        ╰─ init
-     │  │           ╰─ RecordExp rectype1
+     │  │           ╰─ RecordExpr rectype1
      │  │              ├─ Field name
-     │  │              │  ╰─ StringExp "aname"
+     │  │              │  ╰─ StringExpr "aname"
      │  │              ├─ Field address
-     │  │              │  ╰─ StringExp "somewhere"
+     │  │              │  ╰─ StringExpr "somewhere"
      │  │              ├─ Field id
-     │  │              │  ╰─ IntExp 0
+     │  │              │  ╰─ IntExpr 0
      │  │              ╰─ Field age
-     │  │                 ╰─ IntExp 0
+     │  │                 ╰─ IntExpr 0
      │  ├─ VarDec arr3 escape=true
      │  │  ├─ type: arrtype3
      │  │  ╰─ init
-     │  │     ╰─ ArrayExp arrtype3
+     │  │     ╰─ ArrayExpr arrtype3
      │  │        ├─ size
-     │  │        │  ╰─ IntExp 100
+     │  │        │  ╰─ IntExpr 100
      │  │        ╰─ init
-     │  │           ╰─ StringExp ""
+     │  │           ╰─ StringExpr ""
      │  ├─ VarDec rec1 escape=true
      │  │  ├─ type: none
      │  │  ╰─ init
-     │  │     ╰─ RecordExp rectype1
+     │  │     ╰─ RecordExpr rectype1
      │  │        ├─ Field name
-     │  │        │  ╰─ StringExp "Kapoios"
+     │  │        │  ╰─ StringExpr "Kapoios"
      │  │        ├─ Field address
-     │  │        │  ╰─ StringExp "Kapou"
+     │  │        │  ╰─ StringExpr "Kapou"
      │  │        ├─ Field id
-     │  │        │  ╰─ IntExp 2432
+     │  │        │  ╰─ IntExpr 2432
      │  │        ╰─ Field age
-     │  │           ╰─ IntExp 44
+     │  │           ╰─ IntExpr 44
      │  ╰─ VarDec rec2 escape=true
      │     ├─ type: none
      │     ╰─ init
-     │        ╰─ RecordExp rectype2
+     │        ╰─ RecordExpr rectype2
      │           ├─ Field name
-     │           │  ╰─ StringExp "Allos"
+     │           │  ╰─ StringExpr "Allos"
      │           ╰─ Field dates
-     │              ╰─ ArrayExp arrtype1
+     │              ╰─ ArrayExpr arrtype1
      │                 ├─ size
-     │                 │  ╰─ IntExp 3
+     │                 │  ╰─ IntExpr 3
      │                 ╰─ init
-     │                    ╰─ IntExp 1900
+     │                    ╰─ IntExpr 1900
      ╰─ body
-        ╰─ SeqExp
-           ├─ AssignExp
+        ╰─ SeqExpr
+           ├─ AssignExpr
            │  ├─ var
            │  │  ╰─ SubscriptVar
            │  │     ├─ var
            │  │     │  ╰─ SimpleVar arr1
            │  │     ╰─ index
-           │  │        ╰─ IntExp 0
-           │  ╰─ exp
-           │     ╰─ IntExp 1
-           ├─ AssignExp
+           │  │        ╰─ IntExpr 0
+           │  ╰─ expr
+           │     ╰─ IntExpr 1
+           ├─ AssignExpr
            │  ├─ var
            │  │  ╰─ SubscriptVar
            │  │     ├─ var
            │  │     │  ╰─ SimpleVar arr1
            │  │     ╰─ index
-           │  │        ╰─ IntExp 9
-           │  ╰─ exp
-           │     ╰─ IntExp 3
-           ├─ AssignExp
+           │  │        ╰─ IntExpr 9
+           │  ╰─ expr
+           │     ╰─ IntExpr 3
+           ├─ AssignExpr
            │  ├─ var
            │  │  ╰─ FieldVar name
            │  │     ╰─ SubscriptVar
            │  │        ├─ var
            │  │        │  ╰─ SimpleVar arr2
            │  │        ╰─ index
-           │  │           ╰─ IntExp 3
-           │  ╰─ exp
-           │     ╰─ StringExp "kati"
-           ├─ AssignExp
+           │  │           ╰─ IntExpr 3
+           │  ╰─ expr
+           │     ╰─ StringExpr "kati"
+           ├─ AssignExpr
            │  ├─ var
            │  │  ╰─ FieldVar age
            │  │     ╰─ SubscriptVar
            │  │        ├─ var
            │  │        │  ╰─ SimpleVar arr2
            │  │        ╰─ index
-           │  │           ╰─ IntExp 1
-           │  ╰─ exp
-           │     ╰─ IntExp 23
-           ├─ AssignExp
+           │  │           ╰─ IntExpr 1
+           │  ╰─ expr
+           │     ╰─ IntExpr 23
+           ├─ AssignExpr
            │  ├─ var
            │  │  ╰─ SubscriptVar
            │  │     ├─ var
            │  │     │  ╰─ SimpleVar arr3
            │  │     ╰─ index
-           │  │        ╰─ IntExp 34
-           │  ╰─ exp
-           │     ╰─ StringExp "sfd"
-           ├─ AssignExp
+           │  │        ╰─ IntExpr 34
+           │  ╰─ expr
+           │     ╰─ StringExpr "sfd"
+           ├─ AssignExpr
            │  ├─ var
            │  │  ╰─ FieldVar name
            │  │     ╰─ SimpleVar rec1
-           │  ╰─ exp
-           │     ╰─ StringExp "sdf"
-           ├─ AssignExp
+           │  ╰─ expr
+           │     ╰─ StringExpr "sdf"
+           ├─ AssignExpr
            │  ├─ var
            │  │  ╰─ SubscriptVar
            │  │     ├─ var
            │  │     │  ╰─ FieldVar dates
            │  │     │     ╰─ SimpleVar rec2
            │  │     ╰─ index
-           │  │        ╰─ IntExp 0
-           │  ╰─ exp
-           │     ╰─ IntExp 2323
-           ╰─ AssignExp
+           │  │        ╰─ IntExpr 0
+           │  ╰─ expr
+           │     ╰─ IntExpr 2323
+           ╰─ AssignExpr
               ├─ var
               │  ╰─ SubscriptVar
               │     ├─ var
               │     │  ╰─ FieldVar dates
               │     │     ╰─ SimpleVar rec2
               │     ╰─ index
-              │        ╰─ IntExp 2
-              ╰─ exp
-                 ╰─ IntExp 2323
+              │        ╰─ IntExpr 2
+              ╰─ expr
+                 ╰─ IntExpr 2323
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test43.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ VarDec a escape=true
      │     ├─ type: none
      │     ╰─ init
-     │        ╰─ SeqExp
+     │        ╰─ SeqExpr
      ╰─ body
-        ╰─ OpExp PlusOp
-           ├─ VarExp
+        ╰─ OpExpr PlusOp
+           ├─ VarExpr
            │  ╰─ SimpleVar a
-           ╰─ IntExp 3
+           ╰─ IntExpr 3
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test44.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ TypeDec
      │  │  ╰─ Type rectype
@@ -1561,16 +1561,16 @@ syntactically invalid, so it prints the parser error.
      │  ╰─ VarDec b escape=true
      │     ├─ type: rectype
      │     ╰─ init
-     │        ╰─ NilExp
+     │        ╰─ NilExpr
      ╰─ body
-        ╰─ AssignExp
+        ╰─ AssignExpr
            ├─ var
            │  ╰─ SimpleVar b
-           ╰─ exp
-              ╰─ NilExp
+           ╰─ expr
+              ╰─ NilExpr
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test45.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ TypeDec
      │  │  ╰─ Type rectype
@@ -1580,13 +1580,13 @@ syntactically invalid, so it prints the parser error.
      │  ╰─ VarDec a escape=true
      │     ├─ type: none
      │     ╰─ init
-     │        ╰─ NilExp
+     │        ╰─ NilExpr
      ╰─ body
-        ╰─ VarExp
+        ╰─ VarExpr
            ╰─ SimpleVar a
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test46.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ TypeDec
      │  │  ╰─ Type rectype
@@ -1596,20 +1596,20 @@ syntactically invalid, so it prints the parser error.
      │  ╰─ VarDec b escape=true
      │     ├─ type: rectype
      │     ╰─ init
-     │        ╰─ NilExp
+     │        ╰─ NilExpr
      ╰─ body
-        ╰─ SeqExp
-           ├─ OpExp EqOp
-           │  ├─ VarExp
+        ╰─ SeqExpr
+           ├─ OpExpr EqOp
+           │  ├─ VarExpr
            │  │  ╰─ SimpleVar b
-           │  ╰─ NilExp
-           ╰─ OpExp NeqOp
-              ├─ VarExp
+           │  ╰─ NilExpr
+           ╰─ OpExpr NeqOp
+              ├─ VarExpr
               │  ╰─ SimpleVar b
-              ╰─ NilExp
+              ╰─ NilExpr
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test47.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ TypeDec
      │  │  ╰─ Type a
@@ -1617,15 +1617,15 @@ syntactically invalid, so it prints the parser error.
      │  ├─ VarDec b escape=true
      │  │  ├─ type: none
      │  │  ╰─ init
-     │  │     ╰─ IntExp 4
+     │  │     ╰─ IntExpr 4
      │  ╰─ TypeDec
      │     ╰─ Type a
      │        ╰─ NameTy string
      ╰─ body
-        ╰─ IntExp 0
+        ╰─ IntExpr 0
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test48.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ FunctionDec
      │  │  ╰─ Function g
@@ -1633,7 +1633,7 @@ syntactically invalid, so it prints the parser error.
      │  │     │  ╰─ Field a : int escape=true
      │  │     ├─ result: int
      │  │     ╰─ body
-     │  │        ╰─ VarExp
+     │  │        ╰─ VarExpr
      │  │           ╰─ SimpleVar a
      │  ├─ TypeDec
      │  │  ╰─ Type t
@@ -1644,16 +1644,16 @@ syntactically invalid, so it prints the parser error.
      │        │  ╰─ Field a : int escape=true
      │        ├─ result: int
      │        ╰─ body
-     │           ╰─ VarExp
+     │           ╰─ VarExpr
      │              ╰─ SimpleVar a
      ╰─ body
-        ╰─ IntExp 0
+        ╰─ IntExpr 0
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test49.tig
   ../../programs/testcases/test49.tig:5.17:syntax error
   [2]
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test5.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ├─ TypeDec
      │  │  ├─ Type intlist
@@ -1671,17 +1671,17 @@ syntactically invalid, so it prints the parser error.
      │  ╰─ VarDec lis escape=true
      │     ├─ type: intlist
      │     ╰─ init
-     │        ╰─ RecordExp intlist
+     │        ╰─ RecordExpr intlist
      │           ├─ Field hd
-     │           │  ╰─ IntExp 0
+     │           │  ╰─ IntExpr 0
      │           ╰─ Field tl
-     │              ╰─ NilExp
+     │              ╰─ NilExpr
      ╰─ body
-        ╰─ VarExp
+        ╰─ VarExpr
            ╰─ SimpleVar lis
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test6.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ FunctionDec
      │     ├─ Function do_nothing1
@@ -1690,27 +1690,27 @@ syntactically invalid, so it prints the parser error.
      │     │  │  ╰─ Field b : string escape=true
      │     │  ├─ result: none
      │     │  ╰─ body
-     │     │     ╰─ CallExp do_nothing2
-     │     │        ╰─ OpExp PlusOp
-     │     │           ├─ VarExp
+     │     │     ╰─ CallExpr do_nothing2
+     │     │        ╰─ OpExpr PlusOp
+     │     │           ├─ VarExpr
      │     │           │  ╰─ SimpleVar a
-     │     │           ╰─ IntExp 1
+     │     │           ╰─ IntExpr 1
      │     ╰─ Function do_nothing2
      │        ├─ params
      │        │  ╰─ Field d : int escape=true
      │        ├─ result: none
      │        ╰─ body
-     │           ╰─ CallExp do_nothing1
-     │              ├─ VarExp
+     │           ╰─ CallExpr do_nothing1
+     │              ├─ VarExpr
      │              │  ╰─ SimpleVar d
-     │              ╰─ StringExp "str"
+     │              ╰─ StringExpr "str"
      ╰─ body
-        ╰─ CallExp do_nothing1
-           ├─ IntExp 0
-           ╰─ StringExp "str2"
+        ╰─ CallExpr do_nothing1
+           ├─ IntExpr 0
+           ╰─ StringExpr "str2"
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test7.tig
   ╭─ Tiger AST
-  ╰─ LetExp
+  ╰─ LetExpr
      ├─ decs
      │  ╰─ FunctionDec
      │     ├─ Function do_nothing1
@@ -1719,47 +1719,47 @@ syntactically invalid, so it prints the parser error.
      │     │  │  ╰─ Field b : string escape=true
      │     │  ├─ result: int
      │     │  ╰─ body
-     │     │     ╰─ SeqExp
-     │     │        ├─ CallExp do_nothing2
-     │     │        │  ╰─ OpExp PlusOp
-     │     │        │     ├─ VarExp
+     │     │     ╰─ SeqExpr
+     │     │        ├─ CallExpr do_nothing2
+     │     │        │  ╰─ OpExpr PlusOp
+     │     │        │     ├─ VarExpr
      │     │        │     │  ╰─ SimpleVar a
-     │     │        │     ╰─ IntExp 1
-     │     │        ╰─ IntExp 0
+     │     │        │     ╰─ IntExpr 1
+     │     │        ╰─ IntExpr 0
      │     ╰─ Function do_nothing2
      │        ├─ params
      │        │  ╰─ Field d : int escape=true
      │        ├─ result: string
      │        ╰─ body
-     │           ╰─ SeqExp
-     │              ├─ CallExp do_nothing1
-     │              │  ├─ VarExp
+     │           ╰─ SeqExpr
+     │              ├─ CallExpr do_nothing1
+     │              │  ├─ VarExpr
      │              │  │  ╰─ SimpleVar d
-     │              │  ╰─ StringExp "str"
-     │              ╰─ StringExp " "
+     │              │  ╰─ StringExpr "str"
+     │              ╰─ StringExpr " "
      ╰─ body
-        ╰─ CallExp do_nothing1
-           ├─ IntExp 0
-           ╰─ StringExp "str2"
+        ╰─ CallExpr do_nothing1
+           ├─ IntExpr 0
+           ╰─ StringExpr "str2"
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test8.tig
   ╭─ Tiger AST
-  ╰─ IfExp
+  ╰─ IfExpr
      ├─ test
-     │  ╰─ OpExp GtOp
-     │     ├─ IntExp 10
-     │     ╰─ IntExp 20
+     │  ╰─ OpExpr GtOp
+     │     ├─ IntExpr 10
+     │     ╰─ IntExpr 20
      ├─ then
-     │  ╰─ IntExp 30
+     │  ╰─ IntExpr 30
      ╰─ else
-        ╰─ IntExp 40
+        ╰─ IntExpr 40
   $ ../../bin/tiger_ast.exe ../../programs/testcases/test9.tig
   ╭─ Tiger AST
-  ╰─ IfExp
+  ╰─ IfExpr
      ├─ test
-     │  ╰─ OpExp GtOp
-     │     ├─ IntExp 5
-     │     ╰─ IntExp 4
+     │  ╰─ OpExpr GtOp
+     │     ├─ IntExpr 5
+     │     ╰─ IntExpr 4
      ├─ then
-     │  ╰─ IntExp 13
+     │  ╰─ IntExpr 13
      ╰─ else
-        ╰─ StringExp " "
+        ╰─ StringExpr " "

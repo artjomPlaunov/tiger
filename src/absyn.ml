@@ -4,31 +4,31 @@ type symbol = Symbol.t
 type var =
   | SimpleVar of symbol * pos
   | FieldVar of var * symbol * pos
-  | SubscriptVar of var * exp * pos
+  | SubscriptVar of var * expr * pos
 
-and exp =
-  | VarExp of var
-  | NilExp
-  | IntExp of int
-  | StringExp of string * pos
-  | CallExp of { func : symbol; args : exp list; pos : pos }
-  | OpExp of { left : exp; oper : oper; right : exp; pos : pos }
-  | RecordExp of { fields : (symbol * exp * pos) list; typ : symbol; pos : pos }
-  | SeqExp of (exp * pos) list
-  | AssignExp of { var : var; exp : exp; pos : pos }
-  | IfExp of { test : exp; then_ : exp; else_ : exp option; pos : pos }
-  | WhileExp of { test : exp; body : exp; pos : pos }
-  | ForExp of {
+and expr =
+  | VarExpr of var
+  | NilExpr
+  | IntExpr of int
+  | StringExpr of string * pos
+  | CallExpr of { func : symbol; args : expr list; pos : pos }
+  | OpExpr of { left : expr; oper : oper; right : expr; pos : pos }
+  | RecordExpr of { fields : (symbol * expr * pos) list; typ : symbol; pos : pos }
+  | SeqExpr of (expr * pos) list
+  | AssignExpr of { var : var; expr : expr; pos : pos }
+  | IfExpr of { test : expr; then_ : expr; else_ : expr option; pos : pos }
+  | WhileExpr of { test : expr; body : expr; pos : pos }
+  | ForExpr of {
       var : symbol;
       escape : bool ref;
-      lo : exp;
-      hi : exp;
-      body : exp;
+      lo : expr;
+      hi : expr;
+      body : expr;
       pos : pos;
     }
-  | BreakExp of pos
-  | LetExpr of { decs : dec list; body : exp; pos : pos }
-  | ArrayExp of { typ : symbol; size : exp; init : exp; pos : pos }
+  | BreakExpr of pos
+  | LetExpr of { decs : dec list; body : expr; pos : pos }
+  | ArrayExpr of { typ : symbol; size : expr; init : expr; pos : pos }
 
 and dec =
   | FunctionDec of fundec list
@@ -36,7 +36,7 @@ and dec =
       name : symbol;
       escape : bool ref;
       typ : (symbol * pos) option;
-      init : exp;
+      init : expr;
       pos : pos;
     }
   | TypeDec of typedec list
@@ -69,7 +69,7 @@ and fundec = {
   name : symbol;
   params : field list;
   result : (symbol * pos) option;
-  body : exp;
+  body : expr;
   pos : pos;
 }
 

@@ -1,3 +1,2 @@
-val print : out_channel -> Absyn.exp -> unit
-val to_string : Absyn.exp -> string
-
+val print : out_channel -> Absyn.expr -> unit
+val to_string : Absyn.expr -> string

@@ -2,7 +2,7 @@ open Absyn
 
 type venv = Env.enventry Symbol.table
 type tenv = Types.ty Symbol.table
-type expr_ty = { expr : Translate.exp; ty : Types.ty }
+type expr_ty = { expr : Translate.expr; ty : Types.ty }
 
 let check_int ({ ty; _ } : expr_ty) pos =
   match ty with
@@ -12,13 +12,14 @@ let check_int ({ ty; _ } : expr_ty) pos =
 let rec trans_expr venv tenv expr =
   let rec tr_expr expr =
     match expr with
-    | VarExp var -> tr_var var
-    | NilExp -> {expr=(); ty=Types.Nil}
-    | IntExp _ -> { expr = (); ty = Types.Int }
-    | StringExp (_, _) -> { expr = (); ty = Types.String }
-    | CallExp { func; args; pos } -> tr_call func args pos
-    | SeqExp exprs -> tr_seq_expr exprs
-    | OpExp { left; oper; right; pos } -> tr_op left oper right pos
+    | VarExpr var -> tr_var var
+    | NilExpr -> {expr=(); ty=Types.Nil}
+    | IntExpr _ -> { expr = (); ty = Types.Int }
+    | StringExpr (_, _) -> { expr = (); ty = Types.String }
+    | CallExpr { func; args; pos } -> tr_call func args pos
+    | SeqExpr exprs -> tr_seq_expr exprs
+    | OpExpr { left; oper; right; pos } -> tr_op left oper right pos
+    (* | IfExpr {test; then_; else_; pos} -> tr_if *)
     | LetExpr { decs; body; pos } -> tr_let_expr decs body pos
     | _ -> failwith "todo"
 
@@ -133,7 +134,7 @@ and trans_dec venv tenv dec =
       let venv' = Symbol.enter name (Env.VarEntry {ty=init_ty}) venv in 
       (venv', tenv)
   )
-  | _ -> (venv, tenv)
+  | _ -> failwith "todo"
 
 and trans_decs venv tenv decs = 
   match decs with 

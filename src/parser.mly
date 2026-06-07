@@ -5,11 +5,11 @@ let symbol = Symbol.of_string
 let pos n = Parsing.rhs_start n
 let escape () = ref true
 
-let sequence_exp expressions =
+let sequence_expr expressions =
   match expressions with
-  | [] -> SeqExp []
-  | [ (exp, _) ] -> exp
-  | _ -> SeqExp expressions
+  | [] -> SeqExpr []
+  | [ (expr, _) ] -> expr
+  | _ -> SeqExpr expressions
 
 let cons_dec dec decs =
   match dec, decs with
@@ -44,13 +44,13 @@ let cons_dec dec decs =
 %nonassoc UMINUS
 
 %start program
-%type <Absyn.exp> program
-%type <Absyn.exp> exp
+%type <Absyn.expr> program
+%type <Absyn.expr> expr
 %type <Absyn.var> lvalue
-%type <Absyn.exp list> args
-%type <(Absyn.symbol * Absyn.exp * Absyn.pos) list> record_fields
-%type <(Absyn.exp * Absyn.pos) list> expseq
-%type <(Absyn.exp * Absyn.pos) list> seq
+%type <Absyn.expr list> args
+%type <(Absyn.symbol * Absyn.expr * Absyn.pos) list> record_fields
+%type <(Absyn.expr * Absyn.pos) list> exprseq
+%type <(Absyn.expr * Absyn.pos) list> seq
 %type <Absyn.dec list> decs
 %type <Absyn.dec> dec
 %type <Absyn.dec> tydec
@@ -63,71 +63,71 @@ let cons_dec dec decs =
 %%
 
 program:
-  exp EOF { $1 }
+  expr EOF { $1 }
 
-exp:
-  NIL { NilExp }
-| BREAK { BreakExp (pos 1) }
-| INT { IntExp $1 }
-| STRING { StringExp ($1, pos 1) }
-| MINUS exp %prec UMINUS {
-    OpExp { left = IntExp 0; oper = MinusOp; right = $2; pos = pos 1 }
+expr:
+  NIL { NilExpr }
+| BREAK { BreakExpr (pos 1) }
+| INT { IntExpr $1 }
+| STRING { StringExpr ($1, pos 1) }
+| MINUS expr %prec UMINUS {
+    OpExpr { left = IntExpr 0; oper = MinusOp; right = $2; pos = pos 1 }
   }
-| exp PLUS exp { OpExp { left = $1; oper = PlusOp; right = $3; pos = pos 2 } }
-| exp MINUS exp { OpExp { left = $1; oper = MinusOp; right = $3; pos = pos 2 } }
-| exp TIMES exp { OpExp { left = $1; oper = TimesOp; right = $3; pos = pos 2 } }
-| exp DIVIDE exp { OpExp { left = $1; oper = DivideOp; right = $3; pos = pos 2 } }
-| exp EQ exp { OpExp { left = $1; oper = EqOp; right = $3; pos = pos 2 } }
-| exp NEQ exp { OpExp { left = $1; oper = NeqOp; right = $3; pos = pos 2 } }
-| exp LT exp { OpExp { left = $1; oper = LtOp; right = $3; pos = pos 2 } }
-| exp LE exp { OpExp { left = $1; oper = LeOp; right = $3; pos = pos 2 } }
-| exp GT exp { OpExp { left = $1; oper = GtOp; right = $3; pos = pos 2 } }
-| exp GE exp { OpExp { left = $1; oper = GeOp; right = $3; pos = pos 2 } }
-| exp AND exp {
-    IfExp { test = $1; then_ = $3; else_ = Some (IntExp 0); pos = pos 2 }
+| expr PLUS expr { OpExpr { left = $1; oper = PlusOp; right = $3; pos = pos 2 } }
+| expr MINUS expr { OpExpr { left = $1; oper = MinusOp; right = $3; pos = pos 2 } }
+| expr TIMES expr { OpExpr { left = $1; oper = TimesOp; right = $3; pos = pos 2 } }
+| expr DIVIDE expr { OpExpr { left = $1; oper = DivideOp; right = $3; pos = pos 2 } }
+| expr EQ expr { OpExpr { left = $1; oper = EqOp; right = $3; pos = pos 2 } }
+| expr NEQ expr { OpExpr { left = $1; oper = NeqOp; right = $3; pos = pos 2 } }
+| expr LT expr { OpExpr { left = $1; oper = LtOp; right = $3; pos = pos 2 } }
+| expr LE expr { OpExpr { left = $1; oper = LeOp; right = $3; pos = pos 2 } }
+| expr GT expr { OpExpr { left = $1; oper = GtOp; right = $3; pos = pos 2 } }
+| expr GE expr { OpExpr { left = $1; oper = GeOp; right = $3; pos = pos 2 } }
+| expr AND expr {
+    IfExpr { test = $1; then_ = $3; else_ = Some (IntExpr 0); pos = pos 2 }
   }
-| exp OR exp {
-    IfExp { test = $1; then_ = IntExp 1; else_ = Some $3; pos = pos 2 }
+| expr OR expr {
+    IfExpr { test = $1; then_ = IntExpr 1; else_ = Some $3; pos = pos 2 }
   }
-| ID LPAREN RPAREN { CallExp { func = symbol $1; args = []; pos = pos 1 } }
-| ID LPAREN args RPAREN { CallExp { func = symbol $1; args = $3; pos = pos 1 } }
-| ID LBRACE RBRACE { RecordExp { fields = []; typ = symbol $1; pos = pos 1 } }
-| ID LBRACE record_fields RBRACE { RecordExp { fields = $3; typ = symbol $1; pos = pos 1 } }
-| ID LBRACK exp RBRACK OF exp %prec OF {
-    ArrayExp { typ = symbol $1; size = $3; init = $6; pos = pos 1 }
+| ID LPAREN RPAREN { CallExpr { func = symbol $1; args = []; pos = pos 1 } }
+| ID LPAREN args RPAREN { CallExpr { func = symbol $1; args = $3; pos = pos 1 } }
+| ID LBRACE RBRACE { RecordExpr { fields = []; typ = symbol $1; pos = pos 1 } }
+| ID LBRACE record_fields RBRACE { RecordExpr { fields = $3; typ = symbol $1; pos = pos 1 } }
+| ID LBRACK expr RBRACK OF expr %prec OF {
+    ArrayExpr { typ = symbol $1; size = $3; init = $6; pos = pos 1 }
   }
-| lvalue ASSIGN exp { AssignExp { var = $1; exp = $3; pos = pos 2 } }
-| lvalue %prec LVALUE { VarExp $1 }
-| IF exp THEN exp %prec THEN { IfExp { test = $2; then_ = $4; else_ = None; pos = pos 1 } }
-| IF exp THEN exp ELSE exp { IfExp { test = $2; then_ = $4; else_ = Some $6; pos = pos 1 } }
-| WHILE exp DO exp %prec DO { WhileExp { test = $2; body = $4; pos = pos 1 } }
-| FOR ID ASSIGN exp TO exp DO exp %prec DO {
-    ForExp { var = symbol $2; escape = escape (); lo = $4; hi = $6; body = $8; pos = pos 1 }
+| lvalue ASSIGN expr { AssignExpr { var = $1; expr = $3; pos = pos 2 } }
+| lvalue %prec LVALUE { VarExpr $1 }
+| IF expr THEN expr %prec THEN { IfExpr { test = $2; then_ = $4; else_ = None; pos = pos 1 } }
+| IF expr THEN expr ELSE expr { IfExpr { test = $2; then_ = $4; else_ = Some $6; pos = pos 1 } }
+| WHILE expr DO expr %prec DO { WhileExpr { test = $2; body = $4; pos = pos 1 } }
+| FOR ID ASSIGN expr TO expr DO expr %prec DO {
+    ForExpr { var = symbol $2; escape = escape (); lo = $4; hi = $6; body = $8; pos = pos 1 }
   }
-| LET decs IN expseq END { LetExpr { decs = $2; body = sequence_exp $4; pos = pos 1 } }
-| LPAREN expseq RPAREN { sequence_exp $2 }
+| LET decs IN exprseq END { LetExpr { decs = $2; body = sequence_expr $4; pos = pos 1 } }
+| LPAREN exprseq RPAREN { sequence_expr $2 }
 
 lvalue:
   ID { SimpleVar (symbol $1, pos 1) }
-| ID LBRACK exp RBRACK { SubscriptVar (SimpleVar (symbol $1, pos 1), $3, pos 2) }
+| ID LBRACK expr RBRACK { SubscriptVar (SimpleVar (symbol $1, pos 1), $3, pos 2) }
 | lvalue DOT ID { FieldVar ($1, symbol $3, pos 2) }
-| lvalue LBRACK exp RBRACK { SubscriptVar ($1, $3, pos 2) }
+| lvalue LBRACK expr RBRACK { SubscriptVar ($1, $3, pos 2) }
 
 args:
-  exp { [ $1 ] }
-| exp COMMA args { $1 :: $3 }
+  expr { [ $1 ] }
+| expr COMMA args { $1 :: $3 }
 
 record_fields:
-  ID EQ exp { [ (symbol $1, $3, pos 1) ] }
-| ID EQ exp COMMA record_fields { (symbol $1, $3, pos 1) :: $5 }
+  ID EQ expr { [ (symbol $1, $3, pos 1) ] }
+| ID EQ expr COMMA record_fields { (symbol $1, $3, pos 1) :: $5 }
 
-expseq:
+exprseq:
   { [] }
 | seq { $1 }
 
 seq:
-  exp { [ ($1, pos 1) ] }
-| exp SEMICOLON seq { ($1, pos 1) :: $3 }
+  expr { [ ($1, pos 1) ] }
+| expr SEMICOLON seq { ($1, pos 1) :: $3 }
 
 decs:
   { [] }
@@ -142,10 +142,10 @@ tydec:
   TYPE ID EQ ty { TypeDec [ { name = symbol $2; ty = $4; pos = pos 1 } ] }
 
 	vardec:
-	  VAR ID ASSIGN exp {
+	  VAR ID ASSIGN expr {
 	VarDec { name = symbol $2; escape = escape (); typ = None; init = $4; pos = pos 1 }
 	  }
-	| VAR ID COLON ID ASSIGN exp {
+	| VAR ID COLON ID ASSIGN expr {
 	    VarDec {
 	      name = symbol $2;
 	      escape = escape ();
@@ -156,10 +156,10 @@ tydec:
 	  }
 
 fundec:
-  FUNCTION ID LPAREN tyfields RPAREN EQ exp {
+  FUNCTION ID LPAREN tyfields RPAREN EQ expr {
     FunctionDec [ { name = symbol $2; params = $4; result = None; body = $7; pos = pos 1 } ]
   }
-| FUNCTION ID LPAREN tyfields RPAREN COLON ID EQ exp {
+| FUNCTION ID LPAREN tyfields RPAREN COLON ID EQ expr {
     FunctionDec [
       {
         name = symbol $2;

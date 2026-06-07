@@ -38,52 +38,52 @@ let rec var_tree = function
 	| SimpleVar (name, _) -> leaf ("SimpleVar " ^ Symbol.to_string name)
 	| FieldVar (var, field, _) -> node ("FieldVar " ^ Symbol.to_string field) [ var_tree var ]
   | SubscriptVar (var, index, _) ->
-      node "SubscriptVar" [ named "var" (var_tree var); named "index" (exp_tree index) ]
+      node "SubscriptVar" [ named "var" (var_tree var); named "index" (expr_tree index) ]
 
-and exp_tree = function
-  | VarExp var -> named "VarExp" (var_tree var)
-  | NilExp -> leaf "NilExp"
-  | IntExp value -> leaf ("IntExp " ^ string_of_int value)
-  | StringExp (value, _) -> leaf ("StringExp " ^ Printf.sprintf "%S" value)
-	| CallExp { func; args; _ } -> node ("CallExp " ^ Symbol.to_string func) (List.map exp_tree args)
-  | OpExp { left; oper; right; _ } ->
-      node ("OpExp " ^ oper_name oper) [ exp_tree left; exp_tree right ]
-	| RecordExp { fields; typ; _ } ->
-	    let field_tree (name, exp, _) = node ("Field " ^ Symbol.to_string name) [ exp_tree exp ] in
-	    node ("RecordExp " ^ Symbol.to_string typ) (List.map field_tree fields)
-  | SeqExp expressions ->
-      node "SeqExp" (List.map (fun (exp, _) -> exp_tree exp) expressions)
-  | AssignExp { var; exp; _ } ->
-      node "AssignExp" [ named "var" (var_tree var); named "exp" (exp_tree exp) ]
-  | IfExp { test; then_; else_; _ } ->
+and expr_tree = function
+  | VarExpr var -> named "VarExpr" (var_tree var)
+  | NilExpr -> leaf "NilExpr"
+  | IntExpr value -> leaf ("IntExpr " ^ string_of_int value)
+  | StringExpr (value, _) -> leaf ("StringExpr " ^ Printf.sprintf "%S" value)
+	| CallExpr { func; args; _ } -> node ("CallExpr " ^ Symbol.to_string func) (List.map expr_tree args)
+  | OpExpr { left; oper; right; _ } ->
+      node ("OpExpr " ^ oper_name oper) [ expr_tree left; expr_tree right ]
+	| RecordExpr { fields; typ; _ } ->
+	    let field_tree (name, expr, _) = node ("Field " ^ Symbol.to_string name) [ expr_tree expr ] in
+	    node ("RecordExpr " ^ Symbol.to_string typ) (List.map field_tree fields)
+  | SeqExpr expressions ->
+      node "SeqExpr" (List.map (fun (expr, _) -> expr_tree expr) expressions)
+  | AssignExpr { var; expr; _ } ->
+      node "AssignExpr" [ named "var" (var_tree var); named "expr" (expr_tree expr) ]
+  | IfExpr { test; then_; else_; _ } ->
       let children =
         [
-          named "test" (exp_tree test);
-          named "then" (exp_tree then_);
-          option_tree "else" else_ exp_tree;
+          named "test" (expr_tree test);
+          named "then" (expr_tree then_);
+          option_tree "else" else_ expr_tree;
         ]
       in
-      node "IfExp" children
-  | WhileExp { test; body; _ } ->
-      node "WhileExp" [ named "test" (exp_tree test); named "body" (exp_tree body) ]
-	| ForExp { var; escape; lo; hi; body; _ } ->
+      node "IfExpr" children
+  | WhileExpr { test; body; _ } ->
+      node "WhileExpr" [ named "test" (expr_tree test); named "body" (expr_tree body) ]
+	| ForExpr { var; escape; lo; hi; body; _ } ->
 	    node
-	      (Printf.sprintf "ForExp %s escape=%b" (Symbol.to_string var) !escape)
-        [ named "lo" (exp_tree lo); named "hi" (exp_tree hi); named "body" (exp_tree body) ]
-  | BreakExp _ -> leaf "BreakExp"
+	      (Printf.sprintf "ForExpr %s escape=%b" (Symbol.to_string var) !escape)
+        [ named "lo" (expr_tree lo); named "hi" (expr_tree hi); named "body" (expr_tree body) ]
+  | BreakExpr _ -> leaf "BreakExpr"
   | LetExpr { decs; body; _ } ->
-      node "LetExp" [ node "decs" (List.map dec_tree decs); named "body" (exp_tree body) ]
-	| ArrayExp { typ; size; init; _ } ->
+      node "LetExpr" [ node "decs" (List.map dec_tree decs); named "body" (expr_tree body) ]
+	| ArrayExpr { typ; size; init; _ } ->
 	    node
-	      ("ArrayExp " ^ Symbol.to_string typ)
-        [ named "size" (exp_tree size); named "init" (exp_tree init) ]
+	      ("ArrayExpr " ^ Symbol.to_string typ)
+        [ named "size" (expr_tree size); named "init" (expr_tree init) ]
 
 and dec_tree = function
   | FunctionDec functions -> node "FunctionDec" (List.map fundec_tree functions)
 	| VarDec { name; escape; typ; init; _ } ->
 	    node
 	      (Printf.sprintf "VarDec %s escape=%b" (Symbol.to_string name) !escape)
-	      [ symbol_pos_tree "type" typ; named "init" (exp_tree init) ]
+	      [ symbol_pos_tree "type" typ; named "init" (expr_tree init) ]
   | TypeDec types -> node "TypeDec" (List.map typedec_tree types)
 
 and typedec_tree { name; ty; _ } = node ("Type " ^ Symbol.to_string name) [ ty_tree ty ]
@@ -94,7 +94,7 @@ and fundec_tree { name; params; result; body; _ } =
     [
       node "params" (List.map field_tree params);
       symbol_pos_tree "result" result;
-      named "body" (exp_tree body);
+      named "body" (expr_tree body);
     ]
 
 and ty_tree = function
@@ -129,6 +129,6 @@ let render_tree tree =
 
 let print_tree output tree = output_string output (render_tree tree)
 
-let print output exp = print_tree output (exp_tree exp)
+let print output expr = print_tree output (expr_tree expr)
 
-let to_string exp = render_tree (exp_tree exp)
+let to_string expr = render_tree (expr_tree expr)
