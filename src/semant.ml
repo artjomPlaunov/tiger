@@ -5,9 +5,14 @@ type tenv = Types.ty Symbol.table
 type expr_ty = { expr : Translate.expr; ty : Types.ty }
 
 let check_int ({ ty; _ } : expr_ty) pos =
-  match ty with
+  match Types.actual ty with
   | Types.Int | Types.Error -> ()
   | _ -> Error_msg.error pos "integer required"
+
+let check_unit ({ ty; _ } : expr_ty) pos = 
+  match Types.actual ty with 
+  | Types.Unit | Types.Error -> ()
+  | _ -> Error_msg.error pos "unit required"
 
 let rec trans_expr venv tenv expr =
   let rec tr_expr expr =
@@ -19,6 +24,7 @@ let rec trans_expr venv tenv expr =
     | CallExpr { func; args; pos } -> tr_call func args pos
     | SeqExpr exprs -> tr_seq_expr exprs
     | OpExpr { left; oper; right; pos } -> tr_op left oper right pos
+    | IfExpr { test; then_; else_; pos } -> tr_if_expr test then_ else_ pos
     (* | IfExpr {test; then_; else_; pos} -> tr_if *)
     | LetExpr { decs; body; pos } -> tr_let_expr decs body pos
     | _ -> failwith "todo"
@@ -97,6 +103,32 @@ let rec trans_expr venv tenv expr =
         | _ ->
             Error_msg.error pos "integer or string required";
             { expr = (); ty = Types.Error })
+
+  (* If Expr *)
+  and tr_if_expr test then_ else_ pos = 
+    let test_expr = tr_expr test in 
+    check_int test_expr pos;
+    match else_ with 
+    | Some e -> tr_if_else then_ e pos 
+    | None -> tr_if then_ pos
+
+  (* If then *)
+  and tr_if then_ pos = 
+    let then_expr = tr_expr then_ in 
+    check_unit then_expr pos;
+    { expr = (); ty = Types.Unit }
+
+  (* If then else *)
+  and tr_if_else then_ else_ pos = 
+    let then_expr = tr_expr then_ in 
+    let else_expr = tr_expr else_ in 
+    if Types.compatible then_expr.ty else_expr.ty 
+    then 
+      { expr = (); ty = then_expr.ty }
+    else (
+      Error_msg.error pos "then and else branches must have the same type";
+      { expr = (); ty = Types.Error }
+    )
 
   (* Let Expr *)
   and tr_let_expr decs body _pos = 

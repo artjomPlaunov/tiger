@@ -10,8 +10,32 @@
   $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/seq-nested.tig
   typecheck ok
 
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/if-then-unit.tig
+  typecheck ok
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/if-then-else-int.tig
+  typecheck ok
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/if-let-mixed.tig
+  typecheck ok
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/logical-and-int.tig
+  typecheck ok
+
   $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/seq-arg-error.tig
   ../../programs/typecheck/seq-arg-error.tig:1.8:integer required
+  [2]
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/if-test-string.tig
+  ../../programs/typecheck/if-test-string.tig:1.0:integer required
+  [2]
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/if-then-value.tig
+  ../../programs/typecheck/if-then-value.tig:1.0:unit required
+  [2]
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/if-then-else-mismatch.tig
+  ../../programs/typecheck/if-then-else-mismatch.tig:1.0:then and else branches must have the same type
   [2]
 
   $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/string-plus.tig
