@@ -25,7 +25,8 @@ let rec trans_expr venv tenv expr =
     | SeqExpr exprs -> tr_seq_expr exprs
     | AssignExpr { var; expr; pos } -> tr_assign var expr pos
     | OpExpr { left; oper; right; pos } -> tr_op left oper right pos
-    | IfExpr { test; then_; else_; pos } -> tr_if_expr test then_ else_ pos
+    | IfExpr { test; then_; else_; pos } -> tr_if test then_ else_ pos
+    | WhileExpr { test; body; pos } -> tr_while test body pos
     | LetExpr { decs; body; pos } -> tr_let decs body pos
     | _ -> failwith "todo"
 
@@ -112,21 +113,21 @@ let rec trans_expr venv tenv expr =
             { expr = (); ty = Types.Error })
 
   (* If Expr *)
-  and tr_if_expr test then_ else_ pos = 
+  and tr_if test then_ else_ pos = 
     let test_expr = tr_expr test in 
     check_int test_expr pos;
     match else_ with 
-    | Some e -> tr_if_else then_ e pos 
-    | None -> tr_if then_ pos
+    | Some e -> tr_if_then_else then_ e pos 
+    | None -> tr_if_then then_ pos
 
   (* If then *)
-  and tr_if then_ pos = 
+  and tr_if_then then_ pos = 
     let then_expr = tr_expr then_ in 
     check_unit then_expr pos;
     { expr = (); ty = Types.Unit }
 
   (* If then else *)
-  and tr_if_else then_ else_ pos = 
+  and tr_if_then_else then_ else_ pos = 
     let then_expr = tr_expr then_ in 
     let else_expr = tr_expr else_ in 
     if Types.compatible then_expr.ty else_expr.ty 
@@ -136,6 +137,14 @@ let rec trans_expr venv tenv expr =
       Error_msg.error pos "then and else branches must have the same type";
       { expr = (); ty = Types.Error }
     )
+
+  (* While Expr *)
+  and tr_while test body pos = 
+    let test_expr = tr_expr test in 
+    let body_expr = tr_expr body in 
+    check_int test_expr pos;
+    check_unit body_expr pos;
+    { expr = (); ty = Types.Unit }
 
   (* Let Expr *)
   and tr_let decs body _pos = 
