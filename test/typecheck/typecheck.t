@@ -22,8 +22,19 @@
   $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/logical-and-int.tig
   typecheck ok
 
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/assign-int.tig
+  typecheck ok
+
   $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/seq-arg-error.tig
   ../../programs/typecheck/seq-arg-error.tig:1.8:integer required
+  [2]
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/assign-type-mismatch.tig
+  ../../programs/typecheck/assign-type-mismatch.tig:4.4:assignment expression types not compatible
+  [2]
+
+  $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/assign-result-unit.tig
+  ../../programs/typecheck/assign-result-unit.tig:4.11:integer required
   [2]
 
   $ ../../bin/tiger_typecheck.exe ../../programs/typecheck/if-test-string.tig

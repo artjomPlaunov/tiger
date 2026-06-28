@@ -23,13 +23,13 @@ let rec trans_expr venv tenv expr =
     | StringExpr (_, _) -> { expr = (); ty = Types.String }
     | CallExpr { func; args; pos } -> tr_call func args pos
     | SeqExpr exprs -> tr_seq_expr exprs
+    | AssignExpr { var; expr; pos } -> tr_assign var expr pos
     | OpExpr { left; oper; right; pos } -> tr_op left oper right pos
     | IfExpr { test; then_; else_; pos } -> tr_if_expr test then_ else_ pos
-    (* | IfExpr {test; then_; else_; pos} -> tr_if *)
-    | LetExpr { decs; body; pos } -> tr_let_expr decs body pos
+    | LetExpr { decs; body; pos } -> tr_let decs body pos
     | _ -> failwith "todo"
 
-      (* Variables. *)
+  (* Variables. *)
   and tr_var var =
     match var with
     | SimpleVar (name, pos) -> (
@@ -79,6 +79,13 @@ let rec trans_expr venv tenv expr =
     | (expr, _)::exprs -> 
         ignore (tr_expr expr);
         tr_seq_expr exprs
+
+  and tr_assign var expr pos = 
+    let var_ty = tr_var var in 
+    let expr_ty = tr_expr expr in 
+    if not (Types.compatible var_ty.ty expr_ty.ty) 
+    then Error_msg.error pos "assignment expression types not compatible";
+    { expr = (); ty = Types.Unit }
 
   (* Operators. *)
   and tr_op left oper right pos =
@@ -131,7 +138,7 @@ let rec trans_expr venv tenv expr =
     )
 
   (* Let Expr *)
-  and tr_let_expr decs body _pos = 
+  and tr_let decs body _pos = 
     let venv', tenv' = trans_decs venv tenv decs
     in
     trans_expr venv' tenv' body
@@ -144,15 +151,11 @@ and trans_dec venv tenv dec =
       let {expr=_; ty = init_ty} = trans_expr venv tenv init in 
       let _ =
         match typ with
-        (* If there is no constraint type, make sure initializer expr is not Nil *)
         | None -> (
           match init_ty with 
           | Types.Nil -> Error_msg.error pos "Nil initializer in expression must be constrained by record type";
           | _ -> ()
         ) 
-        (*  Look up declared type to see 
-            1) it exists
-            2) compatible with the type of the init expression *)
         | Some(name, type_pos) -> (
             match Symbol.look name tenv with
             | None ->
